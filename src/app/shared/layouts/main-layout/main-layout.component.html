@@ -1,0 +1,15 @@
+<div class="min-h-screen bg-bg-secondary-1">
+  <app-header (sidebarToggle)="toggleSidebar()" />
+
+  <app-sidebar [isOpen]="isSidebarOpen" (sidebarClose)="closeSidebar()" />
+
+  <main
+    class="pt-16 transition-all duration-300"
+    [class.lg:ml-64]="!isSidebarCollapsed"
+    [class.lg:ml-20]="isSidebarCollapsed"
+  >
+    <div class="p-6">
+      <router-outlet />
+    </div>
+  </main>
+</div>

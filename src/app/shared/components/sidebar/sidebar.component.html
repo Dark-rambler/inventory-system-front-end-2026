@@ -1,0 +1,55 @@
+<aside
+  class="fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-3 transition-transform duration-300 z-40"
+  [class.w-64]="!isCollapsed"
+  [class.w-20]="isCollapsed"
+  [class.-translate-x-full]="!isOpen()"
+  [class.translate-x-0]="isOpen()"
+>
+  <button
+    (click)="toggleCollapse()"
+    class="hidden lg:flex absolute -right-3 top-4 bg-white border border-gray-3 rounded-full w-6 h-6 items-center justify-center text-gray-1 hover:text-primary transition-colors"
+  >
+    <svg
+      class="w-4 h-4 transition-transform"
+      [class.rotate-180]="isCollapsed"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+
+  <nav class="p-4 space-y-2">
+    @for (item of menuItems; track item.path) {
+      <a
+        [routerLink]="item.path"
+        routerLinkActive="bg-primary/10 text-primary border-l-4 border-primary"
+        class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-1 hover:bg-bg-secondary-1 transition-colors group border-l-4 border-transparent"
+      >
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="item.icon"
+          />
+        </svg>
+        @if (!isCollapsed) {
+          <span class="text-small font-medium">{{ item.label }}</span>
+        }
+      </a>
+    }
+  </nav>
+</aside>
+
+@if (isOpen()) {
+  <div
+    (click)="closeSidebar()"
+    (keydown.escape)="closeSidebar()"
+    role="button"
+    tabindex="0"
+    class="lg:hidden fixed inset-0 bg-black/50 z-30 top-16"
+    aria-label="Cerrar menú"
+  ></div>
+}
