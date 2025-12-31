@@ -21,5 +21,7 @@
   "eslint.validate": ["typescript", "html"],
   "files.eol": "\n",
   "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore"
 }

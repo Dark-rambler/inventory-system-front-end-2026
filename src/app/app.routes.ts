@@ -8,8 +8,13 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'products',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./domains/dashboard/dashboard.component').then(m => m.DashboardComponent),
       },
       {
         path: 'products',
@@ -17,24 +22,19 @@ export const routes: Routes = [
           import('./domains/products/products.component').then(m => m.ProductsComponent),
       },
       {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./domains/products/products.component').then(m => m.ProductsComponent),
-      },
-      {
         path: 'inventory',
         loadComponent: () =>
-          import('./domains/products/products.component').then(m => m.ProductsComponent),
+          import('./domains/inventory/inventory.component').then(m => m.InventoryComponent),
       },
       {
         path: 'reports',
         loadComponent: () =>
-          import('./domains/products/products.component').then(m => m.ProductsComponent),
+          import('./domains/reports/reports.component').then(m => m.ReportsComponent),
       },
       {
         path: 'settings',
         loadComponent: () =>
-          import('./domains/products/products.component').then(m => m.ProductsComponent),
+          import('./domains/settings/settings.component').then(m => m.SettingsComponent),
       },
     ],
   },
