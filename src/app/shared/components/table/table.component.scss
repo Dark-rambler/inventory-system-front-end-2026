@@ -1,0 +1,135 @@
+/* Contenedor principal */
+.app-table-container {
+  @apply w-full overflow-hidden rounded-xl bg-[#FDFDFD] shadow-sm;
+}
+
+/* Wrapper con scroll horizontal */
+.app-table-wrapper {
+  @apply w-full overflow-x-auto;
+}
+
+/* Tabla base */
+.app-table {
+  @apply w-full border-collapse;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+/* Header de la tabla */
+.app-table-header {
+  @apply bg-[#EDF1F0];
+}
+
+.app-table-header-row {
+  @apply border-b border-gray-200;
+}
+
+.app-table-header-cell {
+  @apply px-6 py-4 text-left text-sm font-semibold text-[#1E1E1E] tracking-wide;
+}
+
+/* Body de la tabla */
+.app-table-body {
+  @apply bg-white;
+}
+
+/* Filas de datos */
+.app-table-row {
+  @apply border-b border-gray-100 transition-colors duration-200;
+}
+
+/* Hover en filas */
+.app-table-row-hover:hover {
+  @apply bg-[#EDF1F0] cursor-pointer;
+}
+
+/* Filas alternadas */
+.app-table-row-striped {
+  @apply bg-[#F9F9F9];
+}
+
+/* Celdas */
+.app-table-cell {
+  @apply px-6 py-4 text-sm text-gray-700;
+}
+
+/* Estado vacío */
+.app-table-empty {
+  @apply flex flex-col items-center justify-center py-16 px-4;
+}
+
+.app-table-empty-icon {
+  @apply w-16 h-16 text-gray-300 mb-4;
+}
+
+.app-table-empty-text {
+  @apply text-gray-500 text-base font-medium;
+}
+
+/* Skeleton loader */
+.skeleton-loader {
+  @apply h-4 bg-gray-200 rounded animate-pulse;
+}
+
+/* Columna de acciones */
+.app-table-actions {
+  @apply flex items-center justify-end gap-2;
+}
+
+.app-table-action-btn {
+  @apply inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+/* Botones de acción por tipo */
+.app-table-action-btn--view {
+  @apply text-blue-600 hover:bg-blue-50 focus:ring-blue-500;
+}
+
+.app-table-action-btn--edit {
+  @apply text-[#288B83] hover:bg-[#A1CBC7]/20 focus:ring-[#288B83];
+}
+
+.app-table-action-btn--delete {
+  @apply text-red-600 hover:bg-red-50 focus:ring-red-500;
+}
+
+.app-table-action-btn--primary {
+  @apply bg-[#288B83] text-white hover:bg-[#1f6f69] focus:ring-[#288B83];
+}
+
+.app-table-action-btn--secondary {
+  @apply bg-[#A1CBC7] text-[#1E1E1E] hover:bg-[#8bb5b1] focus:ring-[#A1CBC7];
+}
+
+.app-table-action-btn--outline {
+  @apply border border-[#288B83] text-[#288B83] hover:bg-[#288B83] hover:text-white focus:ring-[#288B83];
+}
+
+.app-table-action-btn--danger {
+  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+}
+
+/* Iconos dentro de botones */
+.app-table-action-icon {
+  @apply w-4 h-4;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .app-table-header-cell,
+  .app-table-cell {
+    @apply px-4 py-3 text-xs;
+  }
+
+  .app-table-empty-icon {
+    @apply w-12 h-12;
+  }
+
+  .app-table-empty-text {
+    @apply text-sm;
+  }
+}

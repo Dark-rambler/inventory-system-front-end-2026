@@ -1,0 +1,59 @@
+<div class="app-table-container">
+  @if (isLoading()) {
+    <app-table-skeleton [columns]="columns()" [skeletonArray]="skeletonArray()" />
+  }
+
+  @if (!isLoading() && isEmpty()) {
+    <app-table-empty-state
+      [message]="normalizedConfig().emptyMessage || 'No hay datos disponibles'"
+    />
+  }
+
+  @if (!isLoading() && !isEmpty()) {
+    <div class="app-table-wrapper">
+      <table cdk-table [dataSource]="data()" class="app-table">
+        @for (column of columns(); track column.key) {
+          <ng-container [cdkColumnDef]="column.key">
+            <th
+              cdk-header-cell
+              *cdkHeaderCellDef
+              class="app-table-header-cell"
+              [class]="column.cssClass"
+              [style.width]="column.width | columnWidth"
+            >
+              {{ column.header }}
+            </th>
+            <td
+              cdk-cell
+              *cdkCellDef="let row; let rowIndex = index"
+              class="app-table-cell"
+              [class]="column.cssClass"
+            >
+              @if (column.key | hasCustomTemplate: customTemplates(); as customTemplate) {
+                <ng-container
+                  *ngTemplateOutlet="
+                    customTemplate;
+                    context: row | tableCellContext: rowIndex : data().length
+                  "
+                ></ng-container>
+              } @else {
+                {{ row | tableValue: column.key }}
+              }
+            </td>
+          </ng-container>
+        }
+
+        <tr cdk-header-row *cdkHeaderRowDef="displayedColumns()" class="app-table-header-row"></tr>
+
+        <tr
+          cdk-row
+          *cdkRowDef="let row; columns: displayedColumns(); let rowIndex = index"
+          [class]="
+            rowIndex
+              | tableRowClasses: normalizedConfig().enableHover! : normalizedConfig().enableStriped!
+          "
+        ></tr>
+      </table>
+    </div>
+  }
+</div>
