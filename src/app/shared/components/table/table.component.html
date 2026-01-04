@@ -1,96 +1,57 @@
 <div class="app-table-container">
-  <!-- Estado de carga -->
-  @if (isLoading) {
-    <div class="app-table-wrapper">
-      <table class="app-table">
-        <!-- Header -->
-        <thead class="app-table-header">
-          <tr class="app-table-header-row">
-            @for (column of columns; track column.key) {
-              <th class="app-table-header-cell" [style.width]="column.width">
-                {{ column.header }}
-              </th>
-            }
-          </tr>
-        </thead>
-        <!-- Skeleton Body -->
-        <tbody class="app-table-body">
-          @for (_ of getSkeletonArray(); track $index) {
-            <tr class="app-table-row">
-              @for (column of columns; track column.key) {
-                <td class="app-table-cell">
-                  <div class="skeleton-loader"></div>
-                </td>
-              }
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+  @if (isLoading()) {
+    <app-table-skeleton [columns]="columns()" [skeletonArray]="skeletonArray()" />
   }
 
-  <!-- Estado vacío -->
-  @if (!isLoading && isEmpty) {
-    <div class="app-table-empty">
-      <svg class="app-table-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-        />
-      </svg>
-      <p class="app-table-empty-text">{{ config.emptyMessage }}</p>
-    </div>
+  @if (!isLoading() && isEmpty()) {
+    <app-table-empty-state
+      [message]="normalizedConfig().emptyMessage || 'No hay datos disponibles'"
+    />
   }
 
-  <!-- Tabla con datos -->
-  @if (!isLoading && !isEmpty) {
+  @if (!isLoading() && !isEmpty()) {
     <div class="app-table-wrapper">
-      <table cdk-table [dataSource]="data" class="app-table">
-        <!-- Definición de columnas dinámicas -->
-        @for (column of columns; track column.key; let colIndex = $index) {
+      <table cdk-table [dataSource]="data()" class="app-table">
+        @for (column of columns(); track column.key) {
           <ng-container [cdkColumnDef]="column.key">
-            <!-- Header de columna -->
             <th
               cdk-header-cell
               *cdkHeaderCellDef
               class="app-table-header-cell"
               [class]="column.cssClass"
-              [style.width]="column.width"
+              [style.width]="column.width | columnWidth"
             >
               {{ column.header }}
             </th>
-            <!-- Celda de datos -->
             <td
               cdk-cell
               *cdkCellDef="let row; let rowIndex = index"
               class="app-table-cell"
               [class]="column.cssClass"
             >
-              <!-- Template personalizado -->
-              @if (getCustomTemplate(column.key); as customTemplate) {
+              @if (column.key | hasCustomTemplate: customTemplates(); as customTemplate) {
                 <ng-container
-                  *ngTemplateOutlet="customTemplate; context: createCellContext(row, rowIndex)"
+                  *ngTemplateOutlet="
+                    customTemplate;
+                    context: row | tableCellContext: rowIndex : data().length
+                  "
                 ></ng-container>
               } @else {
-                <!-- Celda por defecto -->
                 {{ row | tableValue: column.key }}
               }
             </td>
           </ng-container>
         }
 
-        <!-- Header row -->
-        <tr cdk-header-row *cdkHeaderRowDef="displayedColumns" class="app-table-header-row"></tr>
+        <tr cdk-header-row *cdkHeaderRowDef="displayedColumns()" class="app-table-header-row"></tr>
 
-        <!-- Data rows -->
         <tr
           cdk-row
-          *cdkRowDef="let row; columns: displayedColumns; let rowIndex = index"
-          class="app-table-row"
-          [class.app-table-row-hover]="config.enableHover"
-          [class.app-table-row-striped]="config.enableStriped && rowIndex % 2 !== 0"
+          *cdkRowDef="let row; columns: displayedColumns(); let rowIndex = index"
+          [class]="
+            rowIndex
+              | tableRowClasses: normalizedConfig().enableHover! : normalizedConfig().enableStriped!
+          "
         ></tr>
       </table>
     </div>

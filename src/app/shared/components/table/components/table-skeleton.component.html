@@ -1,0 +1,24 @@
+<div class="app-table-wrapper">
+  <table class="app-table">
+    <thead class="app-table-header">
+      <tr class="app-table-header-row">
+        @for (column of columns(); track column.key) {
+          <th class="app-table-header-cell" [style.width]="column.width">
+            {{ column.header }}
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody class="app-table-body">
+      @for (_ of skeletonArray(); track $index) {
+        <tr class="app-table-row">
+          @for (column of columns(); track column.key) {
+            <td class="app-table-cell">
+              <div class="skeleton-loader"></div>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

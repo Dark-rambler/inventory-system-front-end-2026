@@ -5,173 +5,100 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
   QueryList,
-  SimpleChanges,
   TemplateRef,
   ViewEncapsulation,
+  computed,
+  input,
+  output,
+  signal,
 } from '@angular/core';
+import { TableEmptyStateComponent } from './components/table-empty-state.component';
+import { TableSkeletonComponent } from './components/table-skeleton.component';
 import { TableCellTemplateDirective } from './directives/table-cell-template.directive';
 import { TableColumnDirective } from './directives/table-column.directive';
+import {
+  createDisplayedColumnsSignal,
+  createIsEmptySignal,
+  createIsLoadingSignal,
+  createSkeletonArraySignal,
+} from './helpers/table.helpers';
+import { ColumnWidthPipe } from './pipes/column-width.pipe';
+import { HasCustomTemplatePipe } from './pipes/has-custom-template.pipe';
+import { TableCellContextPipe } from './pipes/table-cell-context.pipe';
+import { TableRowClassesPipe } from './pipes/table-row-classes.pipe';
 import { TableValuePipe } from './pipes/table-value.pipe';
 import { TableActionEvent, TableCellContext, TableColumn, TableConfig } from './table.types';
 
-/**
- * Componente de tabla genérica y reutilizable
- *
- * @example
- * <app-table
- *   [data]="products"
- *   [columns]="columns"
- *   [config]="tableConfig"
- *   (actionClick)="handleAction($event)">
- *
- *   <ng-template appTableColumn="name" let-row>
- *     <span class="font-bold">{{ row.name }}</span>
- *   </ng-template>
- * </app-table>
- */
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, CdkTableModule, TableValuePipe],
+  imports: [
+    CommonModule,
+    CdkTableModule,
+    TableValuePipe,
+    TableRowClassesPipe,
+    TableCellContextPipe,
+    HasCustomTemplatePipe,
+    ColumnWidthPipe,
+    TableEmptyStateComponent,
+    TableSkeletonComponent,
+  ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent<T> implements AfterContentInit, OnChanges {
-  /** Datos a mostrar en la tabla */
-  @Input() data: T[] = [];
+export class TableComponent<T> implements AfterContentInit {
+  readonly data = input.required<T[]>();
+  readonly columns = input.required<TableColumn<T>[]>();
+  readonly config = input<Partial<TableConfig>>({});
 
-  /** Definición de columnas */
-  @Input() columns: TableColumn<T>[] = [];
+  protected readonly normalizedConfig = computed<TableConfig>(() => {
+    const cfg = this.config();
+    return {
+      emptyMessage: cfg.emptyMessage ?? 'No hay datos disponibles',
+      showLoading: cfg.showLoading ?? false,
+      skeletonRows: cfg.skeletonRows ?? 5,
+      enableHover: cfg.enableHover ?? true,
+      enableStriped: cfg.enableStriped ?? true,
+    };
+  });
 
-  /** Configuración de la tabla */
-  @Input() config: TableConfig = {
-    emptyMessage: 'No hay datos disponibles',
-    showLoading: false,
-    skeletonRows: 5,
-    enableHover: true,
-    enableStriped: true,
-  };
+  readonly actionClick = output<TableActionEvent<T>>();
 
-  /** Evento emitido cuando se ejecuta una acción sobre una fila */
-  @Output() actionClick = new EventEmitter<TableActionEvent<T>>();
-
-  /** Templates personalizados inyectados por ng-content */
   @ContentChildren(TableColumnDirective) columnTemplates!: QueryList<TableColumnDirective<T>>;
   @ContentChildren(TableCellTemplateDirective) cellTemplates!: QueryList<
     TableCellTemplateDirective<T>
   >;
-
-  /** Columnas a mostrar (keys) */
-  displayedColumns: string[] = [];
-
-  /** Mapa de templates personalizados por columna */
-  private customTemplates = new Map<string, TemplateRef<TableCellContext<T>>>();
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['columns']) {
-      this.updateDisplayedColumns();
-    }
-  }
-
+  protected readonly displayedColumns = createDisplayedColumnsSignal(this.columns);
+  protected readonly skeletonArray = createSkeletonArraySignal(this.normalizedConfig);
+  protected readonly isEmpty = createIsEmptySignal(this.data);
+  protected readonly isLoading = createIsLoadingSignal(this.normalizedConfig);
+  protected readonly customTemplates = signal<Map<string, TemplateRef<TableCellContext<T>>>>(
+    new Map()
+  );
   ngAfterContentInit(): void {
     this.mapCustomTemplates();
-    this.updateDisplayedColumns();
   }
 
-  /**
-   * Actualiza la lista de columnas a mostrar
-   */
-  private updateDisplayedColumns(): void {
-    this.displayedColumns = this.columns.map(col => col.key);
-  }
-
-  /**
-   * Mapea los templates personalizados con sus columnas
-   */
   private mapCustomTemplates(): void {
-    this.customTemplates.clear();
+    const templatesMap = new Map<string, TemplateRef<TableCellContext<T>>>();
 
-    // Templates con directiva appTableColumn
     this.columnTemplates?.forEach(directive => {
-      this.customTemplates.set(directive.columnKey, directive.template);
+      templatesMap.set(directive.columnKey, directive.template);
     });
 
-    // Templates con directiva appTableCellTemplate
     this.cellTemplates?.forEach(directive => {
-      this.customTemplates.set(directive.cellKey, directive.template);
+      templatesMap.set(directive.cellKey, directive.template);
     });
 
-    // Templates definidos directamente en las columnas
-    this.columns.forEach(column => {
+    this.columns().forEach(column => {
       if (column.cellTemplate) {
-        this.customTemplates.set(column.key, column.cellTemplate);
+        templatesMap.set(column.key, column.cellTemplate);
       }
     });
-  }
 
-  /**
-   * Obtiene el template personalizado para una columna
-   */
-  getCustomTemplate(columnKey: string): TemplateRef<TableCellContext<T>> | undefined {
-    return this.customTemplates.get(columnKey);
-  }
-
-  /**
-   * Obtiene el valor de una celda
-   */
-  getCellValue(row: T, column: TableColumn<T>): unknown {
-    if (column.valueGetter) {
-      return column.valueGetter(row);
-    }
-    return (row as Record<string, unknown>)[column.key];
-  }
-
-  /**
-   * Crea el contexto para un template de celda
-   */
-  createCellContext(row: T, index: number): TableCellContext<T> {
-    return {
-      $implicit: row,
-      index,
-      first: index === 0,
-      last: index === this.data.length - 1,
-      even: index % 2 === 0,
-      odd: index % 2 !== 0,
-    };
-  }
-
-  /**
-   * Emite un evento de acción
-   */
-  emitAction(action: string, row: T, index: number): void {
-    this.actionClick.emit({ action, row, index });
-  }
-
-  /**
-   * Genera un array para el skeleton loader
-   */
-  getSkeletonArray(): number[] {
-    return Array(this.config.skeletonRows || 5).fill(0);
-  }
-
-  /**
-   * Verifica si la tabla está vacía
-   */
-  get isEmpty(): boolean {
-    return !this.data || this.data.length === 0;
-  }
-
-  /**
-   * Verifica si se debe mostrar el estado de carga
-   */
-  get isLoading(): boolean {
-    return this.config.showLoading || false;
+    this.customTemplates.set(templatesMap);
   }
 }
