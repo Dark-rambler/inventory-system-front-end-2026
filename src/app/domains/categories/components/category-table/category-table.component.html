@@ -1,0 +1,25 @@
+<app-table
+  [data]="categoryData()?.items ?? []"
+  [columns]="categoryColumns"
+  [config]="tableConfig()"
+>
+  <ng-template appTableColumn="actions" let-category>
+    <app-action-buttons>
+      <div appViewDetails>
+        <app-icon-button action="view" />
+      </div>
+
+      <div appEditItem>
+        <app-icon-button action="edit" />
+      </div>
+
+      <div
+        appConfirmAction
+        [confirmMessage]="'¿Eliminar la categoría ' + category.name + '?'"
+        [data]="category"
+      >
+        <app-icon-button action="delete" />
+      </div>
+    </app-action-buttons>
+  </ng-template>
+</app-table>

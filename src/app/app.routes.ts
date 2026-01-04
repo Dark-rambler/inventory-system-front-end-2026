@@ -36,6 +36,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/settings/settings.component').then(m => m.SettingsComponent),
       },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./domains/categories/categories.component').then(m => m.CategoriesComponent),
+      },
     ],
   },
   {

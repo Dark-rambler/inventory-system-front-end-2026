@@ -1,0 +1,18 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment.development';
+import { Observable } from 'rxjs';
+import { Category } from '../interfaces/category.interface';
+import { PaginatorInterface } from '../interfaces/paginator.interface';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CategoryService {
+  private readonly _httpClient: HttpClient = inject(HttpClient);
+  private readonly _url = `${environment.API_URL}/category`;
+
+  public getAll(params?: HttpParams): Observable<PaginatorInterface<Category>> {
+    return this._httpClient.get<PaginatorInterface<Category>>(this._url, { params });
+  }
+}

@@ -61,7 +61,6 @@
             >
               {{ column.header }}
             </th>
-
             <!-- Celda de datos -->
             <td
               cdk-cell
@@ -76,7 +75,7 @@
                 ></ng-container>
               } @else {
                 <!-- Celda por defecto -->
-                {{ getCellValue(row, column) | tableValue: column.key }}
+                {{ row | tableValue: column.key }}
               }
             </td>
           </ng-container>
