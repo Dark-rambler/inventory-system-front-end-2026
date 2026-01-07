@@ -1,0 +1,21 @@
+<app-table [data]="productData()?.items ?? []" [columns]="productColumns" [config]="tableConfig()">
+  <ng-template appTableColumn="actions" let-row>
+    <app-action-buttons>
+      <div appViewDetails>
+        <app-icon-button action="view" />
+      </div>
+
+      <div appEditItem>
+        <app-icon-button action="edit" />
+      </div>
+
+      <div
+        appConfirmAction
+        [confirmMessage]="'¿Eliminar el producto ' + row.name + '?'"
+        [data]="row"
+      >
+        <app-icon-button action="delete" />
+      </div>
+    </app-action-buttons>
+  </ng-template>
+</app-table>
