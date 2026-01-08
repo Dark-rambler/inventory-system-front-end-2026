@@ -1,0 +1,30 @@
+<form [formGroup]="categoryForm" class="space-y-4">
+  <app-form-input
+    label="Nombre de la categoría"
+    [name]="'categoryName'"
+    [parentForm]="categoryForm"
+    controlName="name"
+    placeholder="Ej: Electrónica, Ropa, Alimentos..."
+  />
+
+  <app-form-input
+    [textArea]="true"
+    label="Descripción de la categoría"
+    [name]="'categoryDescription'"
+    [parentForm]="categoryForm"
+    controlName="description"
+    placeholder="Describe brevemente esta categoría..."
+  />
+
+  <div class="flex justify-end space-x-2">
+    <app-button
+      appSendCategory
+      [keepOpen]="true"
+      type="submit"
+      label="Guardar y continuar"
+      variant="primary"
+      size="md"
+    />
+    <app-button appSendCategory type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>
