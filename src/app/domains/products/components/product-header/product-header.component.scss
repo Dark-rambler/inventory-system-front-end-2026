@@ -1,0 +1,21 @@
+.products-header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.products-title {
+  @apply text-3xl font-bold text-[#1E1E1E] mb-1;
+}
+
+.products-subtitle {
+  @apply text-sm text-gray-600;
+}
+
+@media (max-width: 768px) {
+  .products-header {
+    @apply flex-col items-start gap-4;
+  }
+
+  .products-title {
+    @apply text-2xl;
+  }
+}

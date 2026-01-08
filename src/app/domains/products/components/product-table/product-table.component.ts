@@ -13,11 +13,11 @@ import {
   EditItemDirective,
   ViewDetailsDirective,
 } from '../../../../shared/directives';
-import { CATEGORYCOLUMNS } from '../../constants/category-columns.constant';
-import { CategoryResourceService } from '../../services/category-resource.service';
+import { PRODUCT_COLUMNS } from '../../constants/product-columns.constant';
+import { ProductResourceService } from '../../services/product-resource.service';
 
 @Component({
-  selector: 'app-category-table',
+  selector: 'app-product-table',
   standalone: true,
   imports: [
     TableComponent,
@@ -28,19 +28,19 @@ import { CategoryResourceService } from '../../services/category-resource.servic
     ViewDetailsDirective,
     EditItemDirective,
   ],
-  templateUrl: './category-table.component.html',
-  styleUrls: ['./category-table.component.scss'],
+  templateUrl: './product-table.component.html',
+  styleUrl: './product-table.component.scss',
 })
-export class CategoryTableComponent {
-  private readonly _categoryResourceService = inject(CategoryResourceService);
-  public categoryData = this._categoryResourceService.categoryData;
+export class ProductTableComponent {
+  private readonly _productResourceService = inject(ProductResourceService);
+  public productData = this._productResourceService.productData;
 
   public tableConfig = computed<TableConfig>(() => ({
-    emptyMessage: 'No se encontraron categorías',
-    showLoading: this._categoryResourceService.isLoading(),
+    emptyMessage: 'No se encontraron productos',
+    showLoading: this._productResourceService.isLoading(),
     skeletonRows: 5,
     enableHover: true,
     enableStriped: true,
   }));
-  protected readonly categoryColumns = CATEGORYCOLUMNS;
+  protected readonly productColumns = PRODUCT_COLUMNS;
 }
