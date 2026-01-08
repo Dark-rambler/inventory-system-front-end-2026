@@ -14,7 +14,7 @@ import {
   ViewDetailsDirective,
 } from '../../../../shared/directives';
 import { CATEGORYCOLUMNS } from '../../constants/category-columns.constant';
-import { CategoryResourceService } from '../../services/categoryResource.service';
+import { CategoryResourceService } from '../../services/category-resource.service';
 
 @Component({
   selector: 'app-category-table',
