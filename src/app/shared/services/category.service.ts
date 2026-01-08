@@ -15,4 +15,8 @@ export class CategoryService {
   public getAll(params?: HttpParams): Observable<PaginatorInterface<Category>> {
     return this._httpClient.get<PaginatorInterface<Category>>(this._url, { params });
   }
+
+  public create(category: Category): Observable<Category> {
+    return this._httpClient.post<Category>(this._url, category);
+  }
 }

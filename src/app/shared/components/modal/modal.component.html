@@ -1,0 +1,29 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div [class]="'bg-white p-8 rounded-lg shadow-2xl relative ' + width()">
+    <div class="flex justify-between items-center border-b border-primary mb-6 pb-4">
+      <h2 class="text-xl text-gray-700 font-semibold">{{ title() }}</h2>
+
+      @if (showCloseButton()) {
+        <button
+          type="button"
+          (click)="onClose()"
+          class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          aria-label="Cerrar modal"
+        >
+          <svg appCloseModal class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

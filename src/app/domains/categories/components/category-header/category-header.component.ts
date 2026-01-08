@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, ViewContainerRef } from '@angular/core';
 import { ButtonComponent } from '../../../../shared/components/button';
+import { Dialog } from '@angular/cdk/dialog';
+import { ModalCategoryComponent } from '../modal-category/modal-category.component';
 
 @Component({
   selector: 'app-category-header',
@@ -8,7 +10,11 @@ import { ButtonComponent } from '../../../../shared/components/button';
   styleUrl: './category-header.component.scss',
 })
 export class CategoryHeaderComponent {
+  private readonly _dialogService = inject(Dialog);
+  private readonly _viewContainerRef = inject(ViewContainerRef);
   handleNewCategory(): void {
-    console.log('agrega nueva categoria');
+    this._dialogService.open(ModalCategoryComponent, {
+      viewContainerRef: this._viewContainerRef,
+    });
   }
 }
