@@ -20,7 +20,7 @@ export class CategoryService {
     return this._httpClient.post<Category>(this._url, category);
   }
 
-  public update(category: Category): Observable<Category> {
-    return this._httpClient.put<Category>(`${this._url}/${category.id}`, category);
+  public update(category: Category, id: string): Observable<Category> {
+    return this._httpClient.put<Category>(`${this._url}/${id}`, category);
   }
 }

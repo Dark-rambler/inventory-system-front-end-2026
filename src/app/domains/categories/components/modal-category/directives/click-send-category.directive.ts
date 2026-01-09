@@ -47,10 +47,10 @@ export class SendCategoryDirective {
 
   private _updateCategory(): void {
     const form = this._formGroupDirective?.form;
-    const category = this.data;
+    const category = form?.value;
 
     this._categoryService
-      .update(category)
+      .update(category, this.data.id)
       .pipe(
         tap(() => this._categoryResourceService.reloadCategory()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
