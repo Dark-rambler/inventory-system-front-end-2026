@@ -17,14 +17,16 @@
   />
 
   <div class="flex justify-end space-x-2">
-    <app-button
-      appSendCategory
-      [keepOpen]="true"
-      type="submit"
-      label="Guardar y continuar"
-      variant="primary"
-      size="md"
-    />
+    @if (!this.data) {
+      <app-button
+        appSendCategory
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
     <app-button appSendCategory type="submit" label="Guardar" variant="primary" size="md" />
   </div>
 </form>

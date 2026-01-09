@@ -1,4 +1,5 @@
-import { Component, computed, inject } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
+import { Component, computed, inject, ViewContainerRef } from '@angular/core';
 import {
   ActionButtonsComponent,
   IconButtonComponent,
@@ -13,8 +14,10 @@ import {
   EditItemDirective,
   ViewDetailsDirective,
 } from '../../../../shared/directives';
+import { Category } from '../../../../shared/interfaces/category.interface';
 import { CATEGORYCOLUMNS } from '../../constants/category-columns.constant';
 import { CategoryResourceService } from '../../services/category-resource.service';
+import { ModalCategoryComponent } from '../modal-category/modal-category.component';
 
 @Component({
   selector: 'app-category-table',
@@ -33,6 +36,8 @@ import { CategoryResourceService } from '../../services/category-resource.servic
 })
 export class CategoryTableComponent {
   private readonly _categoryResourceService = inject(CategoryResourceService);
+  private readonly _dialog = inject(Dialog);
+  private readonly _viewContainerRef = inject(ViewContainerRef);
   public categoryData = this._categoryResourceService.categoryData;
 
   public tableConfig = computed<TableConfig>(() => ({
@@ -43,4 +48,10 @@ export class CategoryTableComponent {
     enableStriped: true,
   }));
   protected readonly categoryColumns = CATEGORYCOLUMNS;
+  protected editCategory(event: Category) {
+    this._dialog.open(ModalCategoryComponent, {
+      data: event,
+      viewContainerRef: this._viewContainerRef,
+    });
+  }
 }
