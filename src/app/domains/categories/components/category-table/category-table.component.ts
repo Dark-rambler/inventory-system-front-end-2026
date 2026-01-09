@@ -1,3 +1,4 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, inject, ViewContainerRef } from '@angular/core';
 import {
   ActionButtonsComponent,
@@ -13,10 +14,9 @@ import {
   EditItemDirective,
   ViewDetailsDirective,
 } from '../../../../shared/directives';
-import { CATEGORYCOLUMNS } from '../../constants/category-columns.constant';
-import { CategoryResourceService } from '../../services/categoryResource.service';
 import { Category } from '../../../../shared/interfaces/category.interface';
-import { Dialog } from '@angular/cdk/dialog';
+import { CATEGORYCOLUMNS } from '../../constants/category-columns.constant';
+import { CategoryResourceService } from '../../services/category-resource.service';
 import { ModalCategoryComponent } from '../modal-category/modal-category.component';
 
 @Component({

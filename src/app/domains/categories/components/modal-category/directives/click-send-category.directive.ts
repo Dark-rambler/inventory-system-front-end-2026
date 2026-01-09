@@ -1,9 +1,9 @@
-import { Directive, inject, input } from '@angular/core';
-import { CategoryService } from '../../../../../shared/services/category.service';
-import { FormGroupDirective } from '@angular/forms';
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
+import { Directive, inject, input } from '@angular/core';
+import { FormGroupDirective } from '@angular/forms';
 import { tap } from 'rxjs';
-import { CategoryResourceService } from '../../../services/categoryResource.service';
+import { CategoryService } from '../../../../../shared/services/category.service';
+import { CategoryResourceService } from '../../../services/category-resource.service';
 
 @Directive({
   selector: '[appSendCategory]',
