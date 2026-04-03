@@ -22,12 +22,8 @@
       <div appEditItem>
         <app-icon-button (buttonClick)="editUser(user)" action="edit" tooltip="Editar" />
       </div>
-      <div
-        appConfirmAction
-        [confirmMessage]="'¿Eliminar el usuario ' + user.name + '?'"
-        [data]="user"
-      >
-        <app-icon-button action="delete" tooltip="Eliminar" />
+      <div>
+        <app-icon-button (buttonClick)="deleteUser(user)" action="delete" tooltip="Eliminar" />
       </div>
     </app-action-buttons>
   </ng-template>

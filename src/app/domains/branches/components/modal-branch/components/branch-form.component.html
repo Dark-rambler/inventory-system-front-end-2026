@@ -23,30 +23,39 @@
     placeholder="Ej: Av. Principal 100"
   />
 
-  <app-form-input
-    label="Ubicación"
-    [name]="'branchLocation'"
-    [parentForm]="branchForm"
-    controlName="location"
-    placeholder="Ej: Ciudad de México, CDMX"
-  />
+  <fieldset formGroupName="location" class="space-y-3 rounded-lg border border-gray-200 p-4">
+    <legend class="px-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+      Ubicación
+    </legend>
+
+    <app-form-input
+      label="Ciudad"
+      [name]="'locationCity'"
+      [parentForm]="branchForm.controls.location"
+      controlName="city"
+      placeholder="Ej: Ciudad de México"
+    />
+
+    <app-form-input
+      label="Dirección"
+      [name]="'locationAddress'"
+      [parentForm]="branchForm.controls.location"
+      controlName="address"
+      placeholder="Ej: Av. Principal 100"
+    />
+  </fieldset>
 
   <div class="flex justify-end space-x-2">
     @if (!this.data) {
       <app-button
-        (buttonClick)="onSubmit(true)"
+        appSendBranch
+        [keepOpen]="true"
         type="button"
         label="Guardar y continuar"
         variant="primary"
         size="md"
       />
     }
-    <app-button
-      (buttonClick)="onSubmit(false)"
-      type="button"
-      label="Guardar"
-      variant="primary"
-      size="md"
-    />
+    <app-button appSendBranch type="button" label="Guardar" variant="primary" size="md" />
   </div>
 </form>

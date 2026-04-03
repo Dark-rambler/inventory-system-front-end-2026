@@ -23,4 +23,8 @@ export class BranchService {
   public update(branch: Branch, id: string): Observable<Branch> {
     return this._httpClient.put<Branch>(`${this._url}/${id}`, branch);
   }
+
+  public delete(id: string): Observable<void> {
+    return this._httpClient.delete<void>(`${this._url}/${id}`);
+  }
 }

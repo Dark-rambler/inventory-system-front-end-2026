@@ -11,15 +11,14 @@ import {
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import {
-  ConfirmActionDirective,
-  EditItemDirective,
-  ViewDetailsDirective,
-} from '../../../../shared/directives';
+import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
 import { Warehouse } from '../../../../shared/interfaces/warehouse.interface';
 import { WAREHOUSECOLUMNS } from '../../constants/warehouse-columns.constant';
 import { WarehouseResourceService } from '../../services/warehouse-resource.service';
 import { ModalWarehouseComponent } from '../modal-warehouse/modal-warehouse.component';
+import { WarehouseService } from '../../../../shared/services/warehouse.service';
+import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-warehouse-table',
@@ -30,7 +29,6 @@ import { ModalWarehouseComponent } from '../modal-warehouse/modal-warehouse.comp
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ConfirmActionDirective,
     ViewDetailsDirective,
     EditItemDirective,
     PaginatorComponent,
@@ -39,6 +37,8 @@ import { ModalWarehouseComponent } from '../modal-warehouse/modal-warehouse.comp
 })
 export class WarehouseTableComponent {
   private readonly _warehouseResourceService = inject(WarehouseResourceService);
+  private readonly _warehouseService = inject(WarehouseService);
+  private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
 
@@ -60,6 +60,25 @@ export class WarehouseTableComponent {
       data: event,
       viewContainerRef: this._viewContainerRef,
     });
+  }
+
+  protected deleteWarehouse(warehouse: Warehouse): void {
+    this._confirmModalService
+      .open({
+        title: 'Eliminar almacén',
+        message: `¿Estás seguro de eliminar el almacén "${warehouse.name}"?`,
+      })
+      .subscribe(result => {
+        if (result === 'confirm') {
+          this._warehouseService
+            .delete(warehouse.id.toString())
+            .pipe(
+              tap(() => this._warehouseResourceService.reloadWarehouse()),
+              tap(() => this._dialog.closeAll())
+            )
+            .subscribe();
+        }
+      });
   }
 
   protected changePage(page: number): void {

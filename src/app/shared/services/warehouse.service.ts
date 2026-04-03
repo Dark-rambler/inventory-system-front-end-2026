@@ -23,4 +23,8 @@ export class WarehouseService {
   public update(warehouse: Warehouse, id: string): Observable<Warehouse> {
     return this._httpClient.put<Warehouse>(`${this._url}/${id}`, warehouse);
   }
+
+  public delete(id: string): Observable<void> {
+    return this._httpClient.delete<void>(`${this._url}/${id}`);
+  }
 }

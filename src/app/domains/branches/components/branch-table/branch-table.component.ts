@@ -19,6 +19,9 @@ import { Branch } from '../../../../shared/interfaces/branch.interface';
 import { BRANCHCOLUMNS } from '../../constants/branch-columns.constant';
 import { BranchResourceService } from '../../services/branch-resource.service';
 import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
+import { BranchService } from '../../../../shared/services/branch.service';
+import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-branch-table',
@@ -38,6 +41,8 @@ import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
 })
 export class BranchTableComponent {
   private readonly _branchResourceService = inject(BranchResourceService);
+  private readonly _branchService = inject(BranchService);
+  private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
 
@@ -59,6 +64,22 @@ export class BranchTableComponent {
       data: event,
       viewContainerRef: this._viewContainerRef,
     });
+  }
+
+  protected deleteBranch(branch: Branch): void {
+    this._confirmModalService
+      .open({
+        title: 'Eliminar sucursal',
+        message: `¿Estás seguro de eliminar la sucursal "${branch.name}"?`,
+      })
+      .subscribe(result => {
+        if (result === 'confirm') {
+          this._branchService
+            .delete(branch.id.toString())
+            .pipe(tap(() => this._branchResourceService.reloadBranch()))
+            .subscribe();
+        }
+      });
   }
 
   protected changePage(page: number): void {

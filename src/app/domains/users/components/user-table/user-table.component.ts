@@ -10,11 +10,14 @@ import {
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import { ConfirmActionDirective, EditItemDirective } from '../../../../shared/directives';
+import { EditItemDirective } from '../../../../shared/directives';
 import { User } from '../../../../shared/interfaces/user.interface';
 import { USERCOLUMNS } from '../../constants/user-columns.constant';
 import { UserResourceService } from '../../services/user-resource.service';
 import { ModalUserComponent } from '../modal-user/modal-user.component';
+import { UserService } from '../../../../shared/services/user.service';
+import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-table',
@@ -24,7 +27,6 @@ import { ModalUserComponent } from '../modal-user/modal-user.component';
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ConfirmActionDirective,
     EditItemDirective,
     PaginatorComponent,
   ],
@@ -32,6 +34,8 @@ import { ModalUserComponent } from '../modal-user/modal-user.component';
 })
 export class UserTableComponent {
   private readonly _userResourceService = inject(UserResourceService);
+  private readonly _userService = inject(UserService);
+  private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
 
@@ -56,7 +60,19 @@ export class UserTableComponent {
   }
 
   protected deleteUser(user: User): void {
-    console.log('Eliminar usuario:', user.id);
+    this._confirmModalService
+      .open({
+        title: 'Eliminar usuario',
+        message: `¿Estás seguro de eliminar el usuario "${user.name}"?`,
+      })
+      .subscribe(result => {
+        if (result === 'confirm') {
+          this._userService
+            .delete(user.id.toString())
+            .pipe(tap(() => this._userResourceService.reloadUser()))
+            .subscribe();
+        }
+      });
   }
 
   protected changePage(page: number): void {

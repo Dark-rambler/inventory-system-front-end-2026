@@ -23,12 +23,12 @@
         <app-icon-button (buttonClick)="editWarehouse(warehouse)" action="edit" />
       </div>
 
-      <div
-        appConfirmAction
-        [confirmMessage]="'¿Eliminar el almacén ' + warehouse.name + '?'"
-        [data]="warehouse"
-      >
-        <app-icon-button action="delete" />
+      <div>
+        <app-icon-button
+          (buttonClick)="deleteWarehouse(warehouse)"
+          action="delete"
+          tooltip="Eliminar"
+        />
       </div>
     </app-action-buttons>
   </ng-template>

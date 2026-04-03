@@ -6,15 +6,11 @@
       </div>
 
       <div appEditItem>
-        <app-icon-button action="edit" />
+        <app-icon-button (buttonClick)="editProduct(row)" action="edit" tooltip="Editar" />
       </div>
 
-      <div
-        appConfirmAction
-        [confirmMessage]="'¿Eliminar el producto ' + row.name + '?'"
-        [data]="row"
-      >
-        <app-icon-button action="delete" />
+      <div>
+        <app-icon-button (buttonClick)="deleteProduct(row)" action="delete" tooltip="Eliminar" />
       </div>
     </app-action-buttons>
   </ng-template>
