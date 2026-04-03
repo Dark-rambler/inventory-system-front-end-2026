@@ -1,0 +1,45 @@
+<app-table
+  [data]="warehouseData()?.items ?? []"
+  [columns]="warehouseColumns"
+  [config]="tableConfig()"
+>
+  <ng-template appTableColumn="isActive" let-warehouse>
+    <span [class]="warehouse.isActive ? 'badge badge-success' : 'badge badge-danger'">
+      {{ warehouse.isActive ? 'Activo' : 'Inactivo' }}
+    </span>
+  </ng-template>
+
+  <ng-template appTableColumn="capacity" let-warehouse>
+    {{ warehouse.capacity | number }} unidades
+  </ng-template>
+
+  <ng-template appTableColumn="actions" let-warehouse>
+    <app-action-buttons>
+      <div appViewDetails>
+        <app-icon-button action="view" />
+      </div>
+
+      <div appEditItem>
+        <app-icon-button (buttonClick)="editWarehouse(warehouse)" action="edit" />
+      </div>
+
+      <div
+        appConfirmAction
+        [confirmMessage]="'¿Eliminar el almacén ' + warehouse.name + '?'"
+        [data]="warehouse"
+      >
+        <app-icon-button action="delete" />
+      </div>
+    </app-action-buttons>
+  </ng-template>
+</app-table>
+
+@if (warehouseData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}

@@ -1,0 +1,53 @@
+<form [formGroup]="warehouseForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del almacén"
+    [name]="'warehouseName'"
+    [parentForm]="warehouseForm"
+    controlName="name"
+    placeholder="Ej: Almacén Central, Almacén Norte..."
+  />
+
+  <app-form-input
+    label="Ubicación"
+    [name]="'warehouseLocation'"
+    [parentForm]="warehouseForm"
+    controlName="location"
+    placeholder="Ej: Ciudad de México, CDMX"
+  />
+
+  <app-form-input
+    label="Encargado"
+    [name]="'warehouseManager'"
+    [parentForm]="warehouseForm"
+    controlName="manager"
+    placeholder="Nombre del responsable del almacén"
+  />
+
+  <app-form-input
+    label="Capacidad"
+    [name]="'warehouseCapacity'"
+    [parentForm]="warehouseForm"
+    controlName="capacity"
+    type="number"
+    placeholder="Capacidad en unidades"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        (buttonClick)="onSubmit(true)"
+        type="button"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button
+      (buttonClick)="onSubmit(false)"
+      type="button"
+      label="Guardar"
+      variant="primary"
+      size="md"
+    />
+  </div>
+</form>
