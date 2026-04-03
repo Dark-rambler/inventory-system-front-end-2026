@@ -5,6 +5,7 @@ import {
   IconButtonComponent,
 } from '../../../../shared/components/icon-button';
 import {
+  PaginatorComponent,
   TableColumnDirective,
   TableComponent,
   TableConfig,
@@ -25,6 +26,7 @@ import { ModalUserComponent } from '../modal-user/modal-user.component';
     ActionButtonsComponent,
     ConfirmActionDirective,
     EditItemDirective,
+    PaginatorComponent,
   ],
   templateUrl: './user-table.component.html',
 })
@@ -34,6 +36,7 @@ export class UserTableComponent {
   private readonly _viewContainerRef = inject(ViewContainerRef);
 
   public userData = this._userResourceService.userData;
+  public currentPage = this._userResourceService.filterUserParameters;
 
   public tableConfig = computed<TableConfig>(() => ({
     emptyMessage: 'No se encontraron usuarios',
@@ -54,5 +57,13 @@ export class UserTableComponent {
 
   protected deleteUser(user: User): void {
     console.log('Eliminar usuario:', user.id);
+  }
+
+  protected changePage(page: number): void {
+    this._userResourceService.filterUserParameters.update(p => ({ ...p, page }));
+  }
+
+  protected changePageSize(pageSize: number): void {
+    this._userResourceService.filterUserParameters.update(p => ({ ...p, page: 1, pageSize }));
   }
 }

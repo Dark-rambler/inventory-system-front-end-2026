@@ -23,3 +23,13 @@
     </app-action-buttons>
   </ng-template>
 </app-table>
+
+@if (categoryData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}

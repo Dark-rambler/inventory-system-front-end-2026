@@ -5,6 +5,7 @@ import {
   IconButtonComponent,
 } from '../../../../shared/components/icon-button';
 import {
+  PaginatorComponent,
   TableColumnDirective,
   TableComponent,
   TableConfig,
@@ -30,6 +31,7 @@ import { ModalCategoryComponent } from '../modal-category/modal-category.compone
     ConfirmActionDirective,
     ViewDetailsDirective,
     EditItemDirective,
+    PaginatorComponent,
   ],
   templateUrl: './category-table.component.html',
   styleUrls: ['./category-table.component.scss'],
@@ -39,6 +41,7 @@ export class CategoryTableComponent {
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
   public categoryData = this._categoryResourceService.categoryData;
+  public currentPage = this._categoryResourceService.filterCategoryParameters;
 
   public tableConfig = computed<TableConfig>(() => ({
     emptyMessage: 'No se encontraron categorías',
@@ -53,5 +56,17 @@ export class CategoryTableComponent {
       data: event,
       viewContainerRef: this._viewContainerRef,
     });
+  }
+
+  protected changePage(page: number): void {
+    this._categoryResourceService.filterCategoryParameters.update(p => ({ ...p, page }));
+  }
+
+  protected changePageSize(pageSize: number): void {
+    this._categoryResourceService.filterCategoryParameters.update(p => ({
+      ...p,
+      page: 1,
+      pageSize,
+    }));
   }
 }

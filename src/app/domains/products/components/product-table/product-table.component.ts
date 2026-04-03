@@ -4,6 +4,7 @@ import {
   IconButtonComponent,
 } from '../../../../shared/components/icon-button';
 import {
+  PaginatorComponent,
   TableColumnDirective,
   TableComponent,
   TableConfig,
@@ -27,6 +28,7 @@ import { ProductResourceService } from '../../services/product-resource.service'
     ConfirmActionDirective,
     ViewDetailsDirective,
     EditItemDirective,
+    PaginatorComponent,
   ],
   templateUrl: './product-table.component.html',
   styleUrl: './product-table.component.scss',
@@ -34,6 +36,7 @@ import { ProductResourceService } from '../../services/product-resource.service'
 export class ProductTableComponent {
   private readonly _productResourceService = inject(ProductResourceService);
   public productData = this._productResourceService.productData;
+  public currentPage = this._productResourceService.filterProductParameters;
 
   public tableConfig = computed<TableConfig>(() => ({
     emptyMessage: 'No se encontraron productos',
@@ -43,4 +46,12 @@ export class ProductTableComponent {
     enableStriped: true,
   }));
   protected readonly productColumns = PRODUCT_COLUMNS;
+
+  protected changePage(page: number): void {
+    this._productResourceService.filterProductParameters.update(p => ({ ...p, page }));
+  }
+
+  protected changePageSize(pageSize: number): void {
+    this._productResourceService.filterProductParameters.update(p => ({ ...p, page: 1, pageSize }));
+  }
 }

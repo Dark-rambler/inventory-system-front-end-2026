@@ -1,5 +1,6 @@
 export { TableComponent } from './table.component';
 
+export { PaginatorComponent } from './components/paginator/paginator.component';
 export { TableEmptyStateComponent } from './components/table-empty-state.component';
 export { TableSkeletonComponent } from './components/table-skeleton.component';
 
