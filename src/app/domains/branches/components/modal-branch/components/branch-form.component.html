@@ -1,0 +1,52 @@
+<form [formGroup]="branchForm" class="space-y-4">
+  <app-form-input
+    label="Nombre de la sucursal"
+    [name]="'branchName'"
+    [parentForm]="branchForm"
+    controlName="name"
+    placeholder="Ej: Sucursal Centro, Sucursal Norte..."
+  />
+
+  <app-form-input
+    label="Teléfono"
+    [name]="'branchTelephone'"
+    [parentForm]="branchForm"
+    controlName="telephone"
+    placeholder="Ej: 55 1234 5678"
+  />
+
+  <app-form-input
+    label="Dirección"
+    [name]="'branchAddress'"
+    [parentForm]="branchForm"
+    controlName="address"
+    placeholder="Ej: Av. Principal 100"
+  />
+
+  <app-form-input
+    label="Ubicación"
+    [name]="'branchLocation'"
+    [parentForm]="branchForm"
+    controlName="location"
+    placeholder="Ej: Ciudad de México, CDMX"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        (buttonClick)="onSubmit(true)"
+        type="button"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button
+      (buttonClick)="onSubmit(false)"
+      type="button"
+      label="Guardar"
+      variant="primary"
+      size="md"
+    />
+  </div>
+</form>

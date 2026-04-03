@@ -1,0 +1,31 @@
+<app-table [data]="branchData()?.items ?? []" [columns]="branchColumns" [config]="tableConfig()">
+  <ng-template appTableColumn="actions" let-branch>
+    <app-action-buttons>
+      <div appViewDetails>
+        <app-icon-button action="view" />
+      </div>
+
+      <div appEditItem>
+        <app-icon-button (buttonClick)="editBranch(branch)" action="edit" tooltip="Editar" />
+      </div>
+
+      <div
+        appConfirmAction
+        [confirmMessage]="'¿Eliminar la sucursal ' + branch.name + '?'"
+        [data]="branch"
+      >
+        <app-icon-button action="delete" />
+      </div>
+    </app-action-buttons>
+  </ng-template>
+</app-table>
+
+@if (branchData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}
