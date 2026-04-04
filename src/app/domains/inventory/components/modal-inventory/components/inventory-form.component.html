@@ -17,10 +17,19 @@
 
   <app-form-input
     label="Categoría"
-    [name]="'inventoryCategory'"
+    [name]="'inventoryCategoryName'"
     [parentForm]="inventoryForm"
-    controlName="category"
+    controlName="categoryName"
     placeholder="Ej: Electrónica, Ropa, Alimentos..."
+  />
+
+  <app-form-input
+    label="Stock"
+    [name]="'inventoryStock'"
+    [parentForm]="inventoryForm"
+    controlName="stock"
+    type="number"
+    placeholder="Cantidad en stock"
   />
 
   <app-form-input

@@ -72,16 +72,16 @@
           </div>
           <input
             type="text"
-            id="username"
-            formControlName="username"
+            id="userName"
+            formControlName="userName"
             class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             placeholder="Ingresa tu usuario"
             autocomplete="username"
           />
         </div>
         @if (
-          loginForm.get('username')?.invalid &&
-          (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)
+          loginForm.get('userName')?.invalid &&
+          (loginForm.get('userName')?.dirty || loginForm.get('userName')?.touched)
         ) {
           <span class="text-xs text-danger/80">El usuario es requerido</span>
         }

@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService, User } from '@shared/services/auth.service';
+import { AuthService } from '@shared/services/auth.service';
 import { ButtonComponent } from '../button';
 
 @Component({
@@ -20,7 +20,7 @@ export class LoginComponent {
   protected readonly errorMessage = signal('');
 
   protected readonly loginForm = this._fb.group({
-    username: ['', [Validators.required, Validators.minLength(3)]],
+    userName: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(3)]],
   });
 
@@ -33,20 +33,16 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    const { username, password } = this.loginForm.value;
+    const { userName, password } = this.loginForm.value;
 
-    this._authService.login(username!, password!).subscribe({
-      next: (user: User | null) => {
+    this._authService.login(userName!, password!).subscribe({
+      next: () => {
         this.isLoading.set(false);
-        if (user) {
-          this._router.navigate(['/dashboard']);
-        } else {
-          this.errorMessage.set('Credenciales incorrectas');
-        }
+        this._router.navigate(['/dashboard']);
       },
       error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set('Error al iniciar sesión');
+        this.errorMessage.set('Credenciales incorrectas');
       },
     });
   }

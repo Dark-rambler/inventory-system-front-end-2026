@@ -5,5 +5,6 @@ export interface Product {
   name: string;
   code: string;
   description: string;
+  categoryName: string;
   category: Omit<Category, 'createdAt' | 'updatedAt'>;
 }

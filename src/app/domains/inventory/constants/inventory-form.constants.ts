@@ -4,5 +4,6 @@ export const INVENTORY_FORM_CONTROL = {
   name: ['', [Validators.required]],
   code: ['', [Validators.required]],
   description: ['', []],
-  category: ['', [Validators.required]],
+  categoryName: ['', [Validators.required]],
+  stock: [0, [Validators.required]],
 };

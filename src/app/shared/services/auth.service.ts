@@ -1,9 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, delay, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface User {
-  username: string;
   token: string;
 }
 
@@ -11,11 +12,7 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly MOCK_USER: User = {
-    username: 'admin',
-    token: 'mock-token-123456',
-  };
-
+  private readonly _httpClient = inject(HttpClient);
   private readonly _router = inject(Router);
   private readonly _currentUser = signal<User | null>(null);
 
@@ -32,17 +29,15 @@ export class AuthService {
     }
   }
 
-  public login(username: string, password: string): Observable<User | null> {
-    if (username === 'admin' && password === 'admin') {
-      return of(this.MOCK_USER).pipe(
-        delay(800),
+  public login(userName: string, password: string): Observable<User> {
+    return this._httpClient
+      .post<User>(`${environment.API_URL}/Auth/login`, { userName, password })
+      .pipe(
         tap(user => {
           this._currentUser.set(user);
           localStorage.setItem('user', JSON.stringify(user));
         })
       );
-    }
-    return of(null).pipe(delay(800));
   }
 
   public logout(): void {
