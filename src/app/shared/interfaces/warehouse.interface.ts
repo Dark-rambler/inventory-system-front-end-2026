@@ -1,13 +1,13 @@
 export interface WarehouseLocation {
-  id: number;
+  id?: number;
   address: string;
   city: string;
 }
 
 export interface Warehouse {
-  id: string;
+  id?: string;
   name: string;
   location: WarehouseLocation;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

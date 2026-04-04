@@ -75,7 +75,7 @@ export class BranchTableComponent {
       .subscribe(result => {
         if (result === 'confirm') {
           this._branchService
-            .delete(branch.id.toString())
+            .delete(branch.id?.toString() ?? '')
             .pipe(tap(() => this._branchResourceService.reloadBranch()))
             .subscribe();
         }

@@ -71,7 +71,7 @@ export class WarehouseTableComponent {
       .subscribe(result => {
         if (result === 'confirm') {
           this._warehouseService
-            .delete(warehouse.id.toString())
+            .delete(warehouse.id?.toString() || '')
             .pipe(
               tap(() => this._warehouseResourceService.reloadWarehouse()),
               tap(() => this._dialog.closeAll())

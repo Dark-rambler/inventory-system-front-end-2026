@@ -8,46 +8,31 @@
   />
 
   <app-form-input
-    label="Ubicación"
-    [name]="'warehouseLocation'"
+    label="Dirección"
+    [name]="'warehouseAddress'"
     [parentForm]="warehouseForm"
-    controlName="location"
+    controlName="address"
+    placeholder="Ej: Calle Falsa 123, Colonia Centro, Ciudad de México"
+  />
+  <app-form-input
+    label="Ciudad"
+    [name]="'warehouseCity'"
+    [parentForm]="warehouseForm"
+    controlName="city"
     placeholder="Ej: Ciudad de México, CDMX"
-  />
-
-  <app-form-input
-    label="Encargado"
-    [name]="'warehouseManager'"
-    [parentForm]="warehouseForm"
-    controlName="manager"
-    placeholder="Nombre del responsable del almacén"
-  />
-
-  <app-form-input
-    label="Capacidad"
-    [name]="'warehouseCapacity'"
-    [parentForm]="warehouseForm"
-    controlName="capacity"
-    type="number"
-    placeholder="Capacidad en unidades"
   />
 
   <div class="flex justify-end space-x-2">
     @if (!this.data) {
       <app-button
-        (buttonClick)="onSubmit(true)"
+        appSendWarehouse
+        [keepOpen]="true"
         type="button"
         label="Guardar y continuar"
         variant="primary"
         size="md"
       />
     }
-    <app-button
-      (buttonClick)="onSubmit(false)"
-      type="button"
-      label="Guardar"
-      variant="primary"
-      size="md"
-    />
+    <app-button appSendWarehouse type="button" label="Guardar" variant="primary" size="md" />
   </div>
 </form>

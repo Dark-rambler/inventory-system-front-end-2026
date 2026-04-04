@@ -1,5 +1,5 @@
 export interface Branch {
-  id: number;
+  id?: number;
   name: string;
   telephone: string;
   address: string;
@@ -7,6 +7,6 @@ export interface Branch {
     address: string;
     city: string;
   };
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

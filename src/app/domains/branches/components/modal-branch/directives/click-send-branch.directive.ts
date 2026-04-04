@@ -4,6 +4,7 @@ import { FormGroupDirective } from '@angular/forms';
 import { tap } from 'rxjs';
 import { BranchService } from '../../../../../shared/services/branch.service';
 import { BranchResourceService } from '../../../services/branch-resource.service';
+import { Branch } from '../../../../../shared/interfaces/branch.interface';
 
 @Directive({
   selector: '[appSendBranch]',
@@ -36,8 +37,18 @@ export class SendBranchDirective {
   private _createBranch(): void {
     const form = this._formGroupDirective?.form;
     const branch = form?.value;
+    const address = {
+      address: branch.address,
+      city: branch.city,
+    };
+    const branchToSend: Branch = {
+      name: branch.name,
+      telephone: branch.telephone,
+      location: address,
+      address: branch.address,
+    };
     this._branchService
-      .create(branch)
+      .create(branchToSend)
       .pipe(
         tap(() => this._branchResourceService.reloadBranch()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
@@ -48,9 +59,19 @@ export class SendBranchDirective {
   private _updateBranch(): void {
     const form = this._formGroupDirective?.form;
     const branch = form?.value;
+    const address = {
+      address: branch.address,
+      city: branch.city,
+    };
+    const branchToSend: Branch = {
+      name: branch.name,
+      telephone: branch.telephone,
+      location: address,
+      address: branch.address,
+    };
 
     this._branchService
-      .update(branch, this.data.id)
+      .update(branchToSend, this.data.id)
       .pipe(
         tap(() => this._branchResourceService.reloadBranch()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
