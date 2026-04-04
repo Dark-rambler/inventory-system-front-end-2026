@@ -1,5 +1,5 @@
 <aside
-  class="fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-3 transition-transform duration-300 z-40"
+  class="fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 transition-all duration-300 z-40 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
   [class.w-64]="!isCollapsed"
   [class.w-20]="isCollapsed"
   [class.-translate-x-full]="!isOpen()"
@@ -7,10 +7,10 @@
 >
   <button
     (click)="toggleCollapse()"
-    class="hidden lg:flex absolute -right-3 top-4 bg-white border border-gray-3 rounded-full w-6 h-6 items-center justify-center text-gray-1 hover:text-primary transition-colors"
+    class="hidden lg:flex absolute -right-3 top-5 bg-white border border-gray-200 rounded-full w-7 h-7 items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-all shadow-md"
   >
     <svg
-      class="w-4 h-4 transition-transform"
+      class="w-4 h-4 transition-transform duration-300"
       [class.rotate-180]="isCollapsed"
       fill="none"
       stroke="currentColor"
@@ -20,27 +20,55 @@
     </svg>
   </button>
 
-  <nav class="p-4 space-y-2">
+  <nav class="p-3 space-y-1 flex-1 overflow-y-auto">
     @for (item of menuItems; track item.path) {
       <a
         [routerLink]="item.path"
-        routerLinkActive="bg-primary/10 text-primary border-l-4 border-primary"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-1 hover:bg-bg-secondary-1 transition-colors group border-l-4 border-transparent"
+        routerLinkActive="bg-gradient-to-r from-primary/10 to-primary/5 text-primary border-l-4 border-primary font-medium"
+        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-primary transition-all group border-l-4 border-transparent"
       >
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            [attr.d]="item.icon"
-          />
-        </svg>
+        <span class="p-1.5 rounded-lg bg-gray-50 group-hover:bg-primary/10 transition-colors">
+          <svg
+            class="w-5 h-5 flex-shrink-0 text-gray-500 group-hover:text-primary transition-colors"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              [attr.d]="item.icon"
+            />
+          </svg>
+        </span>
         @if (!isCollapsed) {
-          <span class="text-small font-medium">{{ item.label }}</span>
+          <span class="text-sm">{{ item.label }}</span>
         }
       </a>
     }
   </nav>
+
+  <div class="p-3 border-t border-gray-100">
+    <button
+      (click)="logout()"
+      class="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-gray-500 hover:bg-danger/5 hover:text-danger transition-all group"
+    >
+      <span class="p-1.5 rounded-lg bg-gray-50 group-hover:bg-danger/10 transition-colors">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+      </span>
+      @if (!isCollapsed) {
+        <span class="text-sm">Cerrar Sesión</span>
+      }
+    </button>
+  </div>
 </aside>
 
 @if (isOpen()) {
@@ -49,7 +77,7 @@
     (keydown.escape)="closeSidebar()"
     role="button"
     tabindex="0"
-    class="lg:hidden fixed inset-0 bg-black/50 z-30 top-16"
+    class="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-30 top-16"
     aria-label="Cerrar menú"
   ></div>
 }

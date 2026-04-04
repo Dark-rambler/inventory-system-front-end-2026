@@ -1,9 +1,11 @@
-<header class="bg-white border-b border-gray-3 h-16 fixed top-0 left-0 right-0 z-50">
+<header
+  class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 h-16 fixed top-0 left-0 right-0 z-50 shadow-sm"
+>
   <div class="flex items-center justify-between h-full px-6">
     <div class="flex items-center gap-4">
       <button
         (click)="toggleSidebar()"
-        class="lg:hidden text-gray-1 hover:text-primary transition-colors"
+        class="lg:hidden p-2 -ml-2 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/5 transition-all"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -14,32 +16,49 @@
           />
         </svg>
       </button>
-      <h1 class="text-h4 text-black">Inventory System</h1>
+      <div class="flex items-center gap-3">
+        <div
+          class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center shadow-md"
+        >
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <h1 class="text-lg font-bold text-gray-800 tracking-tight">Inventory System</h1>
+      </div>
     </div>
 
-    <div class="flex items-center gap-4">
-      <button class="text-gray-1 hover:text-primary transition-colors relative">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="flex items-center gap-2">
+      <button
+        class="p-2.5 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/5 transition-all relative group"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
+            stroke-width="1.5"
             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
           />
         </svg>
         <span
-          class="absolute -top-1 -right-1 bg-danger text-white text-caption rounded-full w-4 h-4 flex items-center justify-center"
+          class="absolute top-1.5 right-1.5 bg-danger text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center"
           >3</span
         >
       </button>
 
-      <div class="flex items-center gap-3">
-        <div class="text-right hidden md:block">
-          <p class="text-small text-black font-medium">Usuario Admin</p>
-          <p class="text-caption text-gray-2">Administrador</p>
+      <div class="h-8 w-px bg-gray-200 mx-1"></div>
+
+      <div
+        class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-lg p-1.5 -mr-1.5 transition-colors"
+      >
+        <div class="text-right hidden sm:block">
+          <p class="text-sm font-semibold text-gray-800">Admin</p>
+          <p class="text-xs text-gray-500">Administrador</p>
         </div>
-        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
-          <span class="text-small font-medium">UA</span>
+        <div
+          class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white shadow-md"
+        >
+          <span class="text-sm font-bold">A</span>
         </div>
       </div>
     </div>

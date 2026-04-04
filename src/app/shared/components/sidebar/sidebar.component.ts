@@ -1,5 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '@shared/services/auth.service';
 
 interface MenuItem {
   label: string;
@@ -11,11 +12,13 @@ interface MenuItem {
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
+  private readonly _authService = inject(AuthService);
+
   isOpen = input<boolean>(true);
   sidebarClose = output<void>();
+  sidebarCollapse = output<boolean>();
 
   isCollapsed = false;
 
@@ -69,9 +72,14 @@ export class SidebarComponent {
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
+    this.sidebarCollapse.emit(this.isCollapsed);
   }
 
   closeSidebar() {
     this.sidebarClose.emit();
+  }
+
+  logout(): void {
+    this._authService.logout();
   }
 }

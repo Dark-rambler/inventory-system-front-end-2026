@@ -1,0 +1,142 @@
+<div
+  class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#1e3a5f] via-[#0d1b2a] to-[#1b263b] px-4"
+>
+  <div class="absolute inset-0">
+    <div
+      class="absolute top-[10%] right-[-10%] sm:right-[20%] w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] rounded-full bg-primary/10 blur-[80px] sm:blur-[100px]"
+    ></div>
+    <div
+      class="absolute bottom-[10%] left-[-10%] sm:left-[10%] w-[250px] sm:w-[300px] h-[250px] sm:h-[300px] rounded-full bg-secondary/10 blur-[60px] sm:blur-[80px]"
+    ></div>
+  </div>
+
+  <div
+    class="relative z-10 w-full max-w-md p-6 sm:p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl"
+  >
+    <div class="text-center mb-6 sm:mb-8">
+      <div
+        class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary to-secondary rounded-xl mb-3 sm:mb-4 shadow-lg"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6 sm:w-8 sm:h-8 text-white"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      </div>
+      <h1 class="text-xl sm:text-2xl font-bold text-white">Inventory System</h1>
+      <p class="text-xs sm:text-sm text-gray-400 mt-1">Ingresa tus credenciales</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-5">
+      @if (errorMessage()) {
+        <div
+          class="flex items-center gap-2 sm:gap-3 p-3 bg-danger/10 border border-danger/30 rounded-lg text-danger text-xs sm:text-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75 75.75 0 000 1.5z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
+      <div class="space-y-2">
+        <label for="username" class="block text-xs sm:text-sm font-medium text-gray-300"
+          >Usuario</label
+        >
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="userName"
+            formControlName="userName"
+            class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            placeholder="Ingresa tu usuario"
+            autocomplete="username"
+          />
+        </div>
+        @if (
+          loginForm.get('userName')?.invalid &&
+          (loginForm.get('userName')?.dirty || loginForm.get('userName')?.touched)
+        ) {
+          <span class="text-xs text-danger/80">El usuario es requerido</span>
+        }
+      </div>
+
+      <div class="space-y-2">
+        <label for="password" class="block text-xs sm:text-sm font-medium text-gray-300"
+          >Contraseña</label
+        >
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.628-2.115-4.5-4.5-4.5zm0 6.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            placeholder="Ingresa tu contraseña"
+            autocomplete="current-password"
+          />
+        </div>
+        @if (
+          loginForm.get('password')?.invalid &&
+          (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)
+        ) {
+          <span class="text-xs text-danger/80">La contraseña es requerida</span>
+        }
+      </div>
+
+      <app-button
+        [type]="'submit'"
+        [label]="isLoading() ? 'Iniciando sesión...' : 'Iniciar Sesión'"
+        [loading]="isLoading()"
+        [variant]="'primary'"
+        [size]="'lg'"
+        [customClass]="'w-full justify-center mt-4 sm:mt-6'"
+      />
+    </form>
+
+    <div class="mt-4 sm:mt-6 text-center">
+      <span class="text-xs text-gray-500 px-3 py-1.5 bg-white/5 rounded-lg"
+        >Demo: admin / admin</span
+      >
+    </div>
+  </div>
+</div>
