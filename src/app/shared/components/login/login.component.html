@@ -1,43 +1,43 @@
 <div
-  class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#1e3a5f] via-[#0d1b2a] to-[#1b263b]"
+  class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#1e3a5f] via-[#0d1b2a] to-[#1b263b] px-4"
 >
   <div class="absolute inset-0">
     <div
-      class="absolute top-[20%] right-[20%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[100px]"
+      class="absolute top-[10%] right-[-10%] sm:right-[20%] w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] rounded-full bg-primary/10 blur-[80px] sm:blur-[100px]"
     ></div>
     <div
-      class="absolute bottom-[20%] left-[10%] w-[400px] h-[400px] rounded-full bg-secondary/10 blur-[80px]"
+      class="absolute bottom-[10%] left-[-10%] sm:left-[10%] w-[250px] sm:w-[300px] h-[250px] sm:h-[300px] rounded-full bg-secondary/10 blur-[60px] sm:blur-[80px]"
     ></div>
   </div>
 
   <div
-    class="relative z-10 w-full max-w-md p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
+    class="relative z-10 w-full max-w-md p-6 sm:p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl"
   >
-    <div class="text-center mb-8">
+    <div class="text-center mb-6 sm:mb-8">
       <div
-        class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-xl mb-4 shadow-lg"
+        class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary to-secondary rounded-xl mb-3 sm:mb-4 shadow-lg"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-8 h-8 text-white"
+          class="w-6 h-6 sm:w-8 sm:h-8 text-white"
           viewBox="0 0 24 24"
           fill="currentColor"
         >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-white">Inventory System</h1>
-      <p class="text-sm text-gray-400 mt-1">Ingresa tus credenciales</p>
+      <h1 class="text-xl sm:text-2xl font-bold text-white">Inventory System</h1>
+      <p class="text-xs sm:text-sm text-gray-400 mt-1">Ingresa tus credenciales</p>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-5">
       @if (errorMessage()) {
         <div
-          class="flex items-center gap-3 p-3 bg-danger/10 border border-danger/30 rounded-lg text-danger text-sm"
+          class="flex items-center gap-2 sm:gap-3 p-3 bg-danger/10 border border-danger/30 rounded-lg text-danger text-xs sm:text-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-5 h-5 flex-shrink-0"
+            class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -52,12 +52,14 @@
       }
 
       <div class="space-y-2">
-        <label for="username" class="block text-sm font-medium text-gray-300">Usuario</label>
+        <label for="username" class="block text-xs sm:text-sm font-medium text-gray-300"
+          >Usuario</label
+        >
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-400"
+              class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -72,7 +74,7 @@
             type="text"
             id="username"
             formControlName="username"
-            class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             placeholder="Ingresa tu usuario"
             autocomplete="username"
           />
@@ -86,12 +88,14 @@
       </div>
 
       <div class="space-y-2">
-        <label for="password" class="block text-sm font-medium text-gray-300">Contraseña</label>
+        <label for="password" class="block text-xs sm:text-sm font-medium text-gray-300"
+          >Contraseña</label
+        >
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-400"
+              class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -106,7 +110,7 @@
             type="password"
             id="password"
             formControlName="password"
-            class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             placeholder="Ingresa tu contraseña"
             autocomplete="current-password"
           />
@@ -125,11 +129,11 @@
         [loading]="isLoading()"
         [variant]="'primary'"
         [size]="'lg'"
-        [customClass]="'w-full justify-center mt-6'"
+        [customClass]="'w-full justify-center mt-4 sm:mt-6'"
       />
     </form>
 
-    <div class="mt-6 text-center">
+    <div class="mt-4 sm:mt-6 text-center">
       <span class="text-xs text-gray-500 px-3 py-1.5 bg-white/5 rounded-lg"
         >Demo: admin / admin</span
       >

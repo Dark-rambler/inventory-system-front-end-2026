@@ -7,7 +7,6 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
   selector: 'app-main-layout',
   imports: [RouterOutlet, HeaderComponent, SidebarComponent],
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent {
   isSidebarOpen = true;
@@ -19,5 +18,9 @@ export class MainLayoutComponent {
 
   closeSidebar() {
     this.isSidebarOpen = false;
+  }
+
+  onSidebarCollapse(isCollapsed: boolean) {
+    this.isSidebarCollapsed = isCollapsed;
   }
 }

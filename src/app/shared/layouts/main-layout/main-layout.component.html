@@ -1,15 +1,21 @@
-<div class="min-h-screen bg-bg-secondary-1">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50/80">
   <app-header (sidebarToggle)="toggleSidebar()" />
 
-  <app-sidebar [isOpen]="isSidebarOpen" (sidebarClose)="closeSidebar()" />
+  <app-sidebar
+    [isOpen]="isSidebarOpen"
+    (sidebarClose)="closeSidebar()"
+    (sidebarCollapse)="onSidebarCollapse($event)"
+  />
 
   <main
-    class="pt-16 transition-all duration-300"
-    [class.lg:ml-64]="!isSidebarCollapsed"
-    [class.lg:ml-20]="isSidebarCollapsed"
+    class="pt-16 transition-all duration-300 ml-0"
+    [class.lg:ml-64]="isSidebarOpen && !isSidebarCollapsed"
+    [class.lg:ml-20]="isSidebarOpen && isSidebarCollapsed"
   >
-    <div class="p-12">
-      <router-outlet />
+    <div class="p-6 lg:p-8">
+      <div class="max-w-7xl mx-auto">
+        <router-outlet />
+      </div>
     </div>
   </main>
 </div>

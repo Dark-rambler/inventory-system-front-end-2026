@@ -18,6 +18,7 @@ export class SidebarComponent {
 
   isOpen = input<boolean>(true);
   sidebarClose = output<void>();
+  sidebarCollapse = output<boolean>();
 
   isCollapsed = false;
 
@@ -71,6 +72,7 @@ export class SidebarComponent {
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
+    this.sidebarCollapse.emit(this.isCollapsed);
   }
 
   closeSidebar() {

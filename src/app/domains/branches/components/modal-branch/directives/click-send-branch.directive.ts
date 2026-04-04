@@ -37,15 +37,11 @@ export class SendBranchDirective {
   private _createBranch(): void {
     const form = this._formGroupDirective?.form;
     const branch = form?.value;
-    const address = {
-      address: branch.address,
-      city: branch.city,
-    };
     const branchToSend: Branch = {
       name: branch.name,
       telephone: branch.telephone,
-      location: address,
       address: branch.address,
+      city: branch.city,
     };
     this._branchService
       .create(branchToSend)
@@ -59,15 +55,11 @@ export class SendBranchDirective {
   private _updateBranch(): void {
     const form = this._formGroupDirective?.form;
     const branch = form?.value;
-    const address = {
-      address: branch.address,
-      city: branch.city,
-    };
     const branchToSend: Branch = {
       name: branch.name,
       telephone: branch.telephone,
-      location: address,
       address: branch.address,
+      city: branch.city,
     };
 
     this._branchService
