@@ -1,5 +1,5 @@
 <aside
-  class="fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-3 transition-transform duration-300 z-40"
+  class="fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-3 transition-transform duration-300 z-40 flex flex-col"
   [class.w-64]="!isCollapsed"
   [class.w-20]="isCollapsed"
   [class.-translate-x-full]="!isOpen()"
@@ -20,7 +20,7 @@
     </svg>
   </button>
 
-  <nav class="p-4 space-y-2">
+  <nav class="p-4 space-y-2 flex-1">
     @for (item of menuItems; track item.path) {
       <a
         [routerLink]="item.path"
@@ -41,6 +41,25 @@
       </a>
     }
   </nav>
+
+  <div class="p-4 border-t border-gray-3">
+    <button
+      (click)="logout()"
+      class="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-danger hover:bg-danger/10 transition-colors"
+    >
+      <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+        />
+      </svg>
+      @if (!isCollapsed) {
+        <span class="text-small font-medium">Cerrar Sesión</span>
+      }
+    </button>
+  </div>
 </aside>
 
 @if (isOpen()) {

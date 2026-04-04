@@ -1,8 +1,16 @@
 import { Routes } from '@angular/router';
+import { authGuard, publicGuard } from '@shared/guards/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'login',
+    canActivate: [publicGuard],
+    loadComponent: () =>
+      import('@shared/components/login/login.component').then(m => m.LoginComponent),
+  },
+  {
     path: '',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./shared/layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
     children: [
