@@ -1,0 +1,40 @@
+<app-table [data]="userData()?.items ?? []" [columns]="userColumns" [config]="tableConfig()">
+  <ng-template appTableColumn="name" let-user>
+    {{ user.name }}
+  </ng-template>
+
+  <ng-template appTableColumn="userName" let-user>
+    {{ user.userName }}
+  </ng-template>
+
+  <ng-template appTableColumn="email" let-user>
+    {{ user.email }}
+  </ng-template>
+
+  <ng-template appTableColumn="role" let-user>
+    <span class="px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+      {{ user.role }}
+    </span>
+  </ng-template>
+
+  <ng-template appTableColumn="actions" let-user>
+    <app-action-buttons>
+      <div appEditItem>
+        <app-icon-button (buttonClick)="editUser(user)" action="edit" tooltip="Editar" />
+      </div>
+      <div>
+        <app-icon-button (buttonClick)="deleteUser(user)" action="delete" tooltip="Eliminar" />
+      </div>
+    </app-action-buttons>
+  </ng-template>
+</app-table>
+
+@if (userData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}

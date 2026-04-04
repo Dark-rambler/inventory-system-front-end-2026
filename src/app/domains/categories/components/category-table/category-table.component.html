@@ -13,13 +13,23 @@
         <app-icon-button (buttonClick)="editCategory(category)" action="edit" />
       </div>
 
-      <div
-        appConfirmAction
-        [confirmMessage]="'¿Eliminar la categoría ' + category.name + '?'"
-        [data]="category"
-      >
-        <app-icon-button action="delete" />
+      <div>
+        <app-icon-button
+          (buttonClick)="deleteCategory(category)"
+          action="delete"
+          tooltip="Eliminar"
+        />
       </div>
     </app-action-buttons>
   </ng-template>
 </app-table>
+
+@if (categoryData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}

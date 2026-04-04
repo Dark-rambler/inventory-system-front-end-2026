@@ -1,6 +1,6 @@
 /* Contenedor principal */
 .app-table-container {
-  @apply w-full overflow-hidden rounded-xl bg-[#FDFDFD] shadow-sm;
+  @apply w-full overflow-hidden rounded-t-xl bg-[#FDFDFD] shadow-sm;
 }
 
 /* Wrapper con scroll horizontal */
@@ -29,7 +29,7 @@
 }
 
 .app-table-header-cell {
-  @apply px-6 py-4 text-left text-sm font-semibold text-[#1E1E1E] tracking-wide;
+  @apply px-6 py-2 text-left text-sm font-semibold text-[#1E1E1E] tracking-wide;
 }
 
 /* Body de la tabla */
@@ -54,7 +54,7 @@
 
 /* Celdas */
 .app-table-cell {
-  @apply px-6 py-4 text-sm text-gray-700;
+  @apply px-6 py-0.5 text-sm text-gray-700;
 }
 
 /* Estado vacío */

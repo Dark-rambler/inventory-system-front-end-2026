@@ -41,6 +41,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/categories/categories.component').then(m => m.CategoriesComponent),
       },
+      {
+        path: 'users',
+        loadComponent: () => import('./domains/users/users.component').then(m => m.UsersComponent),
+      },
+      {
+        path: 'warehouses',
+        loadComponent: () =>
+          import('./domains/warehouses/warehouses.component').then(m => m.WarehousesComponent),
+      },
+      {
+        path: 'branches',
+        loadComponent: () =>
+          import('./domains/branches/branches.component').then(m => m.BranchesComponent),
+      },
     ],
   },
   {

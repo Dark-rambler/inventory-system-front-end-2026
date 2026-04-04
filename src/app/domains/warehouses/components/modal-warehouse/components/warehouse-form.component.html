@@ -1,0 +1,38 @@
+<form [formGroup]="warehouseForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del almacén"
+    [name]="'warehouseName'"
+    [parentForm]="warehouseForm"
+    controlName="name"
+    placeholder="Ej: Almacén Central, Almacén Norte..."
+  />
+
+  <app-form-input
+    label="Dirección"
+    [name]="'warehouseAddress'"
+    [parentForm]="warehouseForm"
+    controlName="address"
+    placeholder="Ej: Calle Falsa 123, Colonia Centro, Ciudad de México"
+  />
+  <app-form-input
+    label="Ciudad"
+    [name]="'warehouseCity'"
+    [parentForm]="warehouseForm"
+    controlName="city"
+    placeholder="Ej: Ciudad de México, CDMX"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendWarehouse
+        [keepOpen]="true"
+        type="button"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendWarehouse type="button" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>

@@ -1,0 +1,48 @@
+<form [formGroup]="inventoryForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del inventario"
+    [name]="'inventoryName'"
+    [parentForm]="inventoryForm"
+    controlName="name"
+    placeholder="Ej: Inventario de electrónica..."
+  />
+
+  <app-form-input
+    label="Código"
+    [name]="'inventoryCode'"
+    [parentForm]="inventoryForm"
+    controlName="code"
+    placeholder="Ej: INV-001..."
+  />
+
+  <app-form-input
+    label="Categoría"
+    [name]="'inventoryCategory'"
+    [parentForm]="inventoryForm"
+    controlName="category"
+    placeholder="Ej: Electrónica, Ropa, Alimentos..."
+  />
+
+  <app-form-input
+    [textArea]="true"
+    label="Descripción"
+    [name]="'inventoryDescription'"
+    [parentForm]="inventoryForm"
+    controlName="description"
+    placeholder="Describe brevemente este inventario..."
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendInventory
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendInventory type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>

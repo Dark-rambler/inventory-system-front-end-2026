@@ -1,0 +1,57 @@
+<form [formGroup]="userForm" class="space-y-4">
+  <app-form-input
+    label="Nombre completo"
+    [name]="'userName'"
+    [parentForm]="userForm"
+    controlName="name"
+    placeholder="Ej: Juan Pérez..."
+  />
+
+  <app-form-input
+    label="Usuario"
+    [name]="'userUserName'"
+    [parentForm]="userForm"
+    controlName="userName"
+    placeholder="Ej: juanperez"
+  />
+
+  <app-form-input
+    label="Correo electrónico"
+    [name]="'userEmail'"
+    [parentForm]="userForm"
+    controlName="email"
+    type="email"
+    placeholder="Ej: juan@correo.com"
+  />
+
+  <app-form-input
+    label="Contraseña"
+    [name]="'userPassword'"
+    [parentForm]="userForm"
+    controlName="password"
+    type="password"
+    placeholder="Mínimo 6 caracteres"
+  />
+
+  <app-form-input
+    label="Rol"
+    [name]="'userRole'"
+    [parentForm]="userForm"
+    controlName="role"
+    placeholder="Ej: Admin, Usuario, etc."
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendUser
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendUser type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>
