@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         // Colores Principales
         primary: {
+          DEFAULT: '#288B83',
           50: '#edf7f6',
           100: '#d0ebe9',
           200: '#a3d5d1',
@@ -18,6 +19,7 @@ module.exports = {
           900: '#0a2220',
         },
         secondary: {
+          DEFAULT: '#579e98',
           50: '#f4f9f8',
           100: '#e3f0ef',
           200: '#c6e2e0',
