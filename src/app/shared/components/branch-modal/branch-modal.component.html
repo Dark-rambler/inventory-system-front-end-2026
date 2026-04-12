@@ -1,0 +1,63 @@
+<app-modal title="Seleccionar Sucursal" width="w-96" (modalClose)="onClose()">
+  <div class="p-4 space-y-4">
+    @if (isLoading()) {
+      <div class="flex justify-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    } @else {
+      <div class="max-h-96 overflow-y-auto pr-1 space-y-2">
+        @for (branch of branches(); track branch.id) {
+          <button
+            type="button"
+            (click)="selectBranch(branch)"
+            class="w-full rounded-xl border p-3 text-left transition-all"
+            [class.border-primary-500]="selectedBranch()?.id === branch.id"
+            [class.bg-primary-50]="selectedBranch()?.id === branch.id"
+            [class.shadow-sm]="selectedBranch()?.id === branch.id"
+            [class.border-gray-200]="selectedBranch()?.id !== branch.id"
+            [class.hover:border-primary-200]="selectedBranch()?.id !== branch.id"
+            [class.hover:bg-gray-50]="selectedBranch()?.id !== branch.id"
+          >
+            <div class="flex items-start gap-3">
+              <div
+                class="mt-0.5 h-5 w-5 rounded-full border-2 transition-colors"
+                [class.border-primary-500]="selectedBranch()?.id === branch.id"
+                [class.bg-primary-500]="selectedBranch()?.id === branch.id"
+                [class.border-gray-300]="selectedBranch()?.id !== branch.id"
+              ></div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <p class="font-semibold text-gray-800 truncate">{{ branch.name }}</p>
+                  @if (selectedBranch()?.id === branch.id) {
+                    <span
+                      class="inline-flex items-center rounded-full bg-primary-100 px-2 py-0.5 text-[11px] font-medium text-primary-700"
+                    >
+                      Seleccionada
+                    </span>
+                  }
+                </div>
+
+                <p class="mt-1 text-sm text-gray-500">{{ branch.city }}</p>
+                <p class="mt-0.5 text-xs text-gray-400 truncate">{{ branch.address }}</p>
+              </div>
+            </div>
+          </button>
+        } @empty {
+          <div
+            class="rounded-lg border border-dashed border-gray-300 p-5 text-center text-sm text-gray-500"
+          >
+            No hay sucursales disponibles
+          </div>
+        }
+      </div>
+    }
+
+    <div class="flex justify-end gap-2 pt-2">
+      <app-button variant="secondary" (buttonClick)="onClose()"> Cancelar </app-button>
+      <app-button (buttonClick)="confirmSelection()" [disabled]="!selectedBranch()">
+        Confirmar
+      </app-button>
+    </div>
+  </div>
+</app-modal>

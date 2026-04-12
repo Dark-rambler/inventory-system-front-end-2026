@@ -11,7 +11,7 @@
   <div class="flex-1 overflow-y-auto pr-1 min-h-0">
     @if (isLoading()) {
       <!-- Skeleton -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track i) {
           <div class="bg-white rounded-xl border border-gray-100 overflow-hidden animate-pulse">
             <div class="h-36 bg-gray-100"></div>
@@ -51,7 +51,7 @@
         <p class="text-sm text-gray-400">No se encontraron productos</p>
       </div>
     } @else {
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         @for (product of products(); track product.id) {
           <app-product-card-pos [product]="product" />
         }
