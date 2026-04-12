@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { SaleRequest } from '@app/domains/pos/interfaces/pos.interface';
 import { Observable } from 'rxjs';
-import { PaginatorInterface } from '../interfaces/paginator.interface';
+import { environment } from '../../../environments/environment.development';
 import { Branch } from '../interfaces/branch.interface';
+import { PaginatorInterface } from '../interfaces/paginator.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,9 @@ export class BranchService {
 
   public delete(id: string): Observable<void> {
     return this._httpClient.delete<void>(`${this._url}/${id}`);
+  }
+
+  public processSale(branchId: string, body: SaleRequest): Observable<unknown> {
+    return this._httpClient.post<unknown>(`${this._url}/${branchId}/sales`, body);
   }
 }

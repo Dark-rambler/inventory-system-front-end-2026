@@ -1,0 +1,57 @@
+<app-table [data]="salesData()?.items ?? []" [columns]="salesColumns" [config]="tableConfig()">
+  <ng-template appTableColumn="status" let-sale>
+    <span
+      class="px-2 py-1 rounded-full text-xs font-medium"
+      [class.bg-green-100]="sale.status === 'completed'"
+      [class.text-green-700]="sale.status === 'completed'"
+      [class.bg-yellow-100]="sale.status === 'pending'"
+      [class.text-yellow-700]="sale.status === 'pending'"
+      [class.bg-red-100]="sale.status === 'cancelled'"
+      [class.text-red-700]="sale.status === 'cancelled'"
+    >
+      @switch (sale.status) {
+        @case ('completed') {
+          Completada
+        }
+        @case ('pending') {
+          Pendiente
+        }
+        @case ('cancelled') {
+          Cancelada
+        }
+      }
+    </span>
+  </ng-template>
+
+  <ng-template appTableColumn="total" let-sale>
+    <span class="font-medium text-gray-900">
+      {{ sale.total | currency: 'USD' : 'symbol' : '1.2-2' }}
+    </span>
+  </ng-template>
+
+  <ng-template appTableColumn="actions" let-sale>
+    <app-action-buttons>
+      <div appViewDetails>
+        <app-icon-button (buttonClick)="viewSale(sale)" action="view" />
+      </div>
+
+      <div appEditItem>
+        <app-icon-button (buttonClick)="editSale(sale)" action="edit" />
+      </div>
+
+      <div>
+        <app-icon-button (buttonClick)="deleteSale(sale)" action="delete" tooltip="Eliminar" />
+      </div>
+    </app-action-buttons>
+  </ng-template>
+</app-table>
+
+@if (salesData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}

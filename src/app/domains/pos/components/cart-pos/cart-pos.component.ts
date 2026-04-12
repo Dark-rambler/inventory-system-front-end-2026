@@ -1,5 +1,10 @@
-import { Component, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, output } from '@angular/core';
+import { AuthService } from '@shared/services/auth.service';
+import { BranchService } from '@shared/services/branch.service';
+import { ConfirmModalService } from '@shared/services/confirm-modal.service';
+import { getSelectedBranchIdFromStorage } from '@shared/utils/selected-branch-storage';
+import { ToastrService } from 'ngx-toastr';
 import { CartPosService } from '../../services/cart-pos.service';
 
 @Component({
@@ -9,12 +14,17 @@ import { CartPosService } from '../../services/cart-pos.service';
 })
 export class CartPosComponent {
   private readonly _cartService = inject(CartPosService);
-  readonly cart = this._cartService.cart;
-  readonly subtotal = this._cartService.subtotal;
-  readonly tax = this._cartService.tax;
-  readonly total = this._cartService.total;
-  readonly isEmpty = this._cartService.isEmpty;
-  readonly saleProcessed = output<number>();
+  private readonly _branchService = inject(BranchService);
+  private readonly _authService = inject(AuthService);
+  private readonly _confirmModalService = inject(ConfirmModalService);
+  private readonly _toastr = inject(ToastrService);
+  protected readonly cart = this._cartService.cart;
+  protected readonly subtotal = this._cartService.subtotal;
+  protected readonly tax = this._cartService.tax;
+  protected readonly total = this._cartService.total;
+  protected readonly isEmpty = this._cartService.isEmpty;
+  protected readonly saleProcessed = output<number>();
+  protected isProcessing = false;
 
   removeFromCart(productId: string): void {
     this._cartService.removeFromCart(productId);
@@ -29,9 +39,48 @@ export class CartPosComponent {
   }
 
   processSale(): void {
-    const total = this._cartService.processSale();
-    if (total > 0) {
-      this.saleProcessed.emit(total);
+    if (this.isEmpty() || this.isProcessing) return;
+
+    this._confirmModalService
+      .open({
+        title: 'Confirmar venta',
+        message: `Se procesara una venta por $${this.total().toFixed(2)}. ¿Deseas continuar?`,
+      })
+      .subscribe(result => {
+        if (result !== 'confirm') return;
+        this._sendSaleRequest();
+      });
+  }
+
+  private _sendSaleRequest(): void {
+    if (this.isProcessing) return;
+
+    const branchId = this._authService.selectedBranchId() ?? getSelectedBranchIdFromStorage();
+    if (!branchId) {
+      this._toastr.error('Selecciona una sucursal antes de procesar la venta', 'Sin sucursal');
+      return;
     }
+
+    const payload = {
+      saleDetails: this.cart().map(item => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    };
+
+    this.isProcessing = true;
+    this._branchService.processSale(branchId, payload).subscribe({
+      next: () => {
+        const total = this.total();
+        this._cartService.clearCart();
+        this.saleProcessed.emit(total);
+        this._toastr.success('Venta procesada correctamente', 'Éxito');
+        this.isProcessing = false;
+      },
+      error: () => {
+        this._toastr.error('No se pudo procesar la venta', 'Error');
+        this.isProcessing = false;
+      },
+    });
   }
 }
