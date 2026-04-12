@@ -1,8 +1,8 @@
 <div
-  class="flex h-[calc(100vh-7rem)] min-h-0 flex-col gap-4 overflow-hidden bg-gray-50 p-4 lg:h-[calc(100vh-8rem)] lg:flex-row"
+  class="flex flex-col gap-3 bg-gray-50 p-3 sm:gap-4 sm:p-4 lg:h-[calc(100vh-8rem)] lg:min-h-0 lg:flex-row lg:overflow-hidden"
 >
   <!-- Productos -->
-  <div class="flex-1 flex flex-col gap-4 overflow-hidden min-w-0">
+  <div class="flex flex-1 flex-col gap-3 min-w-0 lg:gap-4 lg:min-h-0 lg:overflow-hidden">
     <app-products-pos
       [categories]="categories()"
       [selectedCategory]="_selectedCategory()"
