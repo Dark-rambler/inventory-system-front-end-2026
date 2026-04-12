@@ -1,6 +1,8 @@
 import { Component, inject, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
+import { Branch } from '@shared/interfaces/branch.interface';
+import { BranchModalComponent } from '../branch-modal/branch-modal.component';
 
 interface MenuItem {
   label: string;
@@ -10,7 +12,7 @@ interface MenuItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, BranchModalComponent],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
@@ -21,6 +23,22 @@ export class SidebarComponent {
   sidebarCollapse = output<boolean>();
 
   isCollapsed = false;
+  showBranchModal = false;
+
+  get selectedBranch(): Branch | null {
+    return this._authService.selectedBranch();
+  }
+
+  openBranchModal(): void {
+    this.showBranchModal = true;
+  }
+
+  onBranchSelected(branch: Branch): void {
+    if (branch) {
+      this._authService.setSelectedBranch(branch);
+    }
+    this.showBranchModal = false;
+  }
 
   menuItems: MenuItem[] = [
     {

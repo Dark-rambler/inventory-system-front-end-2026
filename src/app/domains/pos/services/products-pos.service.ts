@@ -1,10 +1,12 @@
 import { HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { Inventory } from '../../../domains/inventory/interfaces/inventory.interface';
 import { PaginatorInterface } from '../../../shared/interfaces/paginator.interface';
+import { AuthService } from '../../../shared/services/auth.service';
 import { InventoryService } from '../../../shared/services/inventory.service';
+import { getSelectedBranchIdFromStorage } from '../../../shared/utils/selected-branch-storage';
 import { PosProduct } from '../interfaces/pos.interface';
 
 export interface PosProductParams {
@@ -28,22 +30,28 @@ const EMPTY_PAGINATOR: PaginatorInterface<unknown> = {
 })
 export class ProductsPosService {
   private readonly _inventoryService = inject(InventoryService);
-
-  // TODO: replace with dynamic branch selection signal
-  private readonly _branchId = '441b0b0d-90f4-43cd-a769-c58a3a7173db';
+  private readonly _authService = inject(AuthService);
 
   readonly params = signal<PosProductParams>({ page: 1, pageSize: 10, search: '' });
 
   private readonly _productsResource = rxResource({
-    request: () => this.params(),
+    request: () => ({
+      params: this.params(),
+      branchId: this._authService.selectedBranchId() ?? getSelectedBranchIdFromStorage(),
+    }),
     loader: ({ request }) => {
-      let httpParams = new HttpParams()
-        .set('page', String(request.page))
-        .set('pageSize', String(request.pageSize));
-      if (request.search) {
-        httpParams = httpParams.set('name', request.search);
+      if (!request.branchId) {
+        return of(EMPTY_PAGINATOR as PaginatorInterface<Inventory>);
       }
-      return this._inventoryService.getByBranch(this._branchId, httpParams).pipe(
+
+      const { params } = request;
+      let httpParams = new HttpParams()
+        .set('page', String(params.page))
+        .set('pageSize', String(params.pageSize));
+      if (params.search) {
+        httpParams = httpParams.set('name', params.search);
+      }
+      return this._inventoryService.getByBranch(request.branchId, httpParams).pipe(
         tap(response => {
           if (response?.items?.length) {
             console.log('[POS] Primer item del API:', response.items[0]);
