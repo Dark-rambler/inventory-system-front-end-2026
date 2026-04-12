@@ -1,0 +1,52 @@
+<button
+  [attr.data-product]="product() | json"
+  appClickAddToCart
+  class="w-full h-full bg-white rounded-xl border border-gray-100 flex flex-col overflow-hidden transition-all duration-200 group cursor-pointer hover:shadow-lg hover:border-primary-200 hover:-translate-y-0.5"
+  [class.opacity-40]="product().stock === 0"
+  [class.cursor-not-allowed]="product().stock === 0"
+  [disabled]="product().stock === 0"
+>
+  <!-- Imagen / placeholder -->
+  <div
+    class="h-36 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative overflow-hidden"
+  >
+    <svg
+      class="w-14 h-14 text-gray-300 group-hover:text-primary-300 transition-colors duration-200"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+      />
+    </svg>
+
+    <!-- Stock badge -->
+    <span
+      class="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full"
+      [class]="
+        product().stock === 0
+          ? 'bg-red-100 text-red-600'
+          : product().stock <= 10
+            ? 'bg-amber-100 text-amber-700'
+            : 'bg-emerald-100 text-emerald-700'
+      "
+    >
+      {{ product().stock === 0 ? 'Sin stock' : product().stock + ' uds.' }}
+    </span>
+  </div>
+
+  <!-- Info -->
+  <div class="flex flex-col p-3 text-left flex-1 gap-1">
+    <p class="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">
+      {{ product().name }}
+    </p>
+    <p class="text-xs text-gray-400 font-mono tracking-wide">{{ product().code }}</p>
+    <p class="text-primary-600 font-bold text-base mt-auto pt-2 border-t border-gray-50">
+      ${{ product().price.toFixed(2) }}
+    </p>
+  </div>
+</button>

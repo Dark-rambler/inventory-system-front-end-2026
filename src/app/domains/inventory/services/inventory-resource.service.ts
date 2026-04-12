@@ -15,7 +15,7 @@ export class InventoryResourceService {
   private readonly _inventoryService: InventoryService = inject(InventoryService);
 
   // TODO: replace with a dynamic signal once branch selection is implemented
-  private readonly _branchId = 'cac1a385-1713-4484-9a84-4635a7bfecb0';
+  private readonly _branchId = '441b0b0d-90f4-43cd-a769-c58a3a7173db';
 
   public filterInventoryParameters = signal<InventoryParams>(DEFAULT_GET_INVENTORY_PARAMS);
 
