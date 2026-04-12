@@ -5,9 +5,32 @@ module.exports = {
     extend: {
       colors: {
         // Colores Principales
-        primary: '#288B83',
-        secondary: '#A1CBC7',
-        
+        primary: {
+          DEFAULT: '#288B83',
+          50: '#edf7f6',
+          100: '#d0ebe9',
+          200: '#a3d5d1',
+          300: '#72bdb8',
+          400: '#47a49e',
+          500: '#288B83',
+          600: '#1f6e68',
+          700: '#18544f',
+          800: '#113b38',
+          900: '#0a2220',
+        },
+        secondary: {
+          DEFAULT: '#579e98',
+          50: '#f4f9f8',
+          100: '#e3f0ef',
+          200: '#c6e2e0',
+          300: '#A1CBC7',
+          400: '#7ab5b0',
+          500: '#579e98',
+          600: '#438079',
+          700: '#32605b',
+          800: '#22413e',
+          900: '#112120',
+        },
         // Colores de Fondos
         bg: {
           primary: '#FDFDFD',
@@ -16,7 +39,7 @@ module.exports = {
             2: '#F9F9F9',
           },
         },
-        
+
         // Colores Neutros
         black: '#1E1E1E',
         gray: {
@@ -24,7 +47,7 @@ module.exports = {
           2: '#7A7A7A',
           3: '#C7C7C7',
         },
-        
+
         // Colores Semánticos
         success: '#2D9F5E',
         warning: '#F59E0B',
@@ -45,12 +68,12 @@ module.exports = {
         h2: ['36px', { lineHeight: '44px', fontWeight: '600' }],
         h3: ['28px', { lineHeight: '36px', fontWeight: '600' }],
         h4: ['20px', { lineHeight: '28px', fontWeight: '500' }],
-        
+
         // Body y otros
         body: ['16px', { lineHeight: '24px', fontWeight: '400' }],
         small: ['14px', { lineHeight: '20px', fontWeight: '400' }],
         caption: ['12px', { lineHeight: '16px', fontWeight: '400' }],
-        
+
         // Tamaños adicionales estándar
         xs: ['0.75rem', { lineHeight: '1rem' }],
         sm: ['0.875rem', { lineHeight: '1.25rem' }],

@@ -10,6 +10,8 @@ export interface Inventory {
   categoryName: string;
   description: string;
   category: InventoryCategory;
+  price?: number;
+  stock?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

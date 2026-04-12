@@ -63,6 +63,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/branches/branches.component').then(m => m.BranchesComponent),
       },
+      {
+        path: 'pos',
+        loadComponent: () => import('./domains/pos/pos.component').then(m => m.PosComponent),
+      },
     ],
   },
   {

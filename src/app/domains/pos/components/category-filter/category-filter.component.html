@@ -1,0 +1,15 @@
+<div class="flex flex-wrap gap-1.5">
+  @for (category of categories(); track category) {
+    <button
+      (click)="selectCategory(category)"
+      class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150"
+      [class]="
+        selectedCategory() === category
+          ? 'bg-primary-600 text-white shadow-sm shadow-primary-600/30'
+          : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+      "
+    >
+      {{ category === 'all' ? 'Todos' : category }}
+    </button>
+  }
+</div>
