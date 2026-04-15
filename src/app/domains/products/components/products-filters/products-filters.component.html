@@ -1,0 +1,11 @@
+<app-accordion title="Filtros de productos">
+  <form [formGroup]="filtersForm" class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="name"
+      label="Nombre"
+      name="name"
+      placeholder="Buscar por nombre"
+    ></app-form-input>
+  </form>
+</app-accordion>
