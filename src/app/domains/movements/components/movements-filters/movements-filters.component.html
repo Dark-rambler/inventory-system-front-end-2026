@@ -1,0 +1,43 @@
+<app-accordion title="Filtros de movimientos">
+  <form [formGroup]="filtersForm" class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="movementType"
+      label="Tipo"
+      name="movementType"
+      placeholder="Buscar por tipo"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="productName"
+      label="Producto"
+      name="productName"
+      placeholder="Buscar por producto"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="branchName"
+      label="Sucursal"
+      name="branchName"
+      placeholder="Buscar por sucursal"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="startDate"
+      label="Fecha inicio"
+      name="startDate"
+      placeholder="YYYY-MM-DD"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="endDate"
+      label="Fecha fin"
+      name="endDate"
+      placeholder="YYYY-MM-DD"
+    ></app-form-input>
+  </form>
+</app-accordion>

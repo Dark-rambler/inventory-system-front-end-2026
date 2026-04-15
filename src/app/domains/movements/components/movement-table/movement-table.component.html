@@ -1,0 +1,15 @@
+<app-table
+  [data]="movementData()?.items ?? []"
+  [columns]="movementColumns"
+  [config]="tableConfig()"
+/>
+
+@if (movementData(); as data) {
+  <app-paginator
+    [paginator]="data"
+    [currentPage]="currentPage().page ?? 1"
+    [currentPageSize]="currentPage().pageSize ?? 10"
+    (pageChange)="changePage($event)"
+    (pageSizeChange)="changePageSize($event)"
+  />
+}

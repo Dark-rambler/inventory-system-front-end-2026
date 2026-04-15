@@ -1,7 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '@shared/services/auth.service';
 import { Branch } from '@shared/interfaces/branch.interface';
+import { AuthService } from '@shared/services/auth.service';
 import { BranchModalComponent } from '../branch-modal/branch-modal.component';
 
 interface MenuItem {
@@ -75,6 +75,11 @@ export class SidebarComponent {
       label: 'Inventario',
       path: '/inventory',
       icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+    },
+    {
+      label: 'Movimientos',
+      path: '/movements',
+      icon: 'M13 7l5 5m0 0l-5 5m5-5H6m5-7l-5 5m0 0l5 5m-5-5h12',
     },
     {
       label: 'Punto de Venta',
