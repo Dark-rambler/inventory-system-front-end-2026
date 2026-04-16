@@ -1,5 +1,6 @@
 export interface Movement {
   id: string;
+  branchId?: string;
   movementType: string;
   productName: string;
   branchName: string;

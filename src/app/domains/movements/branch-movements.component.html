@@ -1,0 +1,7 @@
+<app-movements-header
+  [title]="'Movimientos de productos - Sucursal ' + (branchId() ?? '')"
+  [showCreateButton]="true"
+  [branchId]="branchId()"
+/>
+<app-movements-filters [hideBranchFilter]="true"></app-movements-filters>
+<app-movement-table />

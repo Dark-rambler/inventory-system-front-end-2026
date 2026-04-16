@@ -16,13 +16,15 @@
       placeholder="Buscar por producto"
     ></app-form-input>
 
-    <app-form-input
-      [parentForm]="filtersForm"
-      controlName="branchName"
-      label="Sucursal"
-      name="branchName"
-      placeholder="Buscar por sucursal"
-    ></app-form-input>
+    @if (!hideBranchFilter()) {
+      <app-form-input
+        [parentForm]="filtersForm"
+        controlName="branchName"
+        label="Sucursal"
+        name="branchName"
+        placeholder="Buscar por sucursal"
+      ></app-form-input>
+    }
 
     <app-form-input
       [parentForm]="filtersForm"

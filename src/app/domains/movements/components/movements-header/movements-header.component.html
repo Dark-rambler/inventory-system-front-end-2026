@@ -1,3 +1,13 @@
 <div class="products-header">
-  <div></div>
+  <div>
+    <h1 class="text-xl font-semibold text-slate-800">{{ title() }}</h1>
+  </div>
+
+  @if (showCreateButton()) {
+    <app-button label="Nuevo Movimiento" variant="primary" (buttonClick)="handleNewMovement()">
+      <svg slot="icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+    </app-button>
+  }
 </div>

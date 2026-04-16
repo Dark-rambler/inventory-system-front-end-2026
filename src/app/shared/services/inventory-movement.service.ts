@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { CreateMovementRequest } from '../../domains/movements/interfaces/create-movement-request.interface';
 import { Movement } from '../../domains/movements/interfaces/movement.interface';
 import { PaginatorInterface } from '../interfaces/paginator.interface';
 
@@ -14,5 +15,9 @@ export class InventoryMovementService {
 
   public getAll(params?: HttpParams): Observable<PaginatorInterface<Movement>> {
     return this._httpClient.get<PaginatorInterface<Movement>>(this._url, { params });
+  }
+
+  public create(body: CreateMovementRequest): Observable<void> {
+    return this._httpClient.post<void>(this._url, body);
   }
 }

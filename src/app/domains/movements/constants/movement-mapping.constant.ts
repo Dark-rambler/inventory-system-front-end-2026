@@ -1,4 +1,5 @@
 export const MOVEMENT_PARAMETER_MAPPING = {
+  branchId: 'branchId',
   movementType: 'movementType',
   productName: 'productName',
   branchName: 'branchName',

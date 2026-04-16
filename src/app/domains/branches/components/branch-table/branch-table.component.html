@@ -2,7 +2,7 @@
   <ng-template appTableColumn="actions" let-branch>
     <app-action-buttons>
       <div appViewDetails>
-        <app-icon-button action="view" />
+        <app-icon-button (buttonClick)="viewBranchMovements(branch)" action="view" />
       </div>
 
       <div appEditItem>

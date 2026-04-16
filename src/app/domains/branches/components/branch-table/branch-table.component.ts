@@ -22,6 +22,7 @@ import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
 import { BranchService } from '../../../../shared/services/branch.service';
 import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
 import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-branch-table',
@@ -45,6 +46,7 @@ export class BranchTableComponent {
   private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
+  private readonly _router = inject(Router);
 
   public branchData = this._branchResourceService.branchData;
   public currentPage = this._branchResourceService.filterBranchParameters;
@@ -80,6 +82,12 @@ export class BranchTableComponent {
             .subscribe();
         }
       });
+  }
+
+  protected viewBranchMovements(branch: Branch): void {
+    if (!branch.id) return;
+
+    this._router.navigate(['branches', branch.id, 'movements']);
   }
 
   protected changePage(page: number): void {

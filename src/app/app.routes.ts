@@ -69,6 +69,13 @@ export const routes: Routes = [
           import('./domains/branches/branches.component').then(m => m.BranchesComponent),
       },
       {
+        path: 'branches/:branchId/movements',
+        loadComponent: () =>
+          import('./domains/movements/branch-movements.component').then(
+            m => m.BranchMovementsComponent
+          ),
+      },
+      {
         path: 'pos',
         loadComponent: () => import('./domains/pos/pos.component').then(m => m.PosComponent),
       },

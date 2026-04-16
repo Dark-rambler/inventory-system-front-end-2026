@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AccordionComponent } from '@shared/components/accordion';
@@ -15,6 +15,8 @@ import { MovementResourceService } from '../../services/movement-resource.servic
 export class MovementsFiltersComponent {
   private readonly _fb = inject(FormBuilder);
   private readonly _movementResourceService = inject(MovementResourceService);
+
+  public hideBranchFilter = input<boolean>(false);
 
   protected readonly filtersForm = this._fb.group({
     movementType: [''],
