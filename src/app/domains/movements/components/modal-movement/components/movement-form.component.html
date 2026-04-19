@@ -1,0 +1,66 @@
+<app-modal [title]="modalTitle" width="w-128">
+  <form [formGroup]="movementForm" class="space-y-4">
+    <app-form-input
+      label="ID Producto (GUID)"
+      [name]="'productId'"
+      [parentForm]="movementForm"
+      controlName="productId"
+      placeholder="UUID del producto"
+    />
+
+    <app-form-input
+      label="Cantidad"
+      [name]="'quantity'"
+      [type]="'number'"
+      [parentForm]="movementForm"
+      controlName="quantity"
+      placeholder="Cantidad"
+    />
+
+    <app-form-input
+      label="Tipo (0 salida / 1 entrada)"
+      [name]="'type'"
+      [type]="'number'"
+      [parentForm]="movementForm"
+      controlName="type"
+      placeholder="0 o 1"
+    />
+
+    <app-form-input
+      label="Bodega Origen (GUID)"
+      [name]="'fromWarehouseId'"
+      [parentForm]="movementForm"
+      controlName="fromWarehouseId"
+      placeholder="UUID bodega origen"
+    />
+
+    <app-form-input
+      label="Bodega Destino (GUID)"
+      [name]="'toWarehouseId'"
+      [parentForm]="movementForm"
+      controlName="toWarehouseId"
+      placeholder="UUID bodega destino"
+    />
+
+    <app-form-input
+      label="Sucursal Origen (GUID)"
+      [name]="'fromBranchId'"
+      [parentForm]="movementForm"
+      controlName="fromBranchId"
+      placeholder="UUID sucursal origen"
+    />
+
+    <app-form-input
+      label="Sucursal Destino (GUID)"
+      [name]="'toBranchId'"
+      [parentForm]="movementForm"
+      controlName="toBranchId"
+      placeholder="UUID sucursal destino"
+    />
+
+    <div class="flex justify-end space-x-2">
+      <app-button type="button" label="Guardar y continuar" (buttonClick)="handleSave(true)" />
+      <app-button type="button" label="Guardar" (buttonClick)="handleSave()" />
+    </div>
+  </form>
+</app-modal>

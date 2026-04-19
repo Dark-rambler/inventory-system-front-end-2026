@@ -8,3 +8,11 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface UserForm {
+  name: string;
+  userName: string;
+  email: string;
+  roleId: number | string;
+  password?: string;
+}

@@ -1,27 +1,24 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, inject, ViewContainerRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs';
+import {
+  ActionButtonsComponent,
+  IconButtonComponent,
+} from '../../../../shared/components/icon-button';
 import {
   PaginatorComponent,
   TableColumnDirective,
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import {
-  ConfirmActionDirective,
-  EditItemDirective,
-  ViewDetailsDirective,
-} from '../../../../shared/directives';
-import {
-  ActionButtonsComponent,
-  IconButtonComponent,
-} from '../../../../shared/components/icon-button';
+import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
 import { Branch } from '../../../../shared/interfaces/branch.interface';
+import { BranchService } from '../../../../shared/services/branch.service';
+import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
 import { BRANCHCOLUMNS } from '../../constants/branch-columns.constant';
 import { BranchResourceService } from '../../services/branch-resource.service';
 import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
-import { BranchService } from '../../../../shared/services/branch.service';
-import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-branch-table',
@@ -31,7 +28,6 @@ import { tap } from 'rxjs';
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ConfirmActionDirective,
     ViewDetailsDirective,
     EditItemDirective,
     PaginatorComponent,
@@ -45,6 +41,7 @@ export class BranchTableComponent {
   private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
+  private readonly _router = inject(Router);
 
   public branchData = this._branchResourceService.branchData;
   public currentPage = this._branchResourceService.filterBranchParameters;
@@ -76,10 +73,19 @@ export class BranchTableComponent {
         if (result === 'confirm') {
           this._branchService
             .delete(branch.id?.toString() ?? '')
-            .pipe(tap(() => this._branchResourceService.reloadBranch()))
+            .pipe(
+              tap(() => this._branchResourceService.reloadBranch()),
+              tap(() => this._dialog.closeAll())
+            )
             .subscribe();
         }
       });
+  }
+
+  protected viewBranchMovements(branch: Branch): void {
+    if (!branch.id) return;
+
+    this._router.navigate(['branches', branch.id, 'movements']);
   }
 
   protected changePage(page: number): void {

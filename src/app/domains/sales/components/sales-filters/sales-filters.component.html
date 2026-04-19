@@ -1,0 +1,48 @@
+<app-accordion title="Buscar" class="[&>div]:rounded-b-none">
+  <form
+    [formGroup]="filtersForm"
+    class="grid grid-cols-1 gap-3 border-t border-slate-100 bg-white p-3 sm:grid-cols-2 xl:grid-cols-3"
+  >
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="folio"
+      label="Folio"
+      name="folio"
+      placeholder="Buscar por folio"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="customerName"
+      label="Cliente"
+      name="customerName"
+      placeholder="Buscar por cliente"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="status"
+      label="Estado"
+      name="status"
+      placeholder="Buscar por estado"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="fromDate"
+      label="Fecha inicio"
+      name="fromDate"
+      type="date"
+      placeholder=""
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="toDate"
+      label="Fecha fin"
+      name="toDate"
+      type="date"
+      placeholder=""
+    ></app-form-input>
+  </form>
+</app-accordion>

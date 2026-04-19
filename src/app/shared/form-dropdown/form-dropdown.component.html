@@ -1,0 +1,92 @@
+<div class="mt-2">
+  <label [for]="name()" class="block text-sm font-medium text-primary-700">
+    {{ label() }}
+  </label>
+
+  <div class="mt-2" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+    <button
+      [id]="name()"
+      type="button"
+      class="flex w-full items-center justify-between rounded-md border bg-gray-100 px-4 py-3 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30"
+      [class.border-gray-300]="!hasError()"
+      [class.border-red-500]="hasError()"
+      [class.cursor-not-allowed]="isDisabled()"
+      [class.opacity-60]="isDisabled()"
+      (click)="toggleDropdown()"
+      [disabled]="isDisabled()"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-controls]="name() + '-options'"
+    >
+      <span
+        class="truncate text-sm"
+        [class.text-slate-700]="selectedOption() !== null"
+        [class.text-slate-400]="selectedOption() === null"
+      >
+        {{ selectedLabel() }}
+      </span>
+
+      <svg
+        class="h-4 w-4 text-slate-500 transition-transform duration-150"
+        [class.rotate-180]="isOpen()"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+  </div>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen()"
+    [cdkConnectedOverlayHasBackdrop]="true"
+    [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+    [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.getBoundingClientRect().width"
+    [cdkConnectedOverlayOffsetY]="4"
+    (backdropClick)="closeDropdown()"
+    (detach)="closeDropdown()"
+  >
+    <div
+      [id]="name() + '-options'"
+      class="max-h-64 overflow-y-auto rounded-md border border-slate-200 bg-white p-1 shadow-lg"
+      role="listbox"
+    >
+      @if (options().length === 0) {
+        <div class="px-3 py-2 text-sm text-slate-500">
+          {{ emptyMessage() }}
+        </div>
+      } @else {
+        @for (option of options(); track trackByOption($index, option)) {
+          <button
+            type="button"
+            class="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-slate-700 transition-colors hover:bg-slate-100"
+            [class.bg-primary-50]="isOptionSelected(option)"
+            [class.text-primary-700]="isOptionSelected(option)"
+            (click)="selectOption(option)"
+            role="option"
+            [attr.aria-selected]="isOptionSelected(option)"
+          >
+            <span class="text-sm truncate">
+              {{ getOptionDisplay(option) }}
+            </span>
+
+            @if (isOptionSelected(option)) {
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            }
+          </button>
+        }
+      }
+    </div>
+  </ng-template>
+
+  <app-form-error [control]="control()" [fieldName]="label()" />
+</div>

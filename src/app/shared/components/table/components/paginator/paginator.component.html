@@ -1,21 +1,21 @@
 <div
-  class="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 bg-white border-t border-gray-100 rounded-b-xl select-none"
+  class="flex select-none flex-col items-center justify-between gap-2 rounded-b-xl border-t border-slate-200 bg-slate-50/70 px-3 py-2.5 sm:flex-row"
 >
   <!-- Left: info + page size selector -->
-  <div class="flex items-center gap-3 order-2 sm:order-1">
-    <p class="text-sm text-gray-400">
+  <div class="order-2 flex items-center gap-2.5 sm:order-1">
+    <p class="text-xs text-slate-500">
       Mostrando
-      <span class="font-semibold text-gray-600">{{ startItem() }}–{{ endItem() }}</span>
+      <span class="font-semibold text-slate-700">{{ startItem() }}–{{ endItem() }}</span>
       de
-      <span class="font-semibold text-gray-600">{{ paginator().totalCount }}</span>
+      <span class="font-semibold text-slate-700">{{ paginator().totalCount }}</span>
       resultados
     </p>
 
-    <div class="flex items-center gap-1.5">
-      <label class="text-xs text-gray-400 whitespace-nowrap" for="pageSizeSelect">Filas</label>
+    <div class="flex items-center gap-1">
+      <label class="whitespace-nowrap text-xs text-slate-500" for="pageSizeSelect">Filas</label>
       <select
         id="pageSizeSelect"
-        class="h-7 rounded-lg border border-gray-200 bg-white px-2 text-xs text-gray-600 font-medium cursor-pointer transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+        class="h-6 cursor-pointer rounded-md border border-slate-200 bg-white px-1.5 text-xs font-medium text-slate-700 transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
         [value]="currentPageSize()"
         (change)="onPageSizeChange($event)"
       >
@@ -27,14 +27,14 @@
   </div>
 
   <!-- Navigation -->
-  <nav class="flex items-center gap-1 order-1 sm:order-2" aria-label="Paginación">
+  <nav class="order-1 flex items-center gap-1 sm:order-2" aria-label="Paginación">
     <!-- Prev -->
     <button
-      class="inline-flex items-center justify-center h-8 w-8 rounded-lg border text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+      class="inline-flex h-7 w-7 items-center justify-center rounded-md border text-xs font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
       [ngClass]="
         isPrevDisabled()
-          ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
-          : 'border-gray-200 text-gray-500 bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5'
+          ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-100'
+          : 'border-slate-200 text-slate-500 bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5'
       "
       [disabled]="isPrevDisabled()"
       (click)="goToPage(currentPage() - 1)"
@@ -48,7 +48,7 @@
     <!-- First page -->
     @if (showFirst()) {
       <button
-        class="inline-flex items-center justify-center h-8 min-w-8 px-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 bg-white transition-all duration-150 hover:border-primary/40 hover:text-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        class="inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-slate-200 bg-white px-1.5 text-xs font-medium text-slate-600 transition-all duration-150 hover:border-primary/40 hover:bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
         (click)="goToPage(1)"
       >
         1
@@ -56,7 +56,7 @@
     }
 
     @if (showFirstEllipsis()) {
-      <span class="inline-flex items-end justify-center h-8 w-6 text-gray-400 text-sm pb-0.5"
+      <span class="inline-flex h-7 w-5 items-end justify-center pb-0.5 text-xs text-slate-400"
         >…</span
       >
     }
@@ -64,11 +64,11 @@
     <!-- Window pages -->
     @for (page of pages(); track page) {
       <button
-        class="inline-flex items-center justify-center h-8 min-w-8 px-2 rounded-lg border text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        class="inline-flex h-7 min-w-7 items-center justify-center rounded-md border px-1.5 text-xs font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
         [ngClass]="
           page === currentPage()
-            ? 'border-primary bg-primary text-white shadow-sm shadow-primary/20 pointer-events-none'
-            : 'border-gray-200 text-gray-600 bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5'
+            ? 'pointer-events-none border-primary bg-primary text-white shadow-sm shadow-primary/20'
+            : 'border-slate-200 text-slate-600 bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5'
         "
         [attr.aria-current]="page === currentPage() ? 'page' : null"
         (click)="goToPage(page)"
@@ -78,7 +78,7 @@
     }
 
     @if (showLastEllipsis()) {
-      <span class="inline-flex items-end justify-center h-8 w-6 text-gray-400 text-sm pb-0.5"
+      <span class="inline-flex h-7 w-5 items-end justify-center pb-0.5 text-xs text-slate-400"
         >…</span
       >
     }
@@ -86,7 +86,7 @@
     <!-- Last page -->
     @if (showLast()) {
       <button
-        class="inline-flex items-center justify-center h-8 min-w-8 px-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 bg-white transition-all duration-150 hover:border-primary/40 hover:text-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        class="inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-slate-200 bg-white px-1.5 text-xs font-medium text-slate-600 transition-all duration-150 hover:border-primary/40 hover:bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
         (click)="goToPage(paginator().totalPages)"
       >
         {{ paginator().totalPages }}
@@ -95,11 +95,11 @@
 
     <!-- Next -->
     <button
-      class="inline-flex items-center justify-center h-8 w-8 rounded-lg border text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+      class="inline-flex h-7 w-7 items-center justify-center rounded-md border text-xs font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
       [ngClass]="
         isNextDisabled()
-          ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
-          : 'border-gray-200 text-gray-500 bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5'
+          ? 'border-slate-200 text-slate-300 cursor-not-allowed bg-slate-100'
+          : 'border-slate-200 text-slate-500 bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5'
       "
       [disabled]="isNextDisabled()"
       (click)="goToPage(currentPage() + 1)"

@@ -1,0 +1,24 @@
+<section
+  class="mb-3 flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5"
+>
+  <h1 class="text-xl font-semibold text-slate-800 sm:text-2xl">
+    Ventas sucursal {{ currentBranch() }}
+  </h1>
+
+  <button
+    type="button"
+    class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition-colors duration-200 hover:bg-slate-100 hover:text-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-1"
+    title="Generar reporte PDF"
+    aria-label="Generar reporte PDF"
+    (click)="generateReport()"
+  >
+    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+      />
+    </svg>
+  </button>
+</section>

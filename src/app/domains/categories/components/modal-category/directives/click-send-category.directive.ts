@@ -1,6 +1,7 @@
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Directive, inject, input } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { tap } from 'rxjs';
 import { CategoryService } from '../../../../../shared/services/category.service';
 import { CategoryResourceService } from '../../../services/category-resource.service';
@@ -18,6 +19,7 @@ export class SendCategoryDirective {
   private readonly _formGroupDirective = inject(FormGroupDirective, { optional: true });
   private readonly _dialog = inject(Dialog);
   private readonly _categoryResourceService = inject(CategoryResourceService);
+  private readonly _toastrService = inject(ToastrService);
   protected data = inject(DIALOG_DATA);
 
   onClick(): void {
@@ -42,7 +44,14 @@ export class SendCategoryDirective {
         tap(() => this._categoryResourceService.reloadCategory()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
       )
-      .subscribe();
+      .subscribe({
+        next: () => {
+          this._toastrService.success('Categoria creada correctamente.', 'Exito');
+        },
+        error: error => {
+          this._toastrService.error(error?.message || 'No se pudo crear la categoria.', 'Error');
+        },
+      });
   }
 
   private _updateCategory(): void {
@@ -55,6 +64,13 @@ export class SendCategoryDirective {
         tap(() => this._categoryResourceService.reloadCategory()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
       )
-      .subscribe();
+      .subscribe({
+        next: () => {
+          this._toastrService.success('Categoria actualizada correctamente.', 'Exito');
+        },
+        error: () => {
+          this._toastrService.error('No se pudo actualizar la categoria.', 'Error');
+        },
+      });
   }
 }

@@ -35,6 +35,11 @@ export const routes: Routes = [
           import('./domains/inventory/inventory.component').then(m => m.InventoryComponent),
       },
       {
+        path: 'movements',
+        loadComponent: () =>
+          import('./domains/movements/movements.component').then(m => m.MovementsComponent),
+      },
+      {
         path: 'reports',
         loadComponent: () =>
           import('./domains/reports/reports.component').then(m => m.ReportsComponent),
@@ -64,8 +69,19 @@ export const routes: Routes = [
           import('./domains/branches/branches.component').then(m => m.BranchesComponent),
       },
       {
+        path: 'branches/:branchId/movements',
+        loadComponent: () =>
+          import('./domains/movements/branch-movements.component').then(
+            m => m.BranchMovementsComponent
+          ),
+      },
+      {
         path: 'pos',
         loadComponent: () => import('./domains/pos/pos.component').then(m => m.PosComponent),
+      },
+      {
+        path: 'sales',
+        loadComponent: () => import('./domains/sales/sales.component').then(m => m.SalesComponent),
       },
     ],
   },

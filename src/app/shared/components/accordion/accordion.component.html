@@ -1,0 +1,31 @@
+<div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
+  <button
+    type="button"
+    class="flex w-full items-center justify-between bg-slate-50 px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-slate-600 transition-colors duration-200 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
+    (click)="toggleExpanded()"
+    [attr.aria-expanded]="isExpanded()"
+  >
+    <span class="flex-1">{{ title() }}</span>
+    <svg
+      class="h-4 w-4 shrink-0 text-primary transition-transform duration-300"
+      [class.rotate-180]="isExpanded()"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+      />
+    </svg>
+  </button>
+
+  <div
+    [@expandCollapse]="isExpanded() ? 'expanded' : 'collapsed'"
+    class="border-t border-slate-200 bg-white"
+  >
+    <ng-content></ng-content>
+  </div>
+</div>

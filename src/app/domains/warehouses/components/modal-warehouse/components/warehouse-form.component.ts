@@ -23,11 +23,12 @@ export class WarehouseFormComponent implements OnInit {
   }
 
   private formatData(): void {
+    console.log('Data in WarehouseFormComponent:', this.data);
     if (this.data) {
       this.warehouseForm.patchValue({
         name: this.data.name,
-        address: this.data.location.address,
-        city: this.data.location.city,
+        address: this.data.address,
+        city: this.data.city,
       });
     }
     this.loadData();

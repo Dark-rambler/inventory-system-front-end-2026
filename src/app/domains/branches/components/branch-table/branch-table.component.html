@@ -1,32 +1,35 @@
-<app-table [data]="branchData()?.items ?? []" [columns]="branchColumns" [config]="tableConfig()">
-  <ng-template appTableColumn="actions" let-branch>
-    <app-action-buttons>
-      <div appViewDetails>
-        <app-icon-button action="view" />
-      </div>
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <app-table [data]="branchData()?.items ?? []" [columns]="branchColumns" [config]="tableConfig()">
+    <ng-template appTableColumn="actions" let-branch>
+      <app-action-buttons>
+        <div appViewDetails>
+          <app-icon-button (buttonClick)="viewBranchMovements(branch)" action="view" />
+        </div>
 
-      <div appEditItem>
-        <app-icon-button (buttonClick)="editBranch(branch)" action="edit" tooltip="Editar" />
-      </div>
+        <div appEditItem>
+          <app-icon-button (buttonClick)="editBranch(branch)" action="edit" tooltip="Editar" />
+        </div>
 
-      <div
-        appConfirmAction
-        [confirmMessage]="'¿Eliminar la sucursal ' + branch.name + '?'"
-        [data]="branch"
-        (confirmed)="deleteBranch($event)"
-      >
-        <app-icon-button action="delete" tooltip="Eliminar" />
-      </div>
-    </app-action-buttons>
-  </ng-template>
-</app-table>
+        <div>
+          <app-icon-button
+            action="delete"
+            tooltip="Eliminar"
+            (buttonClick)="deleteBranch(branch)"
+          />
+        </div>
+      </app-action-buttons>
+    </ng-template>
+  </app-table>
 
-@if (branchData(); as data) {
-  <app-paginator
-    [paginator]="data"
-    [currentPage]="currentPage().page ?? 1"
-    [currentPageSize]="currentPage().pageSize ?? 10"
-    (pageChange)="changePage($event)"
-    (pageSizeChange)="changePageSize($event)"
-  />
-}
+  @if (branchData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page ?? 1"
+      [currentPageSize]="currentPage().pageSize ?? 10"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

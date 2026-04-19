@@ -1,128 +1,107 @@
-/* Contenedor principal */
 .app-table-container {
-  @apply w-full overflow-hidden rounded-t-xl bg-[#FDFDFD] shadow-sm;
+  @apply w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm;
 }
 
-/* Wrapper con scroll horizontal */
 .app-table-wrapper {
   @apply w-full overflow-x-auto;
 }
 
-/* Tabla base */
 .app-table {
   @apply w-full border-collapse;
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
 }
 
-/* Header de la tabla */
 .app-table-header {
-  @apply bg-[#EDF1F0];
+  @apply bg-slate-100;
 }
 
 .app-table-header-row {
-  @apply border-b border-gray-200;
+  @apply border-b border-slate-200 bg-slate-100;
 }
 
 .app-table-header-cell {
-  @apply px-6 py-2 text-left text-sm font-semibold text-[#1E1E1E] tracking-wide;
+  @apply px-4 py-2 text-left text-sm font-bold text-slate-700;
 }
 
-/* Body de la tabla */
 .app-table-body {
   @apply bg-white;
 }
 
-/* Filas de datos */
 .app-table-row {
-  @apply border-b border-gray-100 transition-colors duration-200;
+  @apply border-b border-slate-100 transition-colors duration-150;
 }
 
-/* Hover en filas */
 .app-table-row-hover:hover {
-  @apply bg-[#EDF1F0] cursor-pointer;
+  @apply cursor-pointer bg-primary-50;
 }
 
-/* Filas alternadas */
 .app-table-row-striped {
-  @apply bg-[#F9F9F9];
+  @apply bg-slate-50;
 }
 
-/* Celdas */
 .app-table-cell {
-  @apply px-6 py-0.5 text-sm text-gray-700;
+  @apply px-4 py-2 text-sm leading-5 text-slate-700;
 }
 
-/* Estado vacío */
 .app-table-empty {
-  @apply flex flex-col items-center justify-center py-16 px-4;
+  @apply flex flex-col items-center justify-center px-4 py-10;
 }
 
 .app-table-empty-icon {
-  @apply w-16 h-16 text-gray-300 mb-4;
+  @apply mb-3 h-14 w-14 text-slate-300;
 }
 
 .app-table-empty-text {
-  @apply text-gray-500 text-base font-medium;
+  @apply text-sm font-medium text-slate-500;
 }
 
-/* Skeleton loader */
 .skeleton-loader {
-  @apply h-4 bg-gray-200 rounded animate-pulse;
+  @apply h-4 animate-pulse rounded bg-slate-200;
 }
 
-/* Columna de acciones */
 .app-table-actions {
   @apply flex items-center justify-end gap-2;
 }
 
 .app-table-action-btn {
-  @apply inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply inline-flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2;
 }
 
-/* Botones de acción por tipo */
 .app-table-action-btn--view {
-  @apply text-blue-600 hover:bg-blue-50 focus:ring-blue-500;
+  @apply text-primary-700 hover:bg-primary-50 focus:ring-primary-500;
 }
 
 .app-table-action-btn--edit {
-  @apply text-[#288B83] hover:bg-[#A1CBC7]/20 focus:ring-[#288B83];
+  @apply text-secondary-700 hover:bg-secondary-100 focus:ring-secondary-500;
 }
 
 .app-table-action-btn--delete {
-  @apply text-red-600 hover:bg-red-50 focus:ring-red-500;
+  @apply text-danger hover:bg-danger/10 focus:ring-danger;
 }
 
 .app-table-action-btn--primary {
-  @apply bg-[#288B83] text-white hover:bg-[#1f6f69] focus:ring-[#288B83];
+  @apply bg-primary text-white hover:bg-primary-700 focus:ring-primary;
 }
 
 .app-table-action-btn--secondary {
-  @apply bg-[#A1CBC7] text-[#1E1E1E] hover:bg-[#8bb5b1] focus:ring-[#A1CBC7];
+  @apply bg-secondary-100 text-secondary-800 hover:bg-secondary-200 focus:ring-secondary-300;
 }
 
 .app-table-action-btn--outline {
-  @apply border border-[#288B83] text-[#288B83] hover:bg-[#288B83] hover:text-white focus:ring-[#288B83];
+  @apply border border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary;
 }
 
 .app-table-action-btn--danger {
-  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  @apply bg-danger text-white hover:bg-red-700 focus:ring-danger;
 }
 
-/* Iconos dentro de botones */
 .app-table-action-icon {
-  @apply w-4 h-4;
+  @apply h-4 w-4;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .app-table-header-cell,
   .app-table-cell {
-    @apply px-4 py-3 text-xs;
+    @apply px-3 py-1.5 text-xs;
   }
 
   .app-table-empty-icon {

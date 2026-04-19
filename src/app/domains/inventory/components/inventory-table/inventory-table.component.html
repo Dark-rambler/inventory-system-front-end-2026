@@ -1,35 +1,43 @@
-<app-table
-  [data]="inventoryData()?.items ?? []"
-  [columns]="inventoryColumns"
-  [config]="tableConfig()"
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
 >
-  <ng-template appTableColumn="actions" let-inventory>
-    <app-action-buttons>
-      <div appViewDetails>
-        <app-icon-button action="view" />
-      </div>
+  <app-table
+    [data]="inventoryData()?.items ?? []"
+    [columns]="inventoryColumns"
+    [config]="tableConfig()"
+  >
+    <ng-template appTableColumn="actions" let-inventory>
+      <app-action-buttons>
+        <div appViewDetails>
+          <app-icon-button action="view" />
+        </div>
 
-      <div appEditItem>
-        <app-icon-button (buttonClick)="editInventory(inventory)" action="edit" tooltip="Editar" />
-      </div>
+        <div appEditItem>
+          <app-icon-button
+            (buttonClick)="editInventory(inventory)"
+            action="edit"
+            tooltip="Editar"
+          />
+        </div>
 
-      <div>
-        <app-icon-button
-          (buttonClick)="deleteInventory(inventory)"
-          action="delete"
-          tooltip="Eliminar"
-        />
-      </div>
-    </app-action-buttons>
-  </ng-template>
-</app-table>
+        <div>
+          <app-icon-button
+            (buttonClick)="deleteInventory(inventory)"
+            action="delete"
+            tooltip="Eliminar"
+          />
+        </div>
+      </app-action-buttons>
+    </ng-template>
+  </app-table>
 
-@if (inventoryData(); as data) {
-  <app-paginator
-    [paginator]="data"
-    [currentPage]="currentPage().page ?? 1"
-    [currentPageSize]="currentPage().pageSize ?? 10"
-    (pageChange)="changePage($event)"
-    (pageSizeChange)="changePageSize($event)"
-  />
-}
+  @if (inventoryData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page ?? 1"
+      [currentPageSize]="currentPage().pageSize ?? 10"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

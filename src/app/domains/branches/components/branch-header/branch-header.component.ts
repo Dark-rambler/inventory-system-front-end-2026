@@ -7,7 +7,6 @@ import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
   selector: 'app-branch-header',
   imports: [ButtonComponent],
   templateUrl: './branch-header.component.html',
-  styleUrl: './branch-header.component.scss',
 })
 export class BranchHeaderComponent {
   private readonly _dialogService = inject(Dialog);

@@ -1,0 +1,7 @@
+<app-movements-header
+  [title]="'Ventas - Sucursal ' + (branchName() ?? branchId() ?? '')"
+  [showCreateButton]="false"
+  [branchId]="branchId()"
+/>
+<app-sales-filters></app-sales-filters>
+<app-sales-table></app-sales-table>

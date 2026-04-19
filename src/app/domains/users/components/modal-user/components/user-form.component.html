@@ -33,12 +33,16 @@
     placeholder="Mínimo 6 caracteres"
   />
 
-  <app-form-input
+  <app-form-dropdown
     label="Rol"
-    [name]="'userRole'"
+    [name]="'roleId'"
     [parentForm]="userForm"
     controlName="role"
-    placeholder="Ej: Admin, Usuario, etc."
+    [options]="roleOptions()"
+    optionLabelKey="name"
+    optionValueKey="id"
+    [visibleKeys]="['name']"
+    placeholder="Selecciona un rol"
   />
 
   <div class="flex justify-end space-x-2">

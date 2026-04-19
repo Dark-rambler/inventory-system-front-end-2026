@@ -23,3 +23,12 @@ export interface PosSale {
   paymentMethod: 'cash' | 'card' | 'transfer';
   createdAt: Date;
 }
+
+export interface SaleDetail {
+  productId: string;
+  quantity: number;
+}
+
+export interface SaleRequest {
+  saleDetails: SaleDetail[];
+}

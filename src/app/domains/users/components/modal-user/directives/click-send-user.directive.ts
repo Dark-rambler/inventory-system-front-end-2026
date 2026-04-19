@@ -4,6 +4,7 @@ import { FormGroupDirective } from '@angular/forms';
 import { tap } from 'rxjs';
 import { UserService } from '../../../../../shared/services/user.service';
 import { UserResourceService } from '../../../services/user-resource.service';
+import { UserForm } from '@app/shared/interfaces/user.interface';
 
 @Directive({
   selector: '[appSendUser]',
@@ -36,8 +37,15 @@ export class SendUserDirective {
   private _createUser(): void {
     const form = this._formGroupDirective?.form;
     const user = form?.value;
+    const userToSend: UserForm = {
+      name: user.name,
+      userName: user.userName,
+      email: user.email,
+      roleId: user.role,
+      password: user.password,
+    };
     this._userService
-      .create(user)
+      .create(userToSend)
       .pipe(
         tap(() => this._userResourceService.reloadUser()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
@@ -48,9 +56,14 @@ export class SendUserDirective {
   private _updateUser(): void {
     const form = this._formGroupDirective?.form;
     const user = form?.value;
-
+    const userToSend: UserForm = {
+      name: user.name,
+      userName: user.userName,
+      email: user.email,
+      roleId: user.role,
+    };
     this._userService
-      .update(user, this.data.id)
+      .update(userToSend, this.data.id)
       .pipe(
         tap(() => this._userResourceService.reloadUser()),
         tap(() => (this.keepOpen() ? form?.reset() : this._dialog.closeAll()))
