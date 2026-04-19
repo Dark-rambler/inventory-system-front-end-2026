@@ -1,3 +1,4 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
 import { AuthService } from '@shared/services/auth.service';
@@ -6,7 +7,6 @@ import { ConfirmModalService } from '@shared/services/confirm-modal.service';
 import { getSelectedBranchIdFromStorage } from '@shared/utils/selected-branch-storage';
 import { ToastrService } from 'ngx-toastr';
 import { CartPosService } from '../../services/cart-pos.service';
-import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-cart-pos',
@@ -46,7 +46,7 @@ export class CartPosComponent {
     this._confirmModalService
       .open({
         title: 'Confirmar venta',
-        message: `Se procesara una venta por $${this.total().toFixed(2)}. ¿Deseas continuar?`,
+        message: `Se procesara una venta por Bs ${this.total().toFixed(2)}. ¿Deseas continuar?`,
       })
       .subscribe(result => {
         if (result !== 'confirm') return;

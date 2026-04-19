@@ -88,7 +88,7 @@
             <!-- Nombre y precio unitario -->
             <div class="flex-1 min-w-0">
               <p class="font-medium text-gray-800 text-xs leading-snug truncate">{{ item.name }}</p>
-              <p class="text-xs text-gray-400 mt-0.5">${{ item.price.toFixed(2) }} c/u</p>
+              <p class="text-xs text-gray-400 mt-0.5">Bs {{ item.price.toFixed(2) }} c/u</p>
             </div>
 
             <!-- Controles cantidad + eliminar -->
@@ -141,7 +141,7 @@
 
             <!-- Subtotal -->
             <div class="text-right min-w-[52px] flex-shrink-0">
-              <p class="font-bold text-gray-800 text-sm">${{ item.subtotal.toFixed(2) }}</p>
+              <p class="font-bold text-gray-800 text-sm">Bs {{ item.subtotal.toFixed(2) }}</p>
             </div>
           </div>
         }
@@ -154,13 +154,13 @@
     <div class="space-y-1.5">
       <div class="flex justify-between text-xs text-gray-500">
         <span>Subtotal</span>
-        <span class="font-medium text-gray-700">${{ subtotal().toFixed(2) }}</span>
+        <span class="font-medium text-gray-700">Bs {{ subtotal().toFixed(2) }}</span>
       </div>
     </div>
 
     <div class="flex justify-between items-center pt-2 border-t border-gray-200">
       <span class="text-sm font-semibold text-gray-700">Total</span>
-      <span class="text-xl font-extrabold text-primary-600">${{ total().toFixed(2) }}</span>
+      <span class="text-xl font-extrabold text-primary-600">Bs {{ total().toFixed(2) }}</span>
     </div>
 
     <button
