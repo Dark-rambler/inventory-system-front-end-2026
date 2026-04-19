@@ -1,13 +1,13 @@
-<div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+<div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
   <button
     type="button"
-    class="flex w-full items-center justify-between bg-slate-50 px-5 py-4 text-left text-sm font-semibold uppercase tracking-wide text-slate-600 transition-colors duration-200 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#288B83] focus-visible:ring-offset-0"
+    class="flex w-full items-center justify-between bg-slate-50 px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-slate-600 transition-colors duration-200 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
     (click)="toggleExpanded()"
     [attr.aria-expanded]="isExpanded()"
   >
     <span class="flex-1">{{ title() }}</span>
     <svg
-      class="h-5 w-5 shrink-0 text-[#288B83] transition-transform duration-300"
+      class="h-4 w-4 shrink-0 text-primary transition-transform duration-300"
       [class.rotate-180]="isExpanded()"
       fill="none"
       stroke="currentColor"

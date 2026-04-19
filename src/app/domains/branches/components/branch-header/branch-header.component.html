@@ -1,7 +1,11 @@
-<div class="flex justify-between items-center mb-4">
-  <h1 class="text-2xl font-bold text-gray-800">Sucursales</h1>
-  <app-button (buttonClick)="handleNewBranch()" variant="primary">
-    <i class="fas fa-plus mr-2"></i>
-    Nueva Sucursal
+<section
+  class="mb-3 flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5"
+>
+  <h1 class="text-xl font-semibold text-slate-800 sm:text-2xl">Sucursales</h1>
+
+  <app-button label="Nueva" variant="primary" (buttonClick)="handleNewBranch()">
+    <svg slot="icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
   </app-button>
-</div>
+</section>

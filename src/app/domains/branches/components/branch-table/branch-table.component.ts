@@ -1,5 +1,11 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, inject, ViewContainerRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs';
+import {
+  ActionButtonsComponent,
+  IconButtonComponent,
+} from '../../../../shared/components/icon-button';
 import {
   PaginatorComponent,
   TableColumnDirective,
@@ -11,18 +17,12 @@ import {
   EditItemDirective,
   ViewDetailsDirective,
 } from '../../../../shared/directives';
-import {
-  ActionButtonsComponent,
-  IconButtonComponent,
-} from '../../../../shared/components/icon-button';
 import { Branch } from '../../../../shared/interfaces/branch.interface';
+import { BranchService } from '../../../../shared/services/branch.service';
+import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
 import { BRANCHCOLUMNS } from '../../constants/branch-columns.constant';
 import { BranchResourceService } from '../../services/branch-resource.service';
 import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
-import { BranchService } from '../../../../shared/services/branch.service';
-import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
-import { tap } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-branch-table',

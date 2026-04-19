@@ -1,45 +1,49 @@
-<app-table
-  [data]="warehouseData()?.items ?? []"
-  [columns]="warehouseColumns"
-  [config]="tableConfig()"
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
 >
-  <ng-template appTableColumn="isActive" let-warehouse>
-    <span [class]="warehouse.isActive ? 'badge badge-success' : 'badge badge-danger'">
-      {{ warehouse.isActive ? 'Activo' : 'Inactivo' }}
-    </span>
-  </ng-template>
+  <app-table
+    [data]="warehouseData()?.items ?? []"
+    [columns]="warehouseColumns"
+    [config]="tableConfig()"
+  >
+    <ng-template appTableColumn="isActive" let-warehouse>
+      <span [class]="warehouse.isActive ? 'badge badge-success' : 'badge badge-danger'">
+        {{ warehouse.isActive ? 'Activo' : 'Inactivo' }}
+      </span>
+    </ng-template>
 
-  <ng-template appTableColumn="capacity" let-warehouse>
-    {{ warehouse.capacity | number }} unidades
-  </ng-template>
+    <ng-template appTableColumn="capacity" let-warehouse>
+      {{ warehouse.capacity | number }} unidades
+    </ng-template>
 
-  <ng-template appTableColumn="actions" let-warehouse>
-    <app-action-buttons>
-      <div appViewDetails>
-        <app-icon-button action="view" />
-      </div>
+    <ng-template appTableColumn="actions" let-warehouse>
+      <app-action-buttons>
+        <div appViewDetails>
+          <app-icon-button action="view" />
+        </div>
 
-      <div appEditItem>
-        <app-icon-button (buttonClick)="editWarehouse(warehouse)" action="edit" />
-      </div>
+        <div appEditItem>
+          <app-icon-button (buttonClick)="editWarehouse(warehouse)" action="edit" />
+        </div>
 
-      <div>
-        <app-icon-button
-          (buttonClick)="deleteWarehouse(warehouse)"
-          action="delete"
-          tooltip="Eliminar"
-        />
-      </div>
-    </app-action-buttons>
-  </ng-template>
-</app-table>
+        <div>
+          <app-icon-button
+            (buttonClick)="deleteWarehouse(warehouse)"
+            action="delete"
+            tooltip="Eliminar"
+          />
+        </div>
+      </app-action-buttons>
+    </ng-template>
+  </app-table>
 
-@if (warehouseData(); as data) {
-  <app-paginator
-    [paginator]="data"
-    [currentPage]="currentPage().page ?? 1"
-    [currentPageSize]="currentPage().pageSize ?? 10"
-    (pageChange)="changePage($event)"
-    (pageSizeChange)="changePageSize($event)"
-  />
-}
+  @if (warehouseData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page ?? 1"
+      [currentPageSize]="currentPage().pageSize ?? 10"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

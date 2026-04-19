@@ -7,7 +7,6 @@ import { ModalUserComponent } from '../modal-user/modal-user.component';
   selector: 'app-user-header',
   imports: [ButtonComponent],
   templateUrl: './user-header.component.html',
-  styleUrl: './user-header.component.scss',
 })
 export class UserHeaderComponent {
   private readonly _dialogService = inject(Dialog);

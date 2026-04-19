@@ -1,57 +1,60 @@
-<app-table [data]="salesData()?.items ?? []" [columns]="salesColumns" [config]="tableConfig()">
-  <ng-template appTableColumn="status" let-sale>
-    <span
-      class="px-2 py-1 rounded-full text-xs font-medium"
-      [class.bg-green-100]="sale.status === 'completed'"
-      [class.text-green-700]="sale.status === 'completed'"
-      [class.bg-yellow-100]="sale.status === 'pending'"
-      [class.text-yellow-700]="sale.status === 'pending'"
-      [class.bg-red-100]="sale.status === 'cancelled'"
-      [class.text-red-700]="sale.status === 'cancelled'"
-    >
-      @switch (sale.status) {
-        @case ('completed') {
-          Completada
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <app-table [data]="salesData()?.items ?? []" [columns]="salesColumns" [config]="tableConfig()">
+    <ng-template appTableColumn="status" let-sale>
+      <span
+        class="rounded-full px-2 py-1 text-xs font-medium"
+        [ngClass]="{
+          'bg-secondary-100 text-secondary-700': sale.status === 'completed',
+          'bg-amber-100 text-amber-700': sale.status === 'pending',
+          'bg-danger/10 text-danger': sale.status === 'cancelled',
+        }"
+      >
+        @switch (sale.status) {
+          @case ('completed') {
+            Completada
+          }
+          @case ('pending') {
+            Pendiente
+          }
+          @case ('cancelled') {
+            Cancelada
+          }
         }
-        @case ('pending') {
-          Pendiente
-        }
-        @case ('cancelled') {
-          Cancelada
-        }
-      }
-    </span>
-  </ng-template>
+      </span>
+    </ng-template>
 
-  <ng-template appTableColumn="total" let-sale>
-    <span class="font-medium text-gray-900">
-      {{ sale.total | currency: 'USD' : 'symbol' : '1.2-2' }}
-    </span>
-  </ng-template>
+    <ng-template appTableColumn="total" let-sale>
+      <span class="font-medium text-slate-800">
+        {{ sale.total | currency: 'USD' : 'symbol' : '1.2-2' }}
+      </span>
+    </ng-template>
 
-  <ng-template appTableColumn="actions" let-sale>
-    <app-action-buttons>
-      <div appViewDetails>
-        <app-icon-button (buttonClick)="viewSale(sale)" action="view" />
-      </div>
+    <ng-template appTableColumn="actions" let-sale>
+      <app-action-buttons>
+        <div appViewDetails>
+          <app-icon-button (buttonClick)="viewSale(sale)" action="view" />
+        </div>
 
-      <div appEditItem>
-        <app-icon-button (buttonClick)="editSale(sale)" action="edit" />
-      </div>
+        <div appEditItem>
+          <app-icon-button (buttonClick)="editSale(sale)" action="edit" />
+        </div>
 
-      <div>
-        <app-icon-button (buttonClick)="deleteSale(sale)" action="delete" tooltip="Eliminar" />
-      </div>
-    </app-action-buttons>
-  </ng-template>
-</app-table>
+        <div>
+          <app-icon-button (buttonClick)="deleteSale(sale)" action="delete" tooltip="Eliminar" />
+        </div>
+      </app-action-buttons>
+    </ng-template>
+  </app-table>
 
-@if (salesData(); as data) {
-  <app-paginator
-    [paginator]="data"
-    [currentPage]="currentPage().page ?? 1"
-    [currentPageSize]="currentPage().pageSize ?? 10"
-    (pageChange)="changePage($event)"
-    (pageSizeChange)="changePageSize($event)"
-  />
-}
+  @if (salesData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page ?? 1"
+      [currentPageSize]="currentPage().pageSize ?? 10"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

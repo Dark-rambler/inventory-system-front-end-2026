@@ -1,11 +1,11 @@
 <header
-  class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 h-16 fixed top-0 left-0 right-0 z-50 shadow-sm"
+  class="fixed top-0 left-0 right-0 z-50 h-16 border-b border-slate-200/80 bg-white/90 shadow-sm backdrop-blur-md"
 >
-  <div class="flex items-center justify-between h-full px-6">
-    <div class="flex items-center gap-4">
+  <div class="flex h-full items-center justify-between px-4 sm:px-6">
+    <div class="flex items-center gap-3 sm:gap-4">
       <button
         (click)="toggleSidebar()"
-        class="lg:hidden p-2 -ml-2 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/5 transition-all"
+        class="-ml-1 rounded-lg p-2 text-slate-500 transition-all hover:bg-primary/10 hover:text-primary lg:hidden"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -16,21 +16,28 @@
           />
         </svg>
       </button>
+
       <div class="flex items-center gap-3">
         <div
-          class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center shadow-md"
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary-700 to-secondary-600 text-white shadow-sm"
         >
-          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
           </svg>
         </div>
-        <h1 class="text-lg font-bold text-gray-800 tracking-tight">Inventory System</h1>
+
+        <div>
+          <p class="text-[11px] uppercase tracking-[0.16em] text-slate-400">Sistema</p>
+          <h1 class="text-base font-semibold leading-tight text-slate-800 sm:text-lg">
+            Inventario central
+          </h1>
+        </div>
       </div>
     </div>
 
     <div class="flex items-center gap-2">
       <button
-        class="p-2.5 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/5 transition-all relative group"
+        class="group relative rounded-lg border border-slate-200/80 bg-white p-2.5 text-slate-500 transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -41,22 +48,22 @@
           />
         </svg>
         <span
-          class="absolute top-1.5 right-1.5 bg-danger text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center"
+          class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-danger text-[10px] font-bold text-white"
           >3</span
         >
       </button>
 
-      <div class="h-8 w-px bg-gray-200 mx-1"></div>
+      <div class="mx-1 hidden h-8 w-px bg-slate-200 sm:block"></div>
 
       <div
-        class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-lg p-1.5 -mr-1.5 transition-colors"
+        class="-mr-1.5 flex cursor-pointer items-center gap-3 rounded-lg p-1.5 transition-colors hover:bg-slate-100/80"
       >
         <div class="text-right hidden sm:block">
-          <p class="text-sm font-semibold text-gray-800">Admin</p>
-          <p class="text-xs text-gray-500">Administrador</p>
+          <p class="text-sm font-semibold text-slate-800">Admin</p>
+          <p class="text-xs text-slate-500">Administrador</p>
         </div>
         <div
-          class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white shadow-md"
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary-700 to-secondary-600 text-white shadow-sm"
         >
           <span class="text-sm font-bold">A</span>
         </div>
