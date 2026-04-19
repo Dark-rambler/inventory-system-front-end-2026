@@ -25,8 +25,8 @@ export class BranchFormComponent implements OnInit {
       this.branchForm.patchValue({
         name: this.data.name,
         telephone: this.data.telephone,
-        address: this.data.location.address,
-        city: this.data.location.city,
+        address: this.data.address,
+        city: this.data.city,
       });
     }
   }

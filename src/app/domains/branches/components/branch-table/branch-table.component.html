@@ -12,13 +12,12 @@
           <app-icon-button (buttonClick)="editBranch(branch)" action="edit" tooltip="Editar" />
         </div>
 
-        <div
-          appConfirmAction
-          [confirmMessage]="'¿Eliminar la sucursal ' + branch.name + '?'"
-          [data]="branch"
-          (confirmed)="deleteBranch($event)"
-        >
-          <app-icon-button action="delete" tooltip="Eliminar" />
+        <div>
+          <app-icon-button
+            action="delete"
+            tooltip="Eliminar"
+            (buttonClick)="deleteBranch(branch)"
+          />
         </div>
       </app-action-buttons>
     </ng-template>

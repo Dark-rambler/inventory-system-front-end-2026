@@ -2,26 +2,21 @@
   class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
 >
   <app-table [data]="salesData()?.items ?? []" [columns]="salesColumns" [config]="tableConfig()">
-    <ng-template appTableColumn="status" let-sale>
-      <span
-        class="rounded-full px-2 py-1 text-xs font-medium"
-        [ngClass]="{
-          'bg-secondary-100 text-secondary-700': sale.status === 'completed',
-          'bg-amber-100 text-amber-700': sale.status === 'pending',
-          'bg-danger/10 text-danger': sale.status === 'cancelled',
-        }"
-      >
-        @switch (sale.status) {
-          @case ('completed') {
-            Completada
-          }
-          @case ('pending') {
-            Pendiente
-          }
-          @case ('cancelled') {
-            Cancelada
-          }
-        }
+    <ng-template appTableColumn="id" let-sale>
+      <span class="font-mono text-xs text-slate-700" [title]="sale.id">
+        {{ sale.id | slice: 0 : 8 }}...
+      </span>
+    </ng-template>
+
+    <ng-template appTableColumn="date" let-sale>
+      <span class="text-slate-700">
+        {{ sale.date | date: 'dd/MM/yyyy HH:mm' }}
+      </span>
+    </ng-template>
+
+    <ng-template appTableColumn="productsSummary" let-sale>
+      <span class="text-slate-700" [title]="sale.productsSummary">
+        {{ sale.productsSummary }}
       </span>
     </ng-template>
 
@@ -29,22 +24,6 @@
       <span class="font-medium text-slate-800">
         {{ sale.total | currency: 'USD' : 'symbol' : '1.2-2' }}
       </span>
-    </ng-template>
-
-    <ng-template appTableColumn="actions" let-sale>
-      <app-action-buttons>
-        <div appViewDetails>
-          <app-icon-button (buttonClick)="viewSale(sale)" action="view" />
-        </div>
-
-        <div appEditItem>
-          <app-icon-button (buttonClick)="editSale(sale)" action="edit" />
-        </div>
-
-        <div>
-          <app-icon-button (buttonClick)="deleteSale(sale)" action="delete" tooltip="Eliminar" />
-        </div>
-      </app-action-buttons>
     </ng-template>
   </app-table>
 

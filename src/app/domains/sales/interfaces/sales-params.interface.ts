@@ -1,10 +1,9 @@
 export interface SalesParams {
   folio?: string;
   customerName?: string;
-  branchName?: string;
   status?: string;
-  startDate?: string;
-  endDate?: string;
+  fromDate?: string;
+  toDate?: string;
   page?: number;
   pageSize?: number;
 }

@@ -1,3 +1,5 @@
+import { Location } from './warehouse.interface';
+
 export interface Branch {
   id?: number;
   name: string;
@@ -6,4 +8,9 @@ export interface Branch {
   city: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+export interface BranchForm {
+  name: string;
+  telephone: string;
+  Location: Location;
 }

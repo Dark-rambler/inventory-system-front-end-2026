@@ -1,145 +1,42 @@
 import { HttpParams } from '@angular/common/http';
-import { Injectable, linkedSignal, signal } from '@angular/core';
+import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { BranchService } from '@shared/services/branch.service';
+import { getSelectedBranchIdFromStorage } from '@shared/utils/selected-branch-storage';
+import { catchError, map, Observable, of } from 'rxjs';
 import { PaginatorInterface } from '../../../shared/interfaces/paginator.interface';
 import { buildHttpParams } from '../../../shared/utils/http-params';
 import { SALES_PARAMETER_MAPPING } from '../constants/sales.constants';
+import { BranchSaleApi, BranchSaleDetailApi } from '../interfaces/sale-api.interface';
 import { Sale } from '../interfaces/sale.interface';
 import { DEFAULT_SALES_PARAMS, SalesParams } from '../interfaces/sales-params.interface';
 
-const MOCK_SALES: Sale[] = [
-  {
-    id: 1,
-    folio: 'Venta-001',
-    date: '2026-04-10',
-    customerName: 'Juan Pérez',
-    branchName: 'Sucursal Central',
-    warehouseName: 'Almacén Principal',
-    total: 1500.0,
-    status: 'completed',
-    paymentMethod: 'Efectivo',
-    items: 5,
-  },
-  {
-    id: 2,
-    folio: 'Venta-002',
-    date: '2026-04-11',
-    customerName: 'María García',
-    branchName: 'Sucursal Norte',
-    warehouseName: 'Almacén Norte',
-    total: 2300.5,
-    status: 'completed',
-    paymentMethod: 'Tarjeta Débito',
-    items: 8,
-  },
-  {
-    id: 3,
-    folio: 'Venta-003',
-    date: '2026-04-11',
-    customerName: 'Carlos López',
-    branchName: 'Sucursal Central',
-    warehouseName: 'Almacén Principal',
-    total: 750.25,
-    status: 'pending',
-    paymentMethod: 'Transferencia',
-    items: 3,
-  },
-  {
-    id: 4,
-    folio: 'Venta-004',
-    date: '2026-04-12',
-    customerName: 'Ana Martínez',
-    branchName: 'Sucursal Sur',
-    warehouseName: 'Almacén Sur',
-    total: 4200.0,
-    status: 'completed',
-    paymentMethod: 'Tarjeta Crédito',
-    items: 12,
-  },
-  {
-    id: 5,
-    folio: 'Venta-005',
-    date: '2026-04-12',
-    customerName: 'Roberto Sánchez',
-    branchName: 'Sucursal Norte',
-    warehouseName: 'Almacén Norte',
-    total: 950.0,
-    status: 'cancelled',
-    paymentMethod: 'Efectivo',
-    items: 2,
-  },
-  {
-    id: 6,
-    folio: 'Venta-006',
-    date: '2026-04-13',
-    customerName: 'Laura Torres',
-    branchName: 'Sucursal Central',
-    warehouseName: 'Almacén Principal',
-    total: 3100.75,
-    status: 'completed',
-    paymentMethod: 'Tarjeta Débito',
-    items: 7,
-  },
-  {
-    id: 7,
-    folio: 'Venta-007',
-    date: '2026-04-13',
-    customerName: 'Miguel Hernández',
-    branchName: 'Sucursal Sur',
-    warehouseName: 'Almacén Sur',
-    total: 1800.0,
-    status: 'completed',
-    paymentMethod: 'Efectivo',
-    items: 4,
-  },
-  {
-    id: 8,
-    folio: 'Venta-008',
-    date: '2026-04-14',
-    customerName: 'Sofia Rodríguez',
-    branchName: 'Sucursal Este',
-    warehouseName: 'Almacén Este',
-    total: 5600.0,
-    status: 'completed',
-    paymentMethod: 'Transferencia',
-    items: 15,
-  },
-  {
-    id: 9,
-    folio: 'Venta-009',
-    date: '2026-04-14',
-    customerName: 'David González',
-    branchName: 'Sucursal Central',
-    warehouseName: 'Almacén Principal',
-    total: 2200.5,
-    status: 'pending',
-    paymentMethod: 'Tarjeta Crédito',
-    items: 6,
-  },
-  {
-    id: 10,
-    folio: 'Venta-010',
-    date: '2026-04-15',
-    customerName: 'Elena Fernández',
-    branchName: 'Sucursal Oeste',
-    warehouseName: 'Almacén Oeste',
-    total: 890.25,
-    status: 'completed',
-    paymentMethod: 'Efectivo',
-    items: 3,
-  },
-];
-
 @Injectable()
 export class SalesResourceService {
+  private readonly _branchService = inject(BranchService);
+  private readonly _currentBranchId = signal<string | null>(getSelectedBranchIdFromStorage());
+  private readonly _allowStorageFallback = signal<boolean>(true);
+
   public filterSalesParameters = signal<SalesParams>(DEFAULT_SALES_PARAMS);
+
+  public setBranchId(
+    branchId: string | null,
+    options?: { disableStorageFallback?: boolean }
+  ): void {
+    if (options?.disableStorageFallback) {
+      this._allowStorageFallback.set(false);
+    }
+
+    this._currentBranchId.set(branchId);
+  }
 
   public readonly salesResource = rxResource({
     request: () => {
       const filters = this.filterSalesParameters();
-      return filters;
+      return {
+        ...filters,
+        branchId: this._currentBranchId(),
+      };
     },
     loader: ({ request }) => {
       return this._getSales(request);
@@ -156,23 +53,21 @@ export class SalesResourceService {
     this._hasActiveFilters(this.filterSalesParameters())
   );
 
-  private _getSales(request: SalesParams): Observable<PaginatorInterface<Sale>> {
-    const pageSize = request.pageSize ?? 10;
-    const pageIndex = request.page ?? 1;
-    const totalCount = MOCK_SALES.length;
-    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  private _getSales(
+    request: SalesParams & { branchId?: string | null }
+  ): Observable<PaginatorInterface<Sale>> {
+    const fallbackBranchId = this._allowStorageFallback() ? getSelectedBranchIdFromStorage() : null;
+    const branchId = request.branchId ?? fallbackBranchId;
+    if (!branchId) {
+      return of(this._buildEmptyPaginator(request));
+    }
 
-    const mockResponse: PaginatorInterface<Sale> = {
-      items: MOCK_SALES,
-      totalCount,
-      pageIndex,
-      pageSize,
-      totalPages,
-      hasPreviousPage: pageIndex > 1,
-      hasNextPage: pageIndex < totalPages,
-    };
+    const params = this._createRequest(request);
 
-    return of(mockResponse).pipe(delay(500));
+    return this._branchService.getSalesByBranch(branchId, params).pipe(
+      map(response => this._normalizeResponse(response, request, branchId)),
+      catchError(() => of(this._buildEmptyPaginator(request)))
+    );
   }
 
   private _createRequest(request: SalesParams): HttpParams {
@@ -183,14 +78,185 @@ export class SalesResourceService {
     const hasStringFilters = !!(
       params.folio ||
       params.customerName ||
-      params.branchName ||
       params.status ||
-      params.startDate ||
-      params.endDate ||
+      params.fromDate ||
+      params.toDate ||
       params.page ||
       params.pageSize
     );
 
     return hasStringFilters;
+  }
+
+  private _normalizeResponse(
+    response: unknown,
+    request: SalesParams,
+    branchId: string
+  ): PaginatorInterface<Sale> {
+    const pageIndex = request.page ?? 1;
+    const pageSize = request.pageSize ?? 10;
+
+    if (this._isPaginatorResponse(response)) {
+      const items = response.items.map(item => this._mapApiSale(item, branchId));
+      const totalCount = this._toSafeNumber(response.totalCount, items.length);
+      const totalPages = Math.max(1, this._toSafeNumber(response.totalPages, 1));
+
+      return {
+        items,
+        pageIndex: this._toSafeNumber(response.pageIndex, pageIndex),
+        pageSize: this._toSafeNumber(response.pageSize, pageSize),
+        totalCount,
+        totalPages,
+        hasPreviousPage: Boolean(response.hasPreviousPage),
+        hasNextPage: Boolean(response.hasNextPage),
+      };
+    }
+
+    const rawItems = this._extractItems(response);
+    const mappedItems = rawItems.map(item => this._mapApiSale(item, branchId));
+
+    const totalCount = mappedItems.length;
+    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+    const start = (pageIndex - 1) * pageSize;
+    const end = start + pageSize;
+
+    return {
+      items: mappedItems.slice(start, end),
+      totalCount,
+      pageIndex,
+      pageSize,
+      totalPages,
+      hasPreviousPage: pageIndex > 1,
+      hasNextPage: pageIndex < totalPages,
+    };
+  }
+
+  private _mapApiSale(item: unknown, branchId: string): Sale {
+    const sale = this._toRecord(item) as Partial<BranchSaleApi> & Record<string, unknown>;
+    const details = this._extractSaleDetails(sale);
+    const id = String(this._readNested(sale, ['id', 'saleId', 'folio']) ?? `${Date.now()}`);
+
+    return {
+      id,
+      date: String(this._readNested(sale, ['date', 'createdAt', 'saleDate']) ?? ''),
+      sellerName: String(this._readNested(sale, ['seller', 'sellerName', 'user.name']) ?? '-'),
+      branchName: String(
+        this._readNested(sale, ['branch', 'branchName', 'branch.name']) ?? `Sucursal ${branchId}`
+      ),
+      productsSummary: this._buildProductsSummary(details),
+      total: this._toSafeNumber(this._readNested(sale, ['total', 'totalAmount', 'amount']), 0),
+      items:
+        this._toSafeNumber(this._readNested(sale, ['items', 'itemCount']), 0) || details.length,
+    };
+  }
+
+  private _extractSaleDetails(
+    sale: Partial<BranchSaleApi> & Record<string, unknown>
+  ): BranchSaleDetailApi[] {
+    const rawDetails = this._readNested(sale, ['saleDetails', 'details']);
+    if (!Array.isArray(rawDetails)) {
+      return [];
+    }
+
+    return rawDetails.map(detail => {
+      const record = this._toRecord(detail);
+      return {
+        id: this._toSafeNumber(record['id'], 0),
+        quantity: this._toSafeNumber(record['quantity'], 0),
+        price: this._toSafeNumber(record['price'], 0),
+        product: String(record['product'] ?? record['name'] ?? '-'),
+      };
+    });
+  }
+
+  private _buildProductsSummary(details: BranchSaleDetailApi[]): string {
+    if (!details.length) {
+      return '-';
+    }
+
+    const products = details.map(detail => detail.product).filter(Boolean);
+    const visibleProducts = products.slice(0, 2);
+    const extraCount = products.length - visibleProducts.length;
+    return extraCount > 0
+      ? `${visibleProducts.join(', ')} +${extraCount}`
+      : visibleProducts.join(', ');
+  }
+
+  private _extractItems(response: unknown): unknown[] {
+    if (Array.isArray(response)) return response;
+
+    const record = this._toRecord(response);
+    const candidates = [record['items'], record['data'], record['results'], record['sales']];
+
+    for (const candidate of candidates) {
+      if (Array.isArray(candidate)) {
+        return candidate;
+      }
+    }
+
+    return [];
+  }
+
+  private _buildEmptyPaginator(request: SalesParams): PaginatorInterface<Sale> {
+    const pageIndex = request.page ?? 1;
+    const pageSize = request.pageSize ?? 10;
+
+    return {
+      items: [],
+      totalCount: 0,
+      pageIndex,
+      pageSize,
+      totalPages: 1,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    };
+  }
+
+  private _isPaginatorResponse(
+    value: unknown
+  ): value is PaginatorInterface<Record<string, unknown>> {
+    const record = this._toRecord(value);
+    return (
+      Array.isArray(record['items']) &&
+      record['pageIndex'] !== undefined &&
+      record['pageSize'] !== undefined
+    );
+  }
+
+  private _toRecord(value: unknown): Record<string, unknown> {
+    if (!value || typeof value !== 'object') return {};
+    return value as Record<string, unknown>;
+  }
+
+  private _readNested(source: Record<string, unknown>, keys: string[]): unknown {
+    for (const key of keys) {
+      const path = key.split('.');
+      let current: unknown = source;
+
+      for (const token of path) {
+        if (token === 'length' && Array.isArray(current)) {
+          current = current.length;
+          continue;
+        }
+
+        if (!current || typeof current !== 'object') {
+          current = undefined;
+          break;
+        }
+
+        current = (current as Record<string, unknown>)[token];
+      }
+
+      if (current !== undefined && current !== null && current !== '') {
+        return current;
+      }
+    }
+
+    return undefined;
+  }
+
+  private _toSafeNumber(value: unknown, fallback: number): number {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : fallback;
   }
 }

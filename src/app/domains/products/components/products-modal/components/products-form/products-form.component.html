@@ -1,0 +1,52 @@
+<form [formGroup]="productForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del producto"
+    [name]="'productName'"
+    [parentForm]="productForm"
+    controlName="name"
+    placeholder="Ej: Teclado mecánico"
+  />
+
+  <app-form-dropdown
+    label="Categoría"
+    [name]="'categoryId'"
+    [parentForm]="productForm"
+    controlName="categoryId"
+    [options]="categoryOptions()"
+    optionLabelKey="name"
+    optionValueKey="id"
+    [visibleKeys]="['name']"
+    placeholder="Selecciona una categoría"
+  />
+
+  <app-form-input
+    label="Código"
+    [name]="'productCode'"
+    [parentForm]="productForm"
+    controlName="code"
+    placeholder="Ej: PRD-001"
+  />
+
+  <app-form-input
+    [textArea]="true"
+    label="Descripción del producto"
+    [name]="'productDescription'"
+    [parentForm]="productForm"
+    controlName="description"
+    placeholder="Describe brevemente el producto..."
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendProduct
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendProduct type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>

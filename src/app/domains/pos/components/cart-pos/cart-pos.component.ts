@@ -6,6 +6,7 @@ import { ConfirmModalService } from '@shared/services/confirm-modal.service';
 import { getSelectedBranchIdFromStorage } from '@shared/utils/selected-branch-storage';
 import { ToastrService } from 'ngx-toastr';
 import { CartPosService } from '../../services/cart-pos.service';
+import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-cart-pos',
@@ -18,6 +19,7 @@ export class CartPosComponent {
   private readonly _authService = inject(AuthService);
   private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _toastr = inject(ToastrService);
+  private readonly _dialog = inject(Dialog);
   protected readonly cart = this._cartService.cart;
   protected readonly subtotal = this._cartService.subtotal;
   protected readonly tax = this._cartService.tax;
@@ -49,6 +51,7 @@ export class CartPosComponent {
       .subscribe(result => {
         if (result !== 'confirm') return;
         this._sendSaleRequest();
+        this._dialog.closeAll();
       });
   }
 

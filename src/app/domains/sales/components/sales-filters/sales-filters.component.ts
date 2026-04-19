@@ -19,10 +19,9 @@ export class SalesFiltersComponent {
   protected readonly filtersForm = this._fb.group({
     folio: [''],
     customerName: [''],
-    branchName: [''],
     status: [''],
-    startDate: [''],
-    endDate: [''],
+    fromDate: [''],
+    toDate: [''],
   });
 
   constructor() {
@@ -31,10 +30,9 @@ export class SalesFiltersComponent {
       {
         folio: initialFilters.folio ?? '',
         customerName: initialFilters.customerName ?? '',
-        branchName: initialFilters.branchName ?? '',
         status: initialFilters.status ?? '',
-        startDate: initialFilters.startDate ?? '',
-        endDate: initialFilters.endDate ?? '',
+        fromDate: initialFilters.fromDate ?? '',
+        toDate: initialFilters.toDate ?? '',
       },
       { emitEvent: false }
     );
@@ -45,19 +43,17 @@ export class SalesFiltersComponent {
         map(value => ({
           folio: (value.folio ?? '').trim(),
           customerName: (value.customerName ?? '').trim(),
-          branchName: (value.branchName ?? '').trim(),
           status: (value.status ?? '').trim(),
-          startDate: (value.startDate ?? '').trim(),
-          endDate: (value.endDate ?? '').trim(),
+          fromDate: (value.fromDate ?? '').trim(),
+          toDate: (value.toDate ?? '').trim(),
         })),
         distinctUntilChanged(
           (prev, curr) =>
             prev.folio === curr.folio &&
             prev.customerName === curr.customerName &&
-            prev.branchName === curr.branchName &&
             prev.status === curr.status &&
-            prev.startDate === curr.startDate &&
-            prev.endDate === curr.endDate
+            prev.fromDate === curr.fromDate &&
+            prev.toDate === curr.toDate
         ),
         takeUntilDestroyed()
       )
@@ -67,10 +63,9 @@ export class SalesFiltersComponent {
           page: 1,
           folio: filters.folio || undefined,
           customerName: filters.customerName || undefined,
-          branchName: filters.branchName || undefined,
           status: filters.status || undefined,
-          startDate: filters.startDate || undefined,
-          endDate: filters.endDate || undefined,
+          fromDate: filters.fromDate || undefined,
+          toDate: filters.toDate || undefined,
         }));
       });
   }

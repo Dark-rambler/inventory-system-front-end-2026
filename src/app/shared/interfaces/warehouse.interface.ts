@@ -1,4 +1,4 @@
-export interface WarehouseLocation {
+export interface Location {
   id?: number;
   address: string;
   city: string;
@@ -7,7 +7,7 @@ export interface WarehouseLocation {
 export interface Warehouse {
   id?: string;
   name: string;
-  location: WarehouseLocation;
+  location: Location;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -13,6 +13,7 @@ import {
 import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
 import { PRODUCT_COLUMNS } from '../../constants/product-columns.constant';
 import { ProductResourceService } from '../../services/product-resource.service';
+import { ProductsModalComponent } from '../products-modal/products-modal.component';
 import { ProductService } from '../../../../shared/services/product.service';
 import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
 import { tap } from 'rxjs';
@@ -53,7 +54,10 @@ export class ProductTableComponent {
   protected readonly productColumns = PRODUCT_COLUMNS;
 
   protected editProduct(event: Product): void {
-    console.log('Edit product:', event);
+    this._dialog.open(ProductsModalComponent, {
+      data: event,
+      viewContainerRef: this._viewContainerRef,
+    });
   }
 
   protected deleteProduct(product: Product): void {
@@ -66,7 +70,10 @@ export class ProductTableComponent {
         if (result === 'confirm') {
           this._productService
             .delete(product.id)
-            .pipe(tap(() => this._productResourceService.reloadProduct()))
+            .pipe(
+              tap(() => this._dialog.closeAll()),
+              tap(() => this._productResourceService.reloadProduct())
+            )
             .subscribe();
         }
       });

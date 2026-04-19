@@ -12,11 +12,7 @@ import {
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import {
-  ConfirmActionDirective,
-  EditItemDirective,
-  ViewDetailsDirective,
-} from '../../../../shared/directives';
+import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
 import { Branch } from '../../../../shared/interfaces/branch.interface';
 import { BranchService } from '../../../../shared/services/branch.service';
 import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
@@ -32,7 +28,6 @@ import { ModalBranchComponent } from '../modal-branch/modal-branch.component';
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ConfirmActionDirective,
     ViewDetailsDirective,
     EditItemDirective,
     PaginatorComponent,
@@ -78,7 +73,10 @@ export class BranchTableComponent {
         if (result === 'confirm') {
           this._branchService
             .delete(branch.id?.toString() ?? '')
-            .pipe(tap(() => this._branchResourceService.reloadBranch()))
+            .pipe(
+              tap(() => this._branchResourceService.reloadBranch()),
+              tap(() => this._dialog.closeAll())
+            )
             .subscribe();
         }
       });

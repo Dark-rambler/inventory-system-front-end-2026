@@ -4,7 +4,7 @@ import { FormGroupDirective } from '@angular/forms';
 import { tap } from 'rxjs';
 import { WarehouseService } from '../../../../../shared/services/warehouse.service';
 import { WarehouseResourceService } from '../../../services/warehouse-resource.service';
-import { Warehouse, WarehouseLocation } from '../../../../../shared/interfaces/warehouse.interface';
+import { Warehouse, Location } from '../../../../../shared/interfaces/warehouse.interface';
 
 @Directive({
   selector: '[appSendWarehouse]',
@@ -27,7 +27,7 @@ export class SendWarehouseDirective {
     if (form.valid) {
       console.log(form.value);
       const warehouse = form.value;
-      const locationWarehouse: WarehouseLocation = {
+      const locationWarehouse: Location = {
         address: warehouse.address,
         city: warehouse.city,
       };

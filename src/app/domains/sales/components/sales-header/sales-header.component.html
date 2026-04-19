@@ -1,11 +1,7 @@
 <section
   class="mb-3 flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5"
 >
-  <h1 class="text-xl font-semibold text-slate-800 sm:text-2xl">Ventas</h1>
-
-  <app-button label="Nueva" variant="primary" (buttonClick)="handleNewSale()">
-    <svg slot="icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-    </svg>
-  </app-button>
+  <h1 class="text-xl font-semibold text-slate-800 sm:text-2xl">
+    Ventas sucursal {{ currentBranch() }}
+  </h1>
 </section>
