@@ -10,6 +10,13 @@ export interface User {
   token: string;
 }
 
+export interface TokenPayload {
+  [key: string]: unknown;
+  unique_name?: string;
+  role?: string;
+  exp?: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +36,18 @@ export class AuthService {
 
     return String(branch.id);
   });
+
+  readonly tokenPayload = computed<TokenPayload | null>(() => {
+    const user = this._currentUser();
+    if (!user?.token) {
+      return null;
+    }
+
+    return this._decodeToken(user.token);
+  });
+
+  readonly currentUsername = computed(() => this.tokenPayload()?.unique_name ?? null);
+  readonly currentRole = computed(() => this.tokenPayload()?.role ?? null);
 
   get isAuthenticated(): boolean {
     return this._currentUser() !== null;
@@ -70,5 +89,24 @@ export class AuthService {
     this._currentUser.set(null);
     localStorage.removeItem('user');
     this._router.navigate(['/login']);
+  }
+
+  private _decodeToken(token: string): TokenPayload | null {
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) {
+        return null;
+      }
+
+      const normalizedPayload = payload.padEnd(
+        payload.length + ((4 - (payload.length % 4)) % 4),
+        '='
+      );
+      const decoded = atob(normalizedPayload.replace(/-/g, '+').replace(/_/g, '/'));
+
+      return JSON.parse(decoded) as TokenPayload;
+    } catch {
+      return null;
+    }
   }
 }

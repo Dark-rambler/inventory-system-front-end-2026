@@ -59,8 +59,8 @@
         class="-mr-1.5 flex cursor-pointer items-center gap-3 rounded-lg p-1.5 transition-colors hover:bg-slate-100/80"
       >
         <div class="text-right hidden sm:block">
-          <p class="text-sm font-semibold text-slate-800">Admin</p>
-          <p class="text-xs text-slate-500">Administrador</p>
+          <p class="text-sm font-semibold text-slate-800">{{ userName() }}</p>
+          <p class="text-xs text-slate-500">{{ currentRole() | role }}</p>
         </div>
         <div
           class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary-700 to-secondary-600 text-white shadow-sm"
