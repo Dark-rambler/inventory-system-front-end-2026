@@ -27,4 +27,14 @@ export class WarehouseService {
   public delete(id: string): Observable<void> {
     return this._httpClient.delete<void>(`${this._url}/${id}`);
   }
+
+  public getProductsByWarehouse(
+    warehouseId: string,
+    params?: HttpParams
+  ): Observable<PaginatorInterface<Warehouse>> {
+    return this._httpClient.get<PaginatorInterface<Warehouse>>(
+      `${environment.API_URL}/warehouse/${warehouseId}/products`,
+      { params }
+    );
+  }
 }

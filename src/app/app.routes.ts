@@ -69,6 +69,13 @@ export const routes: Routes = [
           import('./domains/branches/branches.component').then(m => m.BranchesComponent),
       },
       {
+        path: 'branches/:branchId/movements/new',
+        loadComponent: () =>
+          import('./domains/movements/components/movements-header/create-branch-movement/create-branch-movement.component').then(
+            m => m.CreateBranchMovementComponent
+          ),
+      },
+      {
         path: 'branches/:branchId/movements',
         loadComponent: () =>
           import('./domains/movements/branch-movements.component').then(

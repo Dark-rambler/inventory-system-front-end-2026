@@ -1,42 +1,65 @@
-import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { Dialog } from '@angular/cdk/dialog';
-import { Component, inject, OnInit } from '@angular/core';
+import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
+import { HttpParams } from '@angular/common/http';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormDropdownComponent } from '@app/shared/form-dropdown/form-dropdown.component';
+import { Product } from '@app/shared/interfaces/product.interface';
+import { ProductService } from '@app/shared/services/product.service';
+import { ToastrService } from 'ngx-toastr';
+import { tap } from 'rxjs';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 import { FormInputComponent } from '../../../../../shared/form-input/form-input.component';
-import { ToastrService } from 'ngx-toastr';
-import { tap } from 'rxjs';
+import { InventoryMovementService } from '../../../../../shared/services/inventory-movement.service';
 import { MOVEMENT_FORM_CONTROL } from '../../../constants/movement-form.constant';
 import { CreateMovementRequest } from '../../../interfaces/create-movement-request.interface';
 import { MovementResourceService } from '../../../services/movement-resource.service';
-import { InventoryMovementService } from '../../../../../shared/services/inventory-movement.service';
+import { Warehouse } from '@app/shared/interfaces/warehouse.interface';
+import { WarehouseService } from '@app/shared/services/warehouse.service';
+import { BranchService } from '@app/shared/services/branch.service';
+import { Branch } from '@app/shared/interfaces/branch.interface';
 
 @Component({
   selector: 'app-movement-form',
   standalone: true,
-  imports: [ModalComponent, FormInputComponent, ReactiveFormsModule, ButtonComponent],
+  imports: [
+    ModalComponent,
+    FormInputComponent,
+    ReactiveFormsModule,
+    ButtonComponent,
+    FormDropdownComponent,
+  ],
   templateUrl: './movement-form.component.html',
 })
 export class MovementFormComponent implements OnInit {
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _inventoryMovementService = inject(InventoryMovementService);
   private readonly _movementResourceService = inject(MovementResourceService);
+  private readonly _branchService = inject(BranchService);
   private readonly _dialog = inject(Dialog);
   private readonly _toastrService = inject(ToastrService);
-
+  private readonly _productService = inject(ProductService);
+  protected readonly productOptions = signal<Product[]>([]);
+  protected readonly typeOptions = [
+    { value: 1, label: 'Entrada' },
+    { value: 0, label: 'Salida' },
+  ];
+  protected readonly warehouseOptions = signal<Warehouse[]>([]);
+  protected readonly branchOptions = signal<Branch[]>([]);
   protected readonly modalTitle = 'Nuevo movimiento de producto';
   protected movementForm = this._formBuilder.group(MOVEMENT_FORM_CONTROL);
+  public branchId = input<string | null>(null);
   protected data = inject<{ branchId?: string } | null>(DIALOG_DATA, { optional: true });
-
-  private readonly _guidPattern =
-    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
-
+  private readonly _warehouseService = inject(WarehouseService);
   ngOnInit(): void {
-    if (this.data?.branchId && this._guidPattern.test(this.data.branchId)) {
+    const initialBranchId = this._getInitialBranchId();
+    this.loadproducts();
+    this.loadWarehouses(initialBranchId);
+    this.loadBranch();
+    if (initialBranchId) {
       this.movementForm.patchValue({
-        fromBranchId: this.data.branchId,
-        toBranchId: this.data.branchId,
+        fromBranchId: initialBranchId,
+        toBranchId: initialBranchId,
       });
     }
   }
@@ -78,8 +101,8 @@ export class MovementFormComponent implements OnInit {
               type: 1,
               fromWarehouseId: '',
               toWarehouseId: '',
-              fromBranchId: this._isGuid(this.data?.branchId) ? this.data?.branchId : '',
-              toBranchId: this._isGuid(this.data?.branchId) ? this.data?.branchId : '',
+              fromBranchId: this._getInitialBranchId() ?? '',
+              toBranchId: this._getInitialBranchId() ?? '',
             });
             return;
           }
@@ -92,8 +115,14 @@ export class MovementFormComponent implements OnInit {
       });
   }
 
-  private _isGuid(value: string | null | undefined): value is string {
-    return !!value && this._guidPattern.test(value);
+  private _getInitialBranchId(): string | null {
+    const branchIdFromInput = this.branchId()?.trim();
+    if (branchIdFromInput) {
+      return branchIdFromInput;
+    }
+
+    const branchIdFromDialog = this.data?.branchId?.trim();
+    return branchIdFromDialog || null;
   }
 
   private _normalizeOptionalGuid(value: string | null | undefined): string | null {
@@ -118,5 +147,31 @@ export class MovementFormComponent implements OnInit {
     }
 
     return errorResponse?.error?.title || 'No se pudo crear el movimiento.';
+  }
+  private loadproducts(): void {
+    const params = new HttpParams().set('page', '1').set('pageSize', '100');
+    this._productService
+      .getAll(params)
+      .pipe(tap(products => this.productOptions.set(products.items)))
+      .subscribe();
+  }
+
+  private loadWarehouses(branchId: string | null): void {
+    if (!branchId) {
+      this.warehouseOptions.set([]);
+      return;
+    }
+
+    const params = new HttpParams().set('page', '1').set('pageSize', '100');
+    this._warehouseService
+      .getAll(params)
+      .pipe(tap(response => this.warehouseOptions.set(response.items)))
+      .subscribe();
+  }
+  private loadBranch(): void {
+    this._branchService
+      .getAll(new HttpParams().set('page', '1').set('pageSize', '100'))
+      .pipe(tap(response => this.branchOptions.set(response.items)))
+      .subscribe();
   }
 }

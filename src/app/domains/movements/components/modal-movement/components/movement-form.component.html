@@ -1,63 +1,95 @@
 <app-modal [title]="modalTitle" width="w-128">
   <form [formGroup]="movementForm" class="space-y-4">
-    <app-form-input
-      label="ID Producto (GUID)"
-      [name]="'productId'"
-      [parentForm]="movementForm"
-      controlName="productId"
-      placeholder="UUID del producto"
-    />
+    <div class="grid grid-cols-2 gap-4">
+      <app-form-dropdown
+        class="col-span-2"
+        name="name"
+        label="name"
+        [parentForm]="movementForm"
+        controlName="productId"
+        placeholder="Selecciona un producto"
+        optionValueKey="id"
+        optionLabelKey="name"
+        [options]="productOptions()"
+      />
 
-    <app-form-input
-      label="Cantidad"
-      [name]="'quantity'"
-      [type]="'number'"
-      [parentForm]="movementForm"
-      controlName="quantity"
-      placeholder="Cantidad"
-    />
+      <app-form-input
+        label="Cantidad"
+        [name]="'quantity'"
+        [type]="'number'"
+        [parentForm]="movementForm"
+        controlName="quantity"
+        placeholder="Cantidad"
+      />
 
-    <app-form-input
-      label="Tipo (0 salida / 1 entrada)"
-      [name]="'type'"
-      [type]="'number'"
-      [parentForm]="movementForm"
-      controlName="type"
-      placeholder="0 o 1"
-    />
+      <app-form-dropdown
+        name="movementType"
+        label="Tipo de movimiento"
+        [parentForm]="movementForm"
+        controlName="type"
+        placeholder="Selecciona un tipo de movimiento"
+        optionValueKey="label"
+        [options]="typeOptions"
+      />
 
-    <app-form-input
+      <app-form-dropdown
+        name="fromWarehouseId"
+        label="Bodega Origen"
+        [parentForm]="movementForm"
+        controlName="fromWarehouseId"
+        placeholder="Selecciona una bodega de origen"
+        optionValueKey="id"
+        optionLabelKey="name"
+        [options]="warehouseOptions()"
+      />
+      <!-- <app-form-input
       label="Bodega Origen (GUID)"
       [name]="'fromWarehouseId'"
       [parentForm]="movementForm"
       controlName="fromWarehouseId"
       placeholder="UUID bodega origen"
-    />
+    /> -->
 
-    <app-form-input
-      label="Bodega Destino (GUID)"
-      [name]="'toWarehouseId'"
-      [parentForm]="movementForm"
-      controlName="toWarehouseId"
-      placeholder="UUID bodega destino"
-    />
+      <app-form-dropdown
+        name="toWarehouseId"
+        label="Bodega Destino"
+        [parentForm]="movementForm"
+        controlName="toWarehouseId"
+        placeholder="Selecciona una bodega de destino"
+        optionValueKey="id"
+        optionLabelKey="name"
+        [options]="warehouseOptions()"
+      />
 
-    <app-form-input
+      <!-- <app-form-input
       label="Sucursal Origen (GUID)"
       [name]="'fromBranchId'"
       [parentForm]="movementForm"
       controlName="fromBranchId"
       placeholder="UUID sucursal origen"
-    />
+    /> -->
+      <app-form-dropdown
+        name="fromBranchId"
+        label="Sucursal Origen"
+        [parentForm]="movementForm"
+        controlName="fromBranchId"
+        placeholder="Selecciona una sucursal de origen"
+        optionValueKey="id"
+        optionLabelKey="name"
+        [options]="branchOptions()"
+      />
 
-    <app-form-input
-      label="Sucursal Destino (GUID)"
-      [name]="'toBranchId'"
-      [parentForm]="movementForm"
-      controlName="toBranchId"
-      placeholder="UUID sucursal destino"
-    />
-
+      <app-form-dropdown
+        name="toBranchId"
+        label="Sucursal Destino"
+        [parentForm]="movementForm"
+        controlName="toBranchId"
+        placeholder="Selecciona una sucursal de destino"
+        optionValueKey="id"
+        optionLabelKey="name"
+        [options]="branchOptions()"
+      />
+    </div>
     <div class="flex justify-end space-x-2">
       <app-button type="button" label="Guardar y continuar" (buttonClick)="handleSave(true)" />
       <app-button type="button" label="Guardar" (buttonClick)="handleSave()" />
