@@ -1,5 +1,5 @@
 <aside
-  class="fixed left-0 top-16 z-40 flex h-[calc(100vh-4rem)] flex-col border-r border-slate-200 bg-white/95 text-slate-800 shadow-[8px_0_20px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300"
+  class="fixed left-0 top-16 z-40 flex h-[calc(100vh-4rem)] flex-col border-r border-slate-200 bg-white/95 text-slate-800 shadow-[8px_0_20px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-100 dark:shadow-[8px_0_20px_rgba(2,6,23,0.45)]"
   [class.w-64]="!isCollapsed"
   [class.w-20]="isCollapsed"
   [class.-translate-x-full]="!isOpen()"
@@ -7,7 +7,7 @@
 >
   <button
     (click)="toggleCollapse()"
-    class="absolute -right-3 top-5 hidden h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-md transition-all hover:border-primary/40 hover:text-primary lg:flex"
+    class="absolute -right-3 top-5 hidden h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-md transition-all hover:border-primary/40 hover:text-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-primary-300 lg:flex"
   >
     <svg
       class="w-4 h-4 transition-transform duration-300"
@@ -22,62 +22,23 @@
 
   <nav class="flex-1 space-y-2 overflow-y-auto p-3">
     @for (group of visibleMenuGroups(); track group.id) {
-      <section class="rounded-xl border border-slate-200 bg-slate-50/80">
-        <button
-          type="button"
-          (click)="toggleGroup(group.id)"
-          [attr.title]="isCollapsed ? group.label : null"
-          [disabled]="isCollapsed"
-          [class.cursor-default]="isCollapsed"
-          [class.text-primary-700]="isGroupActive(group)"
-          class="w-full flex items-center justify-between gap-2 px-3 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 transition-colors hover:text-primary"
-        >
-          <span class="flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                [attr.d]="group.icon"
-              />
-            </svg>
-            @if (!isCollapsed) {
-              <span>{{ group.label }}</span>
-            }
-          </span>
-
-          @if (!isCollapsed) {
-            <svg
-              class="w-4 h-4 transition-transform duration-200"
-              [class.rotate-180]="isGroupExpanded(group.id)"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          }
-        </button>
-
-        @if (!isCollapsed && isGroupExpanded(group.id)) {
-          <div class="px-2 pb-2 space-y-1">
+      <section
+        class="rounded-xl border border-slate-200 bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/70"
+      >
+        @if (group.collapsible === false) {
+          <div class="px-2 py-2 space-y-1">
             @for (item of group.items; track item.path) {
               <a
                 [routerLink]="item.path"
                 [attr.title]="isCollapsed ? item.label : null"
-                routerLinkActive="border-l-4 border-primary bg-gradient-to-r from-primary/15 to-primary/5 text-primary-700 font-medium"
-                class="group flex items-center gap-3 rounded-lg border-l-4 border-transparent px-3 py-2.5 text-slate-600 transition-all hover:bg-white hover:text-primary"
+                routerLinkActive="border-l-4 border-primary bg-gradient-to-r from-primary/15 to-primary/5 text-primary-700 font-medium dark:from-primary/30 dark:to-transparent dark:text-primary-300"
+                class="group flex items-center gap-3 rounded-lg border-l-4 border-transparent px-3 py-2.5 text-slate-600 transition-all hover:bg-white hover:text-primary dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-primary-300"
               >
                 <span
-                  class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10"
+                  class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10 dark:bg-slate-700 dark:group-hover:bg-primary/20"
                 >
                   <svg
-                    class="w-5 h-5 flex-shrink-0 text-slate-500 transition-colors group-hover:text-primary"
+                    class="w-5 h-5 flex-shrink-0 text-slate-500 transition-colors group-hover:text-primary dark:text-slate-300 dark:group-hover:text-primary-300"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -96,18 +57,95 @@
               </a>
             }
           </div>
+        } @else {
+          <button
+            type="button"
+            (click)="toggleGroup(group.id)"
+            [attr.title]="isCollapsed ? group.label : null"
+            [disabled]="isCollapsed"
+            [class.cursor-default]="isCollapsed"
+            [class.text-primary-700]="isGroupActive(group)"
+            class="w-full flex items-center justify-between gap-2 px-3 py-2 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary-300"
+          >
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  [attr.d]="group.icon"
+                />
+              </svg>
+              @if (!isCollapsed) {
+                <span>{{ group.label }}</span>
+              }
+            </span>
+
+            @if (!isCollapsed) {
+              <svg
+                class="w-4 h-4 transition-transform duration-200"
+                [class.rotate-180]="isGroupExpanded(group.id)"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            }
+          </button>
+
+          @if (!isCollapsed && isGroupExpanded(group.id)) {
+            <div class="px-2 pb-2 space-y-1">
+              @for (item of group.items; track item.path) {
+                <a
+                  [routerLink]="item.path"
+                  [attr.title]="isCollapsed ? item.label : null"
+                  routerLinkActive="border-l-4 border-primary bg-gradient-to-r from-primary/15 to-primary/5 text-primary-700 font-medium dark:from-primary/30 dark:to-transparent dark:text-primary-300"
+                  class="group flex items-center gap-3 rounded-lg border-l-4 border-transparent px-3 py-2.5 text-slate-600 transition-all hover:bg-white hover:text-primary dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-primary-300"
+                >
+                  <span
+                    class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10 dark:bg-slate-700 dark:group-hover:bg-primary/20"
+                  >
+                    <svg
+                      class="w-5 h-5 flex-shrink-0 text-slate-500 transition-colors group-hover:text-primary dark:text-slate-300 dark:group-hover:text-primary-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        [attr.d]="item.icon"
+                      />
+                    </svg>
+                  </span>
+                  @if (!isCollapsed) {
+                    <span class="text-sm">{{ item.label }}</span>
+                  }
+                </a>
+              }
+            </div>
+          }
         }
       </section>
     }
   </nav>
 
-  <div class="space-y-1 border-t border-slate-200 p-3">
+  <div class="space-y-1 border-t border-slate-200 p-3 dark:border-slate-700">
     @if (selectedBranch) {
       <button
         (click)="openBranchModal()"
-        class="group flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-slate-100 hover:text-primary"
+        class="group flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-slate-100 hover:text-primary dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-primary-300"
       >
-        <span class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10">
+        <span
+          class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10 dark:bg-slate-700 dark:group-hover:bg-primary/20"
+        >
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
@@ -119,7 +157,7 @@
         </span>
         @if (!isCollapsed) {
           <div class="text-left">
-            <span class="text-xs text-slate-400 block">Sucursal</span>
+            <span class="text-xs text-slate-400 block dark:text-slate-500">Sucursal</span>
             <span class="text-sm">{{ selectedBranch.name }}</span>
           </div>
         }
@@ -127,9 +165,11 @@
     } @else {
       <button
         (click)="openBranchModal()"
-        class="group flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-slate-100 hover:text-primary"
+        class="group flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-slate-100 hover:text-primary dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-primary-300"
       >
-        <span class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10">
+        <span
+          class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-primary/10 dark:bg-slate-700 dark:group-hover:bg-primary/20"
+        >
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
@@ -147,9 +187,11 @@
 
     <button
       (click)="logout()"
-      class="group flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-danger/10 hover:text-danger"
+      class="group flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-slate-600 transition-all hover:bg-danger/10 hover:text-danger dark:text-slate-300"
     >
-      <span class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-danger/10">
+      <span
+        class="rounded-lg bg-slate-100 p-1.5 transition-colors group-hover:bg-danger/10 dark:bg-slate-700"
+      >
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"

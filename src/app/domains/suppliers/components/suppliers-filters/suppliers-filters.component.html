@@ -1,0 +1,30 @@
+<app-accordion title="Buscar" class="[&>div]:rounded-b-none">
+  <form
+    [formGroup]="filtersForm"
+    class="grid grid-cols-1 gap-3 border-t border-slate-100 bg-white p-3 sm:grid-cols-2 xl:grid-cols-3"
+  >
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="name"
+      label="Proveedor"
+      name="name"
+      placeholder="Buscar por nombre"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="email"
+      label="Correo"
+      name="email"
+      placeholder="Buscar por correo"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="phone"
+      label="Teléfono"
+      name="phone"
+      placeholder="Buscar por teléfono"
+    ></app-form-input>
+  </form>
+</app-accordion>

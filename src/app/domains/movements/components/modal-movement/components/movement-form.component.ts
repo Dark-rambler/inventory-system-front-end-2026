@@ -1,12 +1,17 @@
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
 import { HttpParams } from '@angular/common/http';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FormDropdownComponent } from '@app/shared/form-dropdown/form-dropdown.component';
+import { Branch } from '@app/shared/interfaces/branch.interface';
 import { Product } from '@app/shared/interfaces/product.interface';
+import { Warehouse } from '@app/shared/interfaces/warehouse.interface';
+import { BranchService } from '@app/shared/services/branch.service';
 import { ProductService } from '@app/shared/services/product.service';
+import { WarehouseService } from '@app/shared/services/warehouse.service';
 import { ToastrService } from 'ngx-toastr';
-import { tap } from 'rxjs';
+import { startWith, tap } from 'rxjs';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 import { FormInputComponent } from '../../../../../shared/form-input/form-input.component';
@@ -14,10 +19,6 @@ import { InventoryMovementService } from '../../../../../shared/services/invento
 import { MOVEMENT_FORM_CONTROL } from '../../../constants/movement-form.constant';
 import { CreateMovementRequest } from '../../../interfaces/create-movement-request.interface';
 import { MovementResourceService } from '../../../services/movement-resource.service';
-import { Warehouse } from '@app/shared/interfaces/warehouse.interface';
-import { WarehouseService } from '@app/shared/services/warehouse.service';
-import { BranchService } from '@app/shared/services/branch.service';
-import { Branch } from '@app/shared/interfaces/branch.interface';
 
 @Component({
   selector: 'app-movement-form',
@@ -32,6 +33,11 @@ import { Branch } from '@app/shared/interfaces/branch.interface';
   templateUrl: './movement-form.component.html',
 })
 export class MovementFormComponent implements OnInit {
+  private readonly _entryType = 1;
+  private readonly _exitType = 0;
+  private readonly _transferType = 2;
+
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _inventoryMovementService = inject(InventoryMovementService);
   private readonly _movementResourceService = inject(MovementResourceService);
@@ -39,11 +45,25 @@ export class MovementFormComponent implements OnInit {
   private readonly _dialog = inject(Dialog);
   private readonly _toastrService = inject(ToastrService);
   private readonly _productService = inject(ProductService);
+
+  protected readonly selectedMovementType = signal<number>(this._entryType);
   protected readonly productOptions = signal<Product[]>([]);
   protected readonly typeOptions = [
-    { value: 1, label: 'Entrada' },
-    { value: 0, label: 'Salida' },
+    { value: this._entryType, label: 'Entrada' },
+    { value: this._exitType, label: 'Salida' },
+    { value: this._transferType, label: 'Transferencia' },
   ];
+
+  protected readonly showOriginFields = computed(
+    () => this.selectedMovementType() !== this._entryType
+  );
+  protected readonly showDestinationFields = computed(
+    () => this.selectedMovementType() !== this._exitType
+  );
+  protected readonly showSalidaNotes = computed(
+    () => this.selectedMovementType() === this._exitType
+  );
+
   protected readonly warehouseOptions = signal<Warehouse[]>([]);
   protected readonly branchOptions = signal<Branch[]>([]);
   protected readonly modalTitle = 'Nuevo movimiento de producto';
@@ -56,12 +76,8 @@ export class MovementFormComponent implements OnInit {
     this.loadproducts();
     this.loadWarehouses(initialBranchId);
     this.loadBranch();
-    if (initialBranchId) {
-      this.movementForm.patchValue({
-        fromBranchId: initialBranchId,
-        toBranchId: initialBranchId,
-      });
-    }
+
+    this._setupDynamicControls();
   }
 
   protected handleSave(keepOpen = false): void {
@@ -101,8 +117,9 @@ export class MovementFormComponent implements OnInit {
               type: 1,
               fromWarehouseId: '',
               toWarehouseId: '',
-              fromBranchId: this._getInitialBranchId() ?? '',
-              toBranchId: this._getInitialBranchId() ?? '',
+              fromBranchId: '',
+              toBranchId: '',
+              notes: '',
             });
             return;
           }
@@ -148,6 +165,149 @@ export class MovementFormComponent implements OnInit {
 
     return errorResponse?.error?.title || 'No se pudo crear el movimiento.';
   }
+
+  private _setupDynamicControls(): void {
+    const movementTypeControl = this.movementForm.get('type');
+    if (!movementTypeControl) {
+      return;
+    }
+
+    movementTypeControl.valueChanges
+      .pipe(startWith(movementTypeControl.value), takeUntilDestroyed(this._destroyRef))
+      .subscribe(value => {
+        const movementType = this._toMovementType(value);
+        this.selectedMovementType.set(movementType);
+        this._applyMovementTypeRules(movementType);
+      });
+
+    this._watchTransferPair('fromWarehouseId', 'fromBranchId');
+    this._watchTransferPair('toWarehouseId', 'toBranchId');
+  }
+
+  private _watchTransferPair(primaryControlName: string, secondaryControlName: string): void {
+    const primaryControl = this.movementForm.get(primaryControlName);
+    const secondaryControl = this.movementForm.get(secondaryControlName);
+
+    if (!primaryControl || !secondaryControl) {
+      return;
+    }
+
+    primaryControl.valueChanges
+      .pipe(startWith(primaryControl.value), takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this._syncTransferPair(primaryControlName, secondaryControlName));
+
+    secondaryControl.valueChanges
+      .pipe(startWith(secondaryControl.value), takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this._syncTransferPair(primaryControlName, secondaryControlName));
+  }
+
+  private _applyMovementTypeRules(movementType: number): void {
+    if (movementType === this._entryType) {
+      this._clearAndDisableControl('fromWarehouseId');
+      this._clearAndDisableControl('fromBranchId');
+      this._enableControl('toWarehouseId');
+      this._enableControl('toBranchId');
+      this._clearControl('notes');
+      return;
+    }
+
+    if (movementType === this._exitType) {
+      this._clearAndDisableControl('toWarehouseId');
+      this._clearAndDisableControl('toBranchId');
+      this._enableControl('fromWarehouseId');
+      this._enableControl('fromBranchId');
+      this._enableControl('notes');
+      return;
+    }
+
+    this._enableControl('fromWarehouseId');
+    this._enableControl('fromBranchId');
+    this._enableControl('toWarehouseId');
+    this._enableControl('toBranchId');
+    this._clearControl('notes');
+
+    this._syncTransferPair('fromWarehouseId', 'fromBranchId');
+    this._syncTransferPair('toWarehouseId', 'toBranchId');
+  }
+
+  private _syncTransferPair(primaryControlName: string, secondaryControlName: string): void {
+    if (this.selectedMovementType() !== this._transferType) {
+      return;
+    }
+
+    const primaryControl = this.movementForm.get(primaryControlName);
+    const secondaryControl = this.movementForm.get(secondaryControlName);
+
+    if (!primaryControl || !secondaryControl) {
+      return;
+    }
+
+    const primaryHasValue = this._hasValue(primaryControl.value);
+    const secondaryHasValue = this._hasValue(secondaryControl.value);
+
+    if (primaryHasValue && secondaryHasValue) {
+      secondaryControl.setValue('', { emitEvent: false });
+    }
+
+    if (primaryHasValue) {
+      secondaryControl.setValue('', { emitEvent: false });
+      secondaryControl.disable({ emitEvent: false });
+      primaryControl.enable({ emitEvent: false });
+      return;
+    }
+
+    if (secondaryHasValue) {
+      primaryControl.setValue('', { emitEvent: false });
+      primaryControl.disable({ emitEvent: false });
+      secondaryControl.enable({ emitEvent: false });
+      return;
+    }
+
+    primaryControl.enable({ emitEvent: false });
+    secondaryControl.enable({ emitEvent: false });
+  }
+
+  private _toMovementType(value: unknown): number {
+    const parsedValue = Number(value);
+    return Number.isFinite(parsedValue) ? parsedValue : this._entryType;
+  }
+
+  private _clearAndDisableControl(controlName: string): void {
+    const control = this.movementForm.get(controlName);
+    if (!control) {
+      return;
+    }
+
+    control.setValue('', { emitEvent: false });
+    control.disable({ emitEvent: false });
+  }
+
+  private _enableControl(controlName: string): void {
+    const control = this.movementForm.get(controlName);
+    if (!control) {
+      return;
+    }
+
+    control.enable({ emitEvent: false });
+  }
+
+  private _clearControl(controlName: string): void {
+    const control = this.movementForm.get(controlName);
+    if (!control) {
+      return;
+    }
+
+    control.setValue('', { emitEvent: false });
+  }
+
+  private _hasValue(value: unknown): boolean {
+    if (value === null || value === undefined) {
+      return false;
+    }
+
+    return String(value).trim().length > 0;
+  }
+
   private loadproducts(): void {
     const params = new HttpParams().set('page', '1').set('pageSize', '100');
     this._productService

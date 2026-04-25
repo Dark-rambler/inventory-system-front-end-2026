@@ -103,7 +103,8 @@ export class MovementResourceService {
     const createdMovement: Movement = {
       id: `mov-${Date.now()}`,
       branchId,
-      movementType: payload.type === 0 ? 'Salida' : 'Entrada',
+      movementType:
+        payload.type === 2 ? 'Transferencia' : payload.type === 0 ? 'Salida' : 'Entrada',
       productName: `Producto ${payload.productId.slice(0, 8)}`,
       branchName: `Sucursal ${branchLabel.slice(0, 8)}`,
       warehouseName: `Bodega ${warehouseLabel.slice(0, 6)}`,

@@ -20,6 +20,7 @@ interface MenuGroup {
   items: MenuItem[];
   roles?: UserRole[];
   defaultExpanded?: boolean;
+  collapsible?: boolean;
 }
 
 @Component({
@@ -50,6 +51,7 @@ export class SidebarComponent {
       id: 'general',
       label: 'General',
       icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+      collapsible: false,
       defaultExpanded: false,
       items: [
         {
@@ -77,6 +79,12 @@ export class SidebarComponent {
           label: 'Categorías',
           path: '/categories',
           icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z',
+          roles: ['admin'],
+        },
+        {
+          label: 'Proveedores',
+          path: '/suppliers',
+          icon: 'M17 9V7a5 5 0 00-10 0v2m-2 0h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z',
           roles: ['admin'],
         },
         {

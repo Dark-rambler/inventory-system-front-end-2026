@@ -5,3 +5,124 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-slate-100 text-slate-800;
+  }
+
+  html.dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+}
+
+@layer components {
+  .dark .app-table-container {
+    border-color: rgb(51 65 85);
+    background-color: rgb(15 23 42);
+  }
+
+  .dark .app-table-header,
+  .dark .app-table-header-row {
+    border-color: rgb(51 65 85);
+    background-color: rgb(30 41 59);
+  }
+
+  .dark .app-table-header-cell,
+  .dark .app-table-cell {
+    color: rgb(226 232 240);
+  }
+
+  .dark .app-table-row {
+    border-color: rgb(30 41 59);
+  }
+
+  .dark .app-table-row-striped {
+    background-color: rgb(30 41 59 / 0.6);
+  }
+
+  .dark .app-table-row-hover:hover {
+    background-color: rgb(51 65 85 / 0.65);
+  }
+
+  .dark .app-table-empty-icon {
+    color: rgb(71 85 105);
+  }
+
+  .dark .app-table-empty-text {
+    color: rgb(148 163 184);
+  }
+
+  .dark .skeleton-loader {
+    background-color: rgb(71 85 105);
+  }
+}
+
+@layer utilities {
+  .dark .bg-white {
+    background-color: rgb(15 23 42);
+  }
+
+  .dark .bg-white\/95 {
+    background-color: rgb(15 23 42 / 0.95);
+  }
+
+  .dark .bg-white\/90 {
+    background-color: rgb(15 23 42 / 0.9);
+  }
+
+  .dark .bg-white\/80 {
+    background-color: rgb(15 23 42 / 0.8);
+  }
+
+  .dark .bg-slate-50,
+  .dark .bg-slate-50\/70,
+  .dark .bg-slate-50\/80,
+  .dark .bg-slate-100,
+  .dark .bg-gray-50,
+  .dark .bg-gray-50\/70,
+  .dark .bg-gray-100 {
+    background-color: rgb(30 41 59);
+  }
+
+  .dark .border-slate-100,
+  .dark .border-slate-200,
+  .dark .border-gray-100,
+  .dark .border-gray-200 {
+    border-color: rgb(51 65 85);
+  }
+
+  .dark .text-slate-800,
+  .dark .text-slate-700,
+  .dark .text-gray-800,
+  .dark .text-gray-700 {
+    color: rgb(241 245 249);
+  }
+
+  .dark .text-slate-600,
+  .dark .text-slate-500,
+  .dark .text-gray-600,
+  .dark .text-gray-500 {
+    color: rgb(148 163 184);
+  }
+
+  .dark .text-slate-400,
+  .dark .text-gray-400,
+  .dark .text-gray-300 {
+    color: rgb(100 116 139);
+  }
+
+  .dark .hover\:bg-slate-100:hover,
+  .dark .hover\:bg-white:hover,
+  .dark .hover\:bg-gray-100:hover {
+    background-color: rgb(51 65 85 / 0.6);
+  }
+}
