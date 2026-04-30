@@ -6,13 +6,12 @@ import { MovementFormComponent } from '../../modal-movement/components/movement-
 import { MovementResourceService } from '@app/domains/movements/services/movement-resource.service';
 import { MovementsTableComponent } from './components/movements-table/movements-table.component';
 import { BranchMovementResourceService } from './services/branch-movement.resource.service';
-import { ButtonComponent } from '@app/shared/components/button';
 import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-create-branch-movement',
   standalone: true,
-  imports: [MovementsTableComponent, ButtonComponent],
+  imports: [MovementsTableComponent],
   providers: [MovementResourceService, BranchMovementResourceService],
   templateUrl: './create-branch-movement.component.html',
 })

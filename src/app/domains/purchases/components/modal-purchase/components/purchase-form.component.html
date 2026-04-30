@@ -1,0 +1,102 @@
+<form [formGroup]="purchaseForm" class="space-y-4">
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <app-form-input
+      label="Folio"
+      [name]="'purchaseFolio'"
+      [parentForm]="purchaseForm"
+      controlName="folio"
+      placeholder="Ej: CMP-00012"
+    />
+
+    <app-form-dropdown
+      label="Proveedor"
+      [name]="'supplierId'"
+      [parentForm]="purchaseForm"
+      controlName="supplierId"
+      [options]="supplierOptions()"
+      optionLabelKey="name"
+      optionValueKey="id"
+      [visibleKeys]="['name']"
+      placeholder="Selecciona un proveedor"
+      (optionSelected)="onSupplierSelected($event)"
+    />
+  </div>
+
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <app-form-dropdown
+      label="Estado"
+      [name]="'purchaseStatus'"
+      [parentForm]="purchaseForm"
+      controlName="status"
+      [options]="statusOptions"
+      optionLabelKey="label"
+      optionValueKey="value"
+      [visibleKeys]="['label']"
+      placeholder="Selecciona un estado"
+    />
+
+    <app-form-dropdown
+      label="Metodo de pago"
+      [name]="'paymentMethod'"
+      [parentForm]="purchaseForm"
+      controlName="paymentMethod"
+      [options]="paymentMethodOptions"
+      optionLabelKey="label"
+      optionValueKey="value"
+      [visibleKeys]="['label']"
+      placeholder="Selecciona un metodo"
+    />
+  </div>
+
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <app-form-input
+      type="number"
+      label="Items"
+      [name]="'purchaseItems'"
+      [parentForm]="purchaseForm"
+      controlName="items"
+      placeholder="Ej: 10"
+    />
+
+    <app-form-input
+      type="number"
+      label="Total (BOB)"
+      [name]="'purchaseTotal'"
+      [parentForm]="purchaseForm"
+      controlName="total"
+      placeholder="Ej: 2450"
+    />
+
+    <app-form-input
+      type="date"
+      label="Fecha estimada"
+      [name]="'expectedDate'"
+      [parentForm]="purchaseForm"
+      controlName="expectedDate"
+      placeholder=""
+    />
+  </div>
+
+  <app-form-input
+    [textArea]="true"
+    label="Notas"
+    [name]="'purchaseNotes'"
+    [parentForm]="purchaseForm"
+    controlName="notes"
+    placeholder="Detalle interno de la compra"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendPurchase
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendPurchase type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>

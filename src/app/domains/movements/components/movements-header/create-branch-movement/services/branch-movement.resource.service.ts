@@ -1,6 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { Movement } from '@app/domains/movements/interfaces/movement.interface';
 import { DEFAULT_GET_USER_PARAMS } from '@app/domains/users/constants/default-user-params.constants';
 import { USER_PARAMETER_MAPPING } from '@app/domains/users/constants/user-mapping.constant';
@@ -13,6 +14,7 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class BranchMovementResourceService {
   private readonly _inventoryMovementService = inject(InventoryMovementService);
+  private readonly _router = inject(Router);
 
   public filterUserParameters = signal<UserParams>(DEFAULT_GET_USER_PARAMS);
 
@@ -37,8 +39,10 @@ export class BranchMovementResourceService {
   public hasActiveFilters = linkedSignal(() => this._hasActiveFilters(this.filterUserParameters()));
 
   private _getUser(request: UserParams): Observable<PaginatorInterface<Movement>> {
+    const branchId = this._router.parseUrl(this._router.url).queryParams['branchId'];
     const params = this._createRequest(request);
-    return this._inventoryMovementService.getAll(params);
+    const requestParams: HttpParams = branchId ? params.set('branchId', String(branchId)) : params;
+    return this._inventoryMovementService.getAll(requestParams);
   }
 
   private _createRequest(request: UserParams): HttpParams {

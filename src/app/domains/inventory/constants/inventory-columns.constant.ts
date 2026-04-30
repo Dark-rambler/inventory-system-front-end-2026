@@ -6,5 +6,6 @@ export const INVENTORYCOLUMNS: TableColumn<Inventory>[] = [
   { key: 'code', header: 'Código' },
   { key: 'description', header: 'Descripción' },
   { key: 'name', header: 'Nombre' },
+  { key: 'stock', header: 'Stock' },
   { key: 'actions', header: 'Acciones', width: '120px' },
 ];

@@ -1,19 +1,21 @@
 <section
-  class="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+  class="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
 >
   <header class="shrink-0 bg-gradient-to-r from-primary to-secondary px-5 py-4">
     <p class="text-xs font-medium uppercase tracking-[0.18em] text-white/80">Seguimiento</p>
     <h2 class="text-white text-lg sm:text-xl font-semibold">Actividad reciente</h2>
   </header>
 
-  <div class="flex-1 min-h-0 px-6 py-4 overflow-y-auto">
+  <div class="min-h-0 flex-1 overflow-y-auto px-6 py-4">
     @if (isLoading()) {
       <app-recent-activity-skeleton [rows]="skeletonRows()" />
     } @else {
       @for (activity of activities(); track activity.id) {
         <app-recent-activity-item [activity]="activity" />
       } @empty {
-        <div class="flex h-56 items-center justify-center text-center text-gray-400">
+        <div
+          class="flex h-56 items-center justify-center text-center text-gray-400 dark:text-slate-500"
+        >
           No se encontraron movimientos recientes.
         </div>
       }

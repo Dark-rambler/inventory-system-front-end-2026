@@ -34,8 +34,6 @@ export class LoginComponent {
     this.isPasswordVisible() ? 'text' : 'password'
   );
 
-  protected readonly isSubmitDisabled = computed(() => this.loginForm.invalid || this.isLoading());
-
   constructor() {
     this.loginForm.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       if (this.errorMessage()) {

@@ -1,19 +1,21 @@
 <article
-  class="flex min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white p-4 shadow-sm xl:h-full"
+  class="flex min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 xl:h-full"
 >
   <header class="mb-2.5">
-    <p class="text-xs sm:text-sm text-gray-500">{{ chart().description }}</p>
-    <h3 class="text-base sm:text-lg font-semibold text-secondary leading-tight">
+    <p class="text-xs text-gray-500 dark:text-slate-400 sm:text-sm">{{ chart().description }}</p>
+    <h3 class="text-base font-semibold leading-tight text-secondary sm:text-lg">
       {{ chart().title }}
     </h3>
   </header>
 
   <section
-    class="mb-3 flex items-end justify-between gap-3 rounded-lg border border-gray-100 bg-gray-50/70 px-3 py-2"
+    class="mb-3 flex items-end justify-between gap-3 rounded-lg border border-gray-100 bg-gray-50/70 px-3 py-2 dark:border-slate-700 dark:bg-slate-800/80"
   >
     <div>
-      <p class="text-xs text-gray-500 uppercase tracking-wide">{{ chart().metricLabel }}</p>
-      <p class="text-xl sm:text-2xl font-semibold text-secondary">{{ chart().metricValue }}</p>
+      <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-slate-400">
+        {{ chart().metricLabel }}
+      </p>
+      <p class="text-xl font-semibold text-secondary sm:text-2xl">{{ chart().metricValue }}</p>
     </div>
     <p class="rounded-full px-2 py-0.5 text-xs sm:text-sm font-medium" [ngClass]="trendClass">
       {{ chart().trend }}
@@ -31,18 +33,20 @@
       <div class="space-y-1.5">
         @for (item of summaryItems; track item.label) {
           <div
-            class="flex items-center justify-between gap-3 rounded-lg border border-gray-100 px-2.5 py-1.5"
+            class="flex items-center justify-between gap-3 rounded-lg border border-gray-100 px-2.5 py-1.5 dark:border-slate-700"
           >
             <div class="flex items-center gap-3 min-w-0">
               <span class="h-3 w-3 rounded-full" [style.background-color]="item.color"></span>
               <div class="min-w-0">
-                <p class="text-xs sm:text-sm font-medium text-secondary truncate">
+                <p class="truncate text-xs font-medium text-secondary sm:text-sm">
                   {{ item.label }}
                 </p>
-                <p class="text-[11px] sm:text-xs text-gray-500">{{ item.percentage }}% del total</p>
+                <p class="text-[11px] text-gray-500 dark:text-slate-400 sm:text-xs">
+                  {{ item.percentage }}% del total
+                </p>
               </div>
             </div>
-            <p class="text-xs sm:text-sm font-semibold text-secondary whitespace-nowrap">
+            <p class="whitespace-nowrap text-xs font-semibold text-secondary sm:text-sm">
               {{ item.value | number }}
             </p>
           </div>
