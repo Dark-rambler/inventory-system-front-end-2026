@@ -1,7 +1,8 @@
 import { Router } from '@angular/router';
 import { Component, inject, input } from '@angular/core';
-import { getSelectedBranchIdFromStorage } from '@shared/utils/selected-branch-storage';
 import { ButtonComponent } from '../../../../shared/components/button';
+import { Dialog } from '@angular/cdk/dialog';
+import { MovementProductModalComponent } from './create-branch-movement/components/movement-product-modal.component/movement-product-modal.component';
 
 @Component({
   selector: 'app-movements-header',
@@ -14,13 +15,9 @@ export class MovementsHeaderComponent {
   public branchId = input<string | null>(null);
   public showCreateButton = input<boolean>(true);
   private readonly _router = inject(Router);
+  private readonly _dialog = inject(Dialog);
 
-  protected handleNewMovement(): void {
-    const currentBranchId = this.branchId() ?? getSelectedBranchIdFromStorage();
-    if (!currentBranchId) {
-      return;
-    }
-
-    this._router.navigate(['branches', currentBranchId, 'movements', 'new']);
+  protected addNewProduct(): void {
+    this._dialog.open(MovementProductModalComponent);
   }
 }

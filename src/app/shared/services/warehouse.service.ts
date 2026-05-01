@@ -28,6 +28,10 @@ export class WarehouseService {
     return this._httpClient.delete<void>(`${this._url}/${id}`);
   }
 
+  public getById(id: string): Observable<Warehouse> {
+    return this._httpClient.get<Warehouse>(`${this._url}/${id}`);
+  }
+
   public getProductsByWarehouse(
     warehouseId: string,
     params?: HttpParams

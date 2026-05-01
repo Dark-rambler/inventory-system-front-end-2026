@@ -4,12 +4,10 @@
   >
     <div>
       <h1 class="text-xl font-semibold text-slate-800 sm:text-2xl">
-        Detalle de sucursal {{ warehouseId() ?? '' }}
+        Detalle del Almacén {{ branchName() ?? '' }}
       </h1>
       <p class="text-sm text-slate-500">Revisa productos y movimientos asociados al almacén.</p>
     </div>
-
-    <app-button label="Volver" variant="secondary" (buttonClick)="goBack()" />
   </div>
 
   <app-tabs ariaLabel="Detalle de sucursal" defaultTabId="warehouse-products">

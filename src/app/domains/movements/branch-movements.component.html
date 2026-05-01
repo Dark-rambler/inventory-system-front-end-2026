@@ -6,29 +6,21 @@
   />
 
   <app-tabs ariaLabel="Tablas de sucursal" defaultTabId="branch-sales">
-    <ng-template appTabPanel="branch-sales" tabLabel="Ventas" [tabBadge]="tabCounts().sales">
+    <ng-template appTabPanel="branch-sales" tabLabel="Ventas">
       <div class="space-y-3">
         <app-sales-filters></app-sales-filters>
         <app-sales-table></app-sales-table>
       </div>
     </ng-template>
 
-    <ng-template
-      appTabPanel="branch-movements"
-      tabLabel="Movimientos"
-      [tabBadge]="tabCounts().movements"
-    >
+    <ng-template appTabPanel="branch-movements" tabLabel="Movimientos">
       <div class="space-y-3">
         <app-movements-filters [hideBranchFilter]="true"></app-movements-filters>
         <app-create-branch-movement />
       </div>
     </ng-template>
 
-    <ng-template
-      appTabPanel="branch-products"
-      tabLabel="Productos"
-      [tabBadge]="tabCounts().products"
-    >
+    <ng-template appTabPanel="branch-products" tabLabel="Productos">
       <div class="space-y-3">
         <app-inventory-filters></app-inventory-filters>
         <app-inventory-table></app-inventory-table>
