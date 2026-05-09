@@ -12,7 +12,7 @@ import {
   TableConfig,
 } from '../../../../shared/components/table';
 import { EditItemDirective } from '../../../../shared/directives';
-import { Purchase, PurchaseStatus } from '../../../../shared/interfaces/purchase.interface';
+import { Purchase } from '../../../../shared/interfaces/purchase.interface';
 import { ConfirmModalService } from '../../../../shared/services/confirm-modal.service';
 import { PurchaseService } from '../../../../shared/services/purchase.service';
 import { tap } from 'rxjs';
@@ -65,7 +65,7 @@ export class PurchaseTableComponent {
     this._confirmModalService
       .open({
         title: 'Eliminar compra',
-        message: `Estas seguro de eliminar la compra "${purchase.folio}"?`,
+        message: `Estas seguro de eliminar la compra del proveedor "${purchase.provider}"?`,
       })
       .subscribe(result => {
         if (result === 'confirm') {
@@ -78,22 +78,6 @@ export class PurchaseTableComponent {
             .subscribe();
         }
       });
-  }
-
-  protected statusBadgeClass(status: PurchaseStatus): string {
-    if (status === 'Recibida') {
-      return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300';
-    }
-
-    if (status === 'Emitida') {
-      return 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300';
-    }
-
-    if (status === 'Anulada') {
-      return 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300';
-    }
-
-    return 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
   }
 
   protected changePage(page: number): void {

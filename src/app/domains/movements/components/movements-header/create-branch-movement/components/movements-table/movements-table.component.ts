@@ -1,22 +1,18 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MovementResourceService } from '@app/domains/movements/services/movement-resource.service';
-import { TableComponent } from '@app/shared/components/table';
-import { BranchMovementResourceService } from '../../services/branch-movement.resource.service';
+import { Component, input } from '@angular/core';
 import { MOVEMENT_COLUMNS } from '@app/domains/movements/constants/movement-columns.constant';
+import { Movement } from '@app/domains/movements/interfaces/movement.interface';
+import { TableColumn, TableComponent } from '@app/shared/components/table';
+import { PaginatorInterface } from '@app/shared/interfaces/paginator.interface';
 
 @Component({
   selector: 'app-movements-table',
   standalone: true,
   imports: [TableComponent],
-  providers: [MovementResourceService],
   templateUrl: './movements-table.component.html',
 })
 export class MovementsTableComponent {
-  private readonly _route = inject(ActivatedRoute);
-  protected readonly _branchMovementResourceService = inject(BranchMovementResourceService);
-  protected readonly movementData = this._branchMovementResourceService.movementData;
-  protected readonly isLoading = this._branchMovementResourceService.isLoading;
-  protected readonly isEmpty = this._branchMovementResourceService.isEmpty;
-  protected readonly columns = MOVEMENT_COLUMNS;
+  public columns = input<TableColumn<Movement>[]>(MOVEMENT_COLUMNS);
+  public movementData = input<PaginatorInterface<Movement> | null>(null);
+  public isLoading = input<boolean>(false);
+  public isEmpty = input<boolean>(false);
 }

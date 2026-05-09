@@ -1,8 +1,7 @@
-import { Router } from '@angular/router';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ViewContainerRef } from '@angular/core';
 import { ButtonComponent } from '../../../../shared/components/button';
 import { Dialog } from '@angular/cdk/dialog';
-import { MovementProductModalComponent } from './create-branch-movement/components/movement-product-modal.component/movement-product-modal.component';
+import { ModalMovementComponent } from '../modal-movement/modal-movement.component';
 
 @Component({
   selector: 'app-movements-header',
@@ -14,10 +13,12 @@ export class MovementsHeaderComponent {
   public title = input<string>('Movimientos de productos');
   public branchId = input<string | null>(null);
   public showCreateButton = input<boolean>(true);
-  private readonly _router = inject(Router);
   private readonly _dialog = inject(Dialog);
+  private readonly _viewContainerRef = inject(ViewContainerRef);
 
   protected addNewProduct(): void {
-    this._dialog.open(MovementProductModalComponent);
+    this._dialog.open(ModalMovementComponent, {
+      viewContainerRef: this._viewContainerRef,
+    });
   }
 }

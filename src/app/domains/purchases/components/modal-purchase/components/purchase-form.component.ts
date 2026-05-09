@@ -75,7 +75,7 @@ export class PurchaseFormComponent implements OnInit {
     });
   }
 
-  private _toDateInputValue(value: string): string {
+  private _toDateInputValue(value: string | null | undefined): string {
     return String(value ?? '').slice(0, 10);
   }
 }

@@ -1,7 +1,7 @@
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
 import { HttpParams } from '@angular/common/http';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FormDropdownComponent } from '@app/shared/form-dropdown/form-dropdown.component';
 import { Branch } from '@app/shared/interfaces/branch.interface';
@@ -72,9 +72,9 @@ export class MovementFormComponent implements OnInit {
   protected data = inject<{ branchId?: string } | null>(DIALOG_DATA, { optional: true });
   private readonly _warehouseService = inject(WarehouseService);
   ngOnInit(): void {
-    const initialBranchId = this._getInitialBranchId();
+    // const initialBranchId = this._getInitialBranchId();
     this.loadproducts();
-    this.loadWarehouses(initialBranchId);
+    this.loadWarehouses();
     this.loadBranch();
 
     this._setupDynamicControls();
@@ -87,8 +87,15 @@ export class MovementFormComponent implements OnInit {
     }
 
     const value = this.movementForm.getRawValue();
+    const productId = this._normalizeRequiredId(value.productId);
+    if (!productId) {
+      this.movementForm.get('productId')?.setErrors({ required: true });
+      this.movementForm.get('productId')?.markAsTouched();
+      return;
+    }
+
     const payload: CreateMovementRequest = {
-      productId: (value.productId ?? '').trim(),
+      productId,
       quantity: Number(value.quantity),
       type: Number(value.type),
       fromWarehouseId: this._normalizeOptionalGuid(value.fromWarehouseId),
@@ -99,14 +106,7 @@ export class MovementFormComponent implements OnInit {
 
     this._inventoryMovementService
       .create(payload)
-      .pipe(
-        tap(() => {
-          if (this._movementResourceService.isUsingMockData()) {
-            this._movementResourceService.appendMockMovement(payload);
-          }
-        }),
-        tap(() => this._movementResourceService.reloadMovement())
-      )
+      .pipe(tap(() => this._movementResourceService.reloadMovement()))
       .subscribe({
         next: () => {
           this._toastrService.success('Movimiento creado correctamente.', 'Exito');
@@ -143,8 +143,16 @@ export class MovementFormComponent implements OnInit {
   }
 
   private _normalizeOptionalGuid(value: string | null | undefined): string | null {
-    const normalizedValue = value?.trim();
+    const normalizedValue = this._normalizeRequiredId(value);
     return normalizedValue ? normalizedValue : null;
+  }
+
+  private _normalizeRequiredId(value: unknown): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    return String(value).trim();
   }
 
   private _getErrorMessage(error: unknown): string {
@@ -316,12 +324,7 @@ export class MovementFormComponent implements OnInit {
       .subscribe();
   }
 
-  private loadWarehouses(branchId: string | null): void {
-    if (!branchId) {
-      this.warehouseOptions.set([]);
-      return;
-    }
-
+  private loadWarehouses(): void {
     const params = new HttpParams().set('page', '1').set('pageSize', '100');
     this._warehouseService
       .getAll(params)

@@ -1,1 +1,6 @@
-<app-movements-table />
+<app-movements-table
+  [columns]="MOVEMENT_COLUMNS"
+  [movementData]="movementData()"
+  [isLoading]="isLoading()"
+  [isEmpty]="isEmpty()"
+/>

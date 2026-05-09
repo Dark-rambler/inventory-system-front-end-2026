@@ -27,8 +27,6 @@ export class SuppliersFiltersComponent {
     this.filtersForm.patchValue(
       {
         name: initialFilters.name ?? '',
-        email: initialFilters.email ?? '',
-        phone: initialFilters.phone ?? '',
       },
       { emitEvent: false }
     );

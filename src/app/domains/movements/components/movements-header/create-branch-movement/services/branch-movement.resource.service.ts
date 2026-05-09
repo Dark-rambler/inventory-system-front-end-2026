@@ -1,7 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 import { Movement } from '@app/domains/movements/interfaces/movement.interface';
 import { DEFAULT_GET_USER_PARAMS } from '@app/domains/users/constants/default-user-params.constants';
 import { USER_PARAMETER_MAPPING } from '@app/domains/users/constants/user-mapping.constant';
@@ -14,19 +13,25 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class BranchMovementResourceService {
   private readonly _inventoryMovementService = inject(InventoryMovementService);
-  private readonly _router = inject(Router);
+  private readonly _branchId = signal<string | null>(null);
 
   public filterUserParameters = signal<UserParams>(DEFAULT_GET_USER_PARAMS);
+
+  public setBranchId(branchId: string | null): void {
+    this._branchId.set(branchId);
+  }
 
   public readonly userResource = rxResource({
     request: () => {
       const filters = this.filterUserParameters();
-      return filters;
+      const branchId = this._branchId();
+      return { filters, branchId };
     },
     loader: ({ request }) => {
       if (!request) return of(null);
-      if (!this._hasActiveFilters(request)) return of(null);
-      return this._getUser(request);
+      if (!request.branchId) return of(null);
+      if (!this._hasActiveFilters(request.filters)) return of(null);
+      return this._getUser(request.filters, request.branchId);
     },
   });
 
@@ -34,14 +39,19 @@ export class BranchMovementResourceService {
   public isLoading = this.userResource.isLoading;
   public reloadUser = () => this.userResource.reload();
 
-  public isEmpty = linkedSignal(() => this.movementData());
+  public isEmpty = linkedSignal(() => {
+    const data = this.movementData();
+    return !data || data.items.length === 0;
+  });
 
   public hasActiveFilters = linkedSignal(() => this._hasActiveFilters(this.filterUserParameters()));
 
-  private _getUser(request: UserParams): Observable<PaginatorInterface<Movement>> {
-    const branchId = this._router.parseUrl(this._router.url).queryParams['branchId'];
+  private _getUser(
+    request: UserParams,
+    branchId: string
+  ): Observable<PaginatorInterface<Movement>> {
     const params = this._createRequest(request);
-    const requestParams: HttpParams = branchId ? params.set('branchId', String(branchId)) : params;
+    const requestParams: HttpParams = params.set('branchId', branchId);
     return this._inventoryMovementService.getAll(requestParams);
   }
 

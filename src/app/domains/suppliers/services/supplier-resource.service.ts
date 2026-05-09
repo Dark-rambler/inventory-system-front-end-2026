@@ -1,6 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { Observable, of } from 'rxjs';
 import { PaginatorInterface } from '../../../shared/interfaces/paginator.interface';
 import { Supplier } from '../../../shared/interfaces/supplier.interface';
 import { SupplierService } from '../../../shared/services/supplier.service';
@@ -8,7 +9,6 @@ import { buildHttpParams } from '../../../shared/utils/http-params';
 import { DEFAULT_GET_SUPPLIER_PARAMS } from '../constants/default-supplier-params.constants';
 import { SUPPLIER_PARAMETER_MAPPING } from '../constants/supplier-mapping.constant';
 import { SupplierParams } from '../interfaces/supplier-params.interface';
-import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class SupplierResourceService {
