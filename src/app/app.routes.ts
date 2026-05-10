@@ -143,6 +143,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/purchases/purchases.component').then(m => m.PurchasesComponent),
       },
+      {
+        path: 'customers',
+        canActivate: [roleGuard],
+        data: { roles: ROLE_ACCESS.users },
+        loadComponent: () =>
+          import('./domains/customers/customers.component').then(m => m.CustomersComponent),
+      },
     ],
   },
   {

@@ -1,0 +1,39 @@
+<form [formGroup]="customerForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del cliente"
+    [name]="'customerName'"
+    [parentForm]="customerForm"
+    controlName="name"
+    placeholder="Ej: Juan Perez"
+  />
+
+  <app-form-input
+    label="NIT"
+    [name]="'customerNit'"
+    [parentForm]="customerForm"
+    controlName="nit"
+    placeholder="Ej: 10203040"
+  />
+
+  <app-form-input
+    label="Teléfono"
+    [name]="'customerPhone'"
+    [parentForm]="customerForm"
+    controlName="phone"
+    placeholder="Ej: +591 70000000"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendCustomer
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendCustomer type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>
