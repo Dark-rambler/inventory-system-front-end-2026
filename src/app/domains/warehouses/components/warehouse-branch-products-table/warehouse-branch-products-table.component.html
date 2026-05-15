@@ -1,0 +1,25 @@
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <app-table [data]="productsData().items" [columns]="productColumns" [config]="tableConfig()">
+    <ng-template appTableColumn="stock" let-product>
+      <span class="font-medium text-slate-700">{{ product.stock }}</span>
+    </ng-template>
+
+    <ng-template appTableColumn="unitPrice" let-product>
+      <span class="font-medium text-slate-800">
+        {{ product.unitPrice | currency: 'BOB' : 'symbol' : '1.2-2' }}
+      </span>
+    </ng-template>
+  </app-table>
+
+  @if (productsData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page"
+      [currentPageSize]="currentPage().pageSize"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

@@ -1,0 +1,43 @@
+<section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+  <div class="border-b border-slate-200 px-3 sm:px-4">
+    <div class="-mb-px flex gap-2 overflow-x-auto" role="tablist" [attr.aria-label]="ariaLabel()">
+      @for (panel of tabPanels(); track panel.tabId) {
+        <button
+          type="button"
+          role="tab"
+          [attr.id]="'app-tab-trigger-' + panel.tabId"
+          [attr.aria-selected]="activeTabId() === panel.tabId"
+          [attr.aria-controls]="'app-tab-panel-' + panel.tabId"
+          [attr.tabindex]="activeTabId() === panel.tabId ? 0 : -1"
+          [disabled]="panel.tabDisabled"
+          [class]="activeTabId() === panel.tabId | tabButtonClass: panel.tabDisabled"
+          (click)="selectTab(panel.tabId)"
+        >
+          <span>{{ panel.tabLabel }}</span>
+
+          @if (panel.tabBadge !== null && panel.tabBadge !== undefined && panel.tabBadge !== '') {
+            <span
+              class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600"
+            >
+              {{ panel.tabBadge | tabBadge }}
+            </span>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (activePanel(); as panel) {
+    <div
+      class="p-3 sm:p-4"
+      role="tabpanel"
+      [attr.id]="'app-tab-panel-' + panel.tabId"
+      [attr.aria-labelledby]="'app-tab-trigger-' + panel.tabId"
+    >
+      <ng-container
+        [ngTemplateOutlet]="panel.template"
+        [ngTemplateOutletContext]="{ $implicit: panel.tabId, active: true }"
+      ></ng-container>
+    </div>
+  }
+</section>

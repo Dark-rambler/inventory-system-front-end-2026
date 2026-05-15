@@ -1,0 +1,34 @@
+<app-accordion title="Buscar" class="[&>div]:rounded-b-none">
+  <form
+    [formGroup]="filtersForm"
+    class="grid grid-cols-1 gap-3 border-t border-slate-100 bg-white p-3 dark:border-slate-700 dark:bg-slate-900 sm:grid-cols-2 xl:grid-cols-3"
+  >
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="folio"
+      label="Folio"
+      name="folio"
+      placeholder="Buscar por folio"
+    ></app-form-input>
+
+    <app-form-input
+      [parentForm]="filtersForm"
+      controlName="supplierName"
+      label="Proveedor"
+      name="supplierName"
+      placeholder="Buscar por proveedor"
+    ></app-form-input>
+
+    <app-form-dropdown
+      [parentForm]="filtersForm"
+      controlName="status"
+      label="Estado"
+      name="status"
+      [options]="statusOptions"
+      optionLabelKey="label"
+      optionValueKey="value"
+      [visibleKeys]="['label']"
+      placeholder="Todos los estados"
+    />
+  </form>
+</app-accordion>

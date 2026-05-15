@@ -14,6 +14,7 @@ export class IconButtonClassPipe implements PipeTransform {
     const actionClasses: Record<IconButtonAction, string> = {
       view: 'text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
       edit: 'text-[#288B83] hover:bg-[#288B83]/10 focus:ring-[#288B83]',
+      save: 'text-emerald-600 hover:bg-emerald-50 focus:ring-emerald-500',
       delete: 'text-red-600 hover:bg-red-50 focus:ring-red-500',
       download: 'text-green-600 hover:bg-green-50 focus:ring-green-500',
       share: 'text-purple-600 hover:bg-purple-50 focus:ring-purple-500',

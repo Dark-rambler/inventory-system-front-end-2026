@@ -4,7 +4,7 @@ import { IconButtonClassPipe } from './pipes/icon-button-class.pipe';
 import { IconSizePipe } from './pipes/icon-size.pipe';
 import { IconTooltipPipe } from './pipes/icon-tooltip.pipe';
 
-export type IconButtonAction = 'view' | 'edit' | 'delete' | 'download' | 'share' | 'more';
+export type IconButtonAction = 'view' | 'edit' | 'delete' | 'download' | 'share' | 'more' | 'save';
 export type IconButtonSize = 'sm' | 'md' | 'lg';
 
 @Component({

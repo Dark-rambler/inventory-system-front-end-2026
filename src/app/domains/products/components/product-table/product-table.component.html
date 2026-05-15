@@ -8,10 +8,6 @@
   >
     <ng-template appTableColumn="actions" let-row>
       <app-action-buttons>
-        <div appViewDetails>
-          <app-icon-button action="view" />
-        </div>
-
         <div appEditItem>
           <app-icon-button (buttonClick)="editProduct(row)" action="edit" tooltip="Editar" />
         </div>

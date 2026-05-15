@@ -32,7 +32,7 @@
   }
 
   @if (label()) {
-    <span>{{ label() }}</span>
+    <span class="hidden md:flex flex-none">{{ label() }}</span>
   } @else {
     <ng-content></ng-content>
   }

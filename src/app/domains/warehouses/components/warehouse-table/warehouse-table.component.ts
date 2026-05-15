@@ -1,5 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { Component, computed, inject, ViewContainerRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import {
   ActionButtonsComponent,
@@ -11,7 +12,7 @@ import {
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
+import { EditItemDirective } from '../../../../shared/directives';
 import { Warehouse } from '../../../../shared/interfaces/warehouse.interface';
 import { WAREHOUSECOLUMNS } from '../../constants/warehouse-columns.constant';
 import { WarehouseResourceService } from '../../services/warehouse-resource.service';
@@ -29,7 +30,6 @@ import { tap } from 'rxjs';
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ViewDetailsDirective,
     EditItemDirective,
     PaginatorComponent,
   ],
@@ -41,6 +41,7 @@ export class WarehouseTableComponent {
   private readonly _confirmModalService = inject(ConfirmModalService);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
+  private readonly _router = inject(Router);
 
   public warehouseData = this._warehouseResourceService.warehouseData;
   public currentPage = this._warehouseResourceService.filterWarehouseParameters;
@@ -79,6 +80,14 @@ export class WarehouseTableComponent {
             .subscribe();
         }
       });
+  }
+
+  protected viewWarehouseDetails(warehouse: Warehouse): void {
+    if (!warehouse.id) {
+      return;
+    }
+
+    this._router.navigate(['warehouses', warehouse.id, 'details']);
   }
 
   protected changePage(page: number): void {

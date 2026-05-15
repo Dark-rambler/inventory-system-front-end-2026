@@ -1,0 +1,56 @@
+<form [formGroup]="supplierForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del proveedor"
+    [name]="'supplierName'"
+    [parentForm]="supplierForm"
+    controlName="name"
+    placeholder="Ej: Distribuidora Andina"
+  />
+
+  <app-form-input
+    label="Nombre del contacto"
+    [name]="'contact'"
+    [parentForm]="supplierForm"
+    controlName="contact"
+    placeholder="Ej: Ana Perez"
+  />
+
+  <app-form-input
+    type="email"
+    label="Correo electrónico"
+    [name]="'supplierEmail'"
+    [parentForm]="supplierForm"
+    controlName="email"
+    placeholder="contacto@proveedor.com"
+  />
+
+  <app-form-input
+    label="Teléfono"
+    [name]="'supplierTelephone'"
+    [parentForm]="supplierForm"
+    controlName="telephone"
+    placeholder="Ej: +591 70000000"
+  />
+
+  <app-form-input
+    label="Ciudad"
+    [name]="'supplierCity'"
+    [parentForm]="supplierForm"
+    controlName="city"
+    placeholder="Ej: La Paz"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendSupplier
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendSupplier type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>

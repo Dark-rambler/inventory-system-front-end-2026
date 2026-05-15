@@ -56,7 +56,7 @@ export class ChartCardComponent implements AfterViewInit, OnChanges {
       case 'down':
         return 'text-danger';
       default:
-        return 'text-gray-500';
+        return 'text-gray-500 dark:text-slate-400';
     }
   }
 

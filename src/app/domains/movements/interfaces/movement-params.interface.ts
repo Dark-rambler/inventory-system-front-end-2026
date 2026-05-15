@@ -1,5 +1,6 @@
 export interface MovementParams {
   branchId?: string;
+  warehouseId?: string;
   movementType?: string;
   productName?: string;
   branchName?: string;

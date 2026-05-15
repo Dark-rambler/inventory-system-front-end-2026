@@ -10,7 +10,7 @@ import {
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
+import { EditItemDirective } from '../../../../shared/directives';
 import { PRODUCT_COLUMNS } from '../../constants/product-columns.constant';
 import { ProductResourceService } from '../../services/product-resource.service';
 import { ProductsModalComponent } from '../products-modal/products-modal.component';
@@ -27,7 +27,6 @@ import { Product } from '../../../../shared/interfaces/product.interface';
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ViewDetailsDirective,
     EditItemDirective,
     PaginatorComponent,
   ],

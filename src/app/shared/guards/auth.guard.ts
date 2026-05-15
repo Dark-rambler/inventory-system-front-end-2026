@@ -10,6 +10,10 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
+  if (authService.currentUser()) {
+    authService.clearSession();
+  }
+
   router.navigate(['/login']);
   return false;
 };
@@ -19,6 +23,10 @@ export const publicGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!authService.isAuthenticated) {
+    if (authService.currentUser()) {
+      authService.clearSession();
+    }
+
     return true;
   }
 

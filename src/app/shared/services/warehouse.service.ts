@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { PaginatorInterface } from '../interfaces/paginator.interface';
+import { Product } from '../interfaces/product.interface';
 import { Warehouse } from '../interfaces/warehouse.interface';
 
 @Injectable({
@@ -26,5 +27,29 @@ export class WarehouseService {
 
   public delete(id: string): Observable<void> {
     return this._httpClient.delete<void>(`${this._url}/${id}`);
+  }
+
+  public getById(id: string): Observable<Warehouse> {
+    return this._httpClient.get<Warehouse>(`${this._url}/${id}`);
+  }
+
+  public getProductsByWarehouse(
+    warehouseId: string,
+    params?: HttpParams
+  ): Observable<PaginatorInterface<Warehouse>> {
+    return this._httpClient.get<PaginatorInterface<Warehouse>>(
+      `${environment.API_URL}/warehouse/${warehouseId}/products`,
+      { params }
+    );
+  }
+
+  public getProductsNotInWarehouse(
+    warehouseId: string,
+    params?: HttpParams
+  ): Observable<PaginatorInterface<Product>> {
+    return this._httpClient.get<PaginatorInterface<Product>>(
+      `${environment.API_URL}/branch/${warehouseId}/products/doesnt-exist`,
+      { params }
+    );
   }
 }

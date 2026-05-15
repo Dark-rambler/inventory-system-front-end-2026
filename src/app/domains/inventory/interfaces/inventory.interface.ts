@@ -12,6 +12,7 @@ export interface Inventory {
   category: InventoryCategory;
   price?: number;
   stock?: number;
+  lowStock?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

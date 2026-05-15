@@ -1,7 +1,7 @@
-import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject, input, ViewContainerRef } from '@angular/core';
 import { ButtonComponent } from '../../../../shared/components/button';
-import { MovementFormComponent } from '../modal-movement/components/movement-form.component';
+import { Dialog } from '@angular/cdk/dialog';
+import { ModalMovementComponent } from '../modal-movement/modal-movement.component';
 
 @Component({
   selector: 'app-movements-header',
@@ -11,18 +11,14 @@ import { MovementFormComponent } from '../modal-movement/components/movement-for
 })
 export class MovementsHeaderComponent {
   public title = input<string>('Movimientos de productos');
-  public showCreateButton = input<boolean>(false);
   public branchId = input<string | null>(null);
-
+  public showCreateButton = input<boolean>(true);
   private readonly _dialog = inject(Dialog);
   private readonly _viewContainerRef = inject(ViewContainerRef);
 
-  protected handleNewMovement(): void {
-    this._dialog.open(MovementFormComponent, {
+  protected addNewProduct(): void {
+    this._dialog.open(ModalMovementComponent, {
       viewContainerRef: this._viewContainerRef,
-      data: {
-        branchId: this.branchId(),
-      },
     });
   }
 }

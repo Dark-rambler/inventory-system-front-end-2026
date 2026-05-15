@@ -1,11 +1,12 @@
-<div class="products-header">
+<div
+  class="mb-3 flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5"
+>
   <div>
     <h1 class="text-xl font-semibold text-slate-800">{{ title() }}</h1>
   </div>
-
-  @if (showCreateButton()) {
-    <app-button label="Nuevo Movimiento" variant="primary" (buttonClick)="handleNewMovement()">
-      <svg slot="icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  @if (!showCreateButton()) {
+    <app-button label="Registrar Producto" variant="primary" (buttonClick)="addNewProduct()">
+      <svg slot="icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
     </app-button>

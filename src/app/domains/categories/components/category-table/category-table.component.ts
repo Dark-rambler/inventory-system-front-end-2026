@@ -10,7 +10,7 @@ import {
   TableComponent,
   TableConfig,
 } from '../../../../shared/components/table';
-import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
+import { EditItemDirective } from '../../../../shared/directives';
 import { Category } from '../../../../shared/interfaces/category.interface';
 import { CATEGORYCOLUMNS } from '../../constants/category-columns.constant';
 import { CategoryResourceService } from '../../services/category-resource.service';
@@ -27,7 +27,6 @@ import { tap } from 'rxjs';
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ViewDetailsDirective,
     EditItemDirective,
     PaginatorComponent,
   ],

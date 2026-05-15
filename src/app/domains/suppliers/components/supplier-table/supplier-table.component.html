@@ -1,0 +1,35 @@
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <app-table
+    [data]="supplierData()?.items ?? []"
+    [columns]="supplierColumns"
+    [config]="tableConfig()"
+  >
+    <ng-template appTableColumn="actions" let-supplier>
+      <app-action-buttons>
+        <div appEditItem>
+          <app-icon-button (buttonClick)="editSupplier(supplier)" action="edit" />
+        </div>
+
+        <div>
+          <app-icon-button
+            (buttonClick)="deleteSupplier(supplier)"
+            action="delete"
+            tooltip="Eliminar"
+          />
+        </div>
+      </app-action-buttons>
+    </ng-template>
+  </app-table>
+
+  @if (supplierData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page ?? 1"
+      [currentPageSize]="currentPage().pageSize ?? 10"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

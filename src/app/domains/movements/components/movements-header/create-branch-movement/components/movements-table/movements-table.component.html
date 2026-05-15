@@ -1,0 +1,5 @@
+<app-table
+  [columns]="columns()"
+  [data]="movementData()?.items ?? []"
+  [config]="{ showLoading: isLoading() }"
+/>

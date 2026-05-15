@@ -1,4 +1,6 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-100 via-bg-secondary-2 to-primary-50">
+<div
+  class="min-h-screen bg-gradient-to-br from-slate-100 via-bg-secondary-2 to-primary-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900"
+>
   <app-header (sidebarToggle)="toggleSidebar()" />
 
   <app-sidebar
@@ -15,7 +17,7 @@
     <div class="p-4 sm:p-5 lg:p-7">
       <div class="max-w-[1500px] mx-auto">
         <section
-          class="rounded-2xl border border-white/80 bg-white/80 p-3 shadow-lg shadow-slate-900/5 backdrop-blur-sm sm:p-4"
+          class="rounded-2xl border border-white/80 bg-white/80 p-3 shadow-lg shadow-slate-900/5 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/80 dark:shadow-slate-950/40 sm:p-4"
         >
           <router-outlet />
         </section>

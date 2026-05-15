@@ -1,0 +1,25 @@
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <app-table [data]="movementsData().items" [columns]="movementColumns" [config]="tableConfig()">
+    <ng-template appTableColumn="movementDate" let-movement>
+      <span class="text-slate-700">
+        {{ movement.movementDate | date: 'dd/MM/yyyy HH:mm' }}
+      </span>
+    </ng-template>
+
+    <ng-template appTableColumn="quantity" let-movement>
+      <span class="font-medium text-slate-700">{{ movement.quantity }}</span>
+    </ng-template>
+  </app-table>
+
+  @if (movementsData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page"
+      [currentPageSize]="currentPage().pageSize"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>
