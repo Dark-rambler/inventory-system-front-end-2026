@@ -13,6 +13,7 @@ export class IconTooltipPipe implements PipeTransform {
     const defaultTooltips: Record<IconButtonAction, string> = {
       view: 'Ver detalles',
       edit: 'Editar',
+      save: 'Guardar',
       delete: 'Eliminar',
       download: 'Descargar',
       share: 'Compartir',

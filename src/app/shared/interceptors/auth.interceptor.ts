@@ -14,12 +14,19 @@ export const authInterceptor: HttpInterceptorFn = (
 ) => {
   const authService = inject(AuthService);
   const token = authService.currentUser()?.token ?? getTokenFromStorage();
-  const request =
+  let request =
     token && !req.headers.has('Authorization')
       ? req.clone({
           headers: req.headers.set('Authorization', `Bearer ${token}`),
         })
       : req;
+
+  const businessId = authService.getBusinessId();
+  if (businessId) {
+    request = request.clone({
+      headers: request.headers.set('businessId', businessId),
+    });
+  }
 
   return next(request).pipe(
     catchError((error: unknown) => {

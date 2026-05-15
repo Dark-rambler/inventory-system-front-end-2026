@@ -14,3 +14,10 @@ export interface BranchForm {
   telephone: string;
   Location: Location;
 }
+
+export interface BranchProductItem {
+  productId: string;
+  stock: number;
+  lowStock: number;
+  price: number;
+}

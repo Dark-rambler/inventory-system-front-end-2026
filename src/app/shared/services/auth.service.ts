@@ -15,6 +15,8 @@ export interface TokenPayload {
   unique_name?: string;
   role?: string;
   exp?: number;
+  businessName: string;
+  businessId: string;
 }
 
 @Injectable({
@@ -50,14 +52,18 @@ export class AuthService {
   readonly currentRole = computed(() => this.tokenPayload()?.role ?? null);
 
   get isAuthenticated(): boolean {
-    return this._currentUser() !== null;
+    const user = this._currentUser();
+    return !!user?.token && !this._isTokenExpired(user.token);
   }
 
   constructor() {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this._currentUser.set(JSON.parse(storedUser));
+    const storedUser = this._getStoredUser();
+    if (storedUser && !this._isTokenExpired(storedUser.token)) {
+      this._currentUser.set(storedUser);
+    } else if (storedUser) {
+      this.clearSession();
     }
+
     const storedBranch = getSelectedBranchFromStorage<Branch>();
     if (storedBranch) {
       this._selectedBranch.set(storedBranch);
@@ -86,9 +92,38 @@ export class AuthService {
   }
 
   public logout(): void {
-    this._currentUser.set(null);
-    localStorage.removeItem('user');
+    this.clearSession();
     this._router.navigate(['/login']);
+  }
+
+  public clearSession(): void {
+    this._currentUser.set(null);
+    this._selectedBranch.set(null);
+    localStorage.clear();
+  }
+
+  private _getStoredUser(): User | null {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      return null;
+    }
+
+    try {
+      const parsedUser = JSON.parse(storedUser) as User;
+      return typeof parsedUser?.token === 'string' ? parsedUser : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private _isTokenExpired(token: string): boolean {
+    const payload = this._decodeToken(token);
+    if (!payload?.exp) {
+      return true;
+    }
+
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    return payload.exp <= currentTimeInSeconds;
   }
 
   private _decodeToken(token: string): TokenPayload | null {
@@ -108,5 +143,9 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+  public getBusinessId(): string | null {
+    return this.tokenPayload()?.businessId ?? null;
   }
 }

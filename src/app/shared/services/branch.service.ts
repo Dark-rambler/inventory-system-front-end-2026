@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { SaleRequest } from '@app/domains/pos/interfaces/pos.interface';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { Branch, BranchForm } from '../interfaces/branch.interface';
+import { Branch, BranchForm, BranchProductItem } from '../interfaces/branch.interface';
 import { PaginatorInterface } from '../interfaces/paginator.interface';
 
 @Injectable({
@@ -39,5 +39,18 @@ export class BranchService {
 
   public getSalesByBranch(branchId: string, params?: HttpParams): Observable<unknown> {
     return this._httpClient.get<unknown>(`${this._url}/${branchId}/sales`, { params });
+  }
+
+  public addProducts(branchId: string, products: BranchProductItem[]): Observable<unknown> {
+    return this._httpClient.post<unknown>(`${this._url}/${branchId}/products`, products);
+  }
+
+  public removeProductsByIds(branchId: string, productIds: string[]): Observable<unknown> {
+    return this._httpClient.request('delete', `${this._url}/${branchId}/products`, {
+      body: productIds,
+    });
+  }
+  public updateBranchProducts(branchId: string, item: BranchProductItem): Observable<unknown> {
+    return this._httpClient.put<unknown>(`${this._url}/${branchId}/products`, item);
   }
 }

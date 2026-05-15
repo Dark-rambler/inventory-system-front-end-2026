@@ -15,18 +15,10 @@ import { Inventory } from '../interfaces/inventory.interface';
 export class InventoryResourceService {
   private readonly _inventoryService: InventoryService = inject(InventoryService);
   private readonly _currentBranchId = signal<string | null>(getSelectedBranchIdFromStorage());
-  private readonly _allowStorageFallback = signal<boolean>(true);
 
   public filterInventoryParameters = signal<InventoryParams>(DEFAULT_GET_INVENTORY_PARAMS);
 
-  public setBranchId(
-    branchId: string | null,
-    options?: { disableStorageFallback?: boolean }
-  ): void {
-    if (options?.disableStorageFallback) {
-      this._allowStorageFallback.set(false);
-    }
-
+  public setBranchId(branchId: string | null): void {
     this._currentBranchId.set(branchId);
   }
 
@@ -56,11 +48,16 @@ export class InventoryResourceService {
   private _getInventory(
     request: InventoryParams & { branchId?: string | null }
   ): Observable<PaginatorInterface<Inventory>> {
-    const fallbackBranchId = this._allowStorageFallback() ? getSelectedBranchIdFromStorage() : null;
-    const branchId = request.branchId ?? fallbackBranchId;
+    const branchId = request.branchId;
     if (!branchId) {
       return of(this._buildEmptyPaginator(request));
     }
+    console.log(
+      '[InventoryResourceService] Cargando inventario para branchId:',
+      branchId,
+      'con filtros:',
+      request
+    );
 
     const params = this._createRequest(request);
     return this._inventoryService
