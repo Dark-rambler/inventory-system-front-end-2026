@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment.development';
 
 export interface User {
   token: string;
+  refreshToken?: string;
 }
 
 export interface TokenPayload {
@@ -75,10 +76,18 @@ export class AuthService {
       .post<User>(`${environment.API_URL}/Auth/login`, { userName, password })
       .pipe(
         tap(user => {
-          this._currentUser.set(user);
-          localStorage.setItem('user', JSON.stringify(user));
+          this.updateSession(user);
         })
       );
+  }
+
+  public updateSession(user: User): void {
+    this._currentUser.set(user);
+    localStorage.setItem('user', JSON.stringify(user));
+
+    if (user.refreshToken) {
+      localStorage.setItem('refreshToken', user.refreshToken);
+    }
   }
 
   public setSelectedBranch(branch: Branch): void {

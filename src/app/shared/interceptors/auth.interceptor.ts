@@ -5,54 +5,70 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { AuthRefreshService } from '@shared/services/auth-refresh.service';
 import { AuthService } from '@shared/services/auth.service';
-import { catchError, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ) => {
   const authService = inject(AuthService);
-  const token = authService.currentUser()?.token ?? getTokenFromStorage();
-  let request =
-    token && !req.headers.has('Authorization')
-      ? req.clone({
-          headers: req.headers.set('Authorization', `Bearer ${token}`),
-        })
-      : req;
+  const authRefreshService = inject(AuthRefreshService);
+  const token = authService.currentUser()?.token ?? authRefreshService.getStoredAccessToken();
+  let request = withAuthHeader(req, token);
 
   const businessId = authService.getBusinessId();
-  if (businessId) {
-    request = request.clone({
-      headers: request.headers.set('businessId', businessId),
-    });
-  }
+  request = withBusinessIdHeader(request, businessId);
 
   return next(request).pipe(
     catchError((error: unknown) => {
-      if (error instanceof HttpErrorResponse && error.status === 401 && !isLoginRequest(req.url)) {
-        authService.logout();
+      if (!(error instanceof HttpErrorResponse) || error.status !== 401 || isAuthRequest(req.url)) {
+        return throwError(() => error);
       }
 
-      return throwError(() => error);
+      return authRefreshService.refreshAccessToken().pipe(
+        switchMap(newToken => {
+          if (!newToken) {
+            authService.logout();
+            return throwError(() => error);
+          }
+
+          const retryRequest = withBusinessIdHeader(withAuthHeader(req, newToken), businessId);
+          return next(retryRequest);
+        }),
+        catchError(refreshError => {
+          authService.logout();
+          return throwError(() => refreshError);
+        })
+      );
     })
   );
 };
 
-function isLoginRequest(url: string): boolean {
-  return /\/auth\/login$/i.test(url);
+function isAuthRequest(url: string): boolean {
+  return /\/auth\/(login|refresh)$/i.test(url);
 }
 
-function getTokenFromStorage(): string | null {
-  const storedUser = localStorage.getItem('user');
-  if (!storedUser) {
-    return null;
+function withAuthHeader(req: HttpRequest<unknown>, token: string | null): HttpRequest<unknown> {
+  if (!token || req.headers.has('Authorization')) {
+    return req;
   }
 
-  try {
-    const parsedUser = JSON.parse(storedUser) as { token?: string };
-    return parsedUser.token ?? null;
-  } catch {
-    return null;
+  return req.clone({
+    headers: req.headers.set('Authorization', `Bearer ${token}`),
+  });
+}
+
+function withBusinessIdHeader(
+  req: HttpRequest<unknown>,
+  businessId: string | null
+): HttpRequest<unknown> {
+  if (!businessId) {
+    return req;
   }
+
+  return req.clone({
+    headers: req.headers.set('businessId', businessId),
+  });
 }
