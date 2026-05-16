@@ -1,11 +1,13 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
+import { Customer } from '@shared/interfaces/customer.interface';
 import { AuthService } from '@shared/services/auth.service';
 import { BranchService } from '@shared/services/branch.service';
 import { ConfirmModalService } from '@shared/services/confirm-modal.service';
 import { getSelectedBranchIdFromStorage } from '@shared/utils/selected-branch-storage';
 import { ToastrService } from 'ngx-toastr';
+import { CustomerSaleModalComponent } from '../customer-sale-modal/customer-sale-modal.component';
 import { CartPosService } from '../../services/cart-pos.service';
 
 @Component({
@@ -43,19 +45,32 @@ export class CartPosComponent {
   processSale(): void {
     if (this.isEmpty() || this.isProcessing) return;
 
+    const dialogRef = this._dialog.open(CustomerSaleModalComponent, {
+      disableClose: true,
+    });
+
+    dialogRef.componentInstance?.customerConfirmed.subscribe(customer => {
+      this._confirmSale(customer);
+    });
+  }
+
+  private _confirmSale(customer: Customer): void {
     this._confirmModalService
       .open({
         title: 'Confirmar venta',
-        message: `Se procesara una venta por Bs ${this.total().toFixed(2)}. ¿Deseas continuar?`,
+        message: `Cliente: ${customer.name}. Se procesara una venta por Bs ${this.total().toFixed(2)}. ¿Deseas continuar?`,
       })
       .subscribe(result => {
-        if (result !== 'confirm') return;
-        this._sendSaleRequest();
+        if (result !== 'confirm') {
+          return;
+        }
+
+        this._sendSaleRequest(customer);
         this._dialog.closeAll();
       });
   }
 
-  private _sendSaleRequest(): void {
+  private _sendSaleRequest(customer: Customer): void {
     if (this.isProcessing) return;
 
     const branchId = this._authService.selectedBranchId() ?? getSelectedBranchIdFromStorage();
@@ -65,6 +80,7 @@ export class CartPosComponent {
     }
 
     const payload = {
+      customerId: customer.id,
       saleDetails: this.cart().map(item => ({
         productId: item.id,
         quantity: item.quantity,
