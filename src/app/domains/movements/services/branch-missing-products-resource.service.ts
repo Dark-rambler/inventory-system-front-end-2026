@@ -68,7 +68,7 @@ export class BranchMissingProductsResourceService {
     request: MissingProductsRequest
   ): Observable<PaginatorInterface<Product>> {
     const params = this._createRequest(request);
-    return this._warehouseService.getProductsNotInWarehouse(request.branchId!, params).pipe(
+    return this._warehouseService.getProductsNotInBranch(request.branchId!, params).pipe(
       map(response => this._normalizeResponse(response, request.page, request.pageSize)),
       catchError(() => of(this._buildEmptyPaginator(request.page, request.pageSize)))
     );

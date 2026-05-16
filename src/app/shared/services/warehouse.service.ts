@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
+import { BranchProductItem } from '../interfaces/branch.interface';
 import { PaginatorInterface } from '../interfaces/paginator.interface';
 import { Product } from '../interfaces/product.interface';
 import { Warehouse } from '../interfaces/warehouse.interface';
@@ -48,8 +49,27 @@ export class WarehouseService {
     params?: HttpParams
   ): Observable<PaginatorInterface<Product>> {
     return this._httpClient.get<PaginatorInterface<Product>>(
+      `${this._url}/${warehouseId}/products/doesnt-exist`,
+      { params }
+    );
+  }
+  public getProductsNotInBranch(
+    warehouseId: string,
+    params?: HttpParams
+  ): Observable<PaginatorInterface<Product>> {
+    return this._httpClient.get<PaginatorInterface<Product>>(
       `${environment.API_URL}/branch/${warehouseId}/products/doesnt-exist`,
       { params }
     );
+  }
+
+  public addProducts(warehouseId: string, products: BranchProductItem[]): Observable<unknown> {
+    return this._httpClient.post<unknown>(`${this._url}/${warehouseId}/products`, products);
+  }
+
+  public removeProductsByIds(warehouseId: string, productIds: string[]): Observable<unknown> {
+    return this._httpClient.request('delete', `${this._url}/${warehouseId}/products`, {
+      body: productIds,
+    });
   }
 }

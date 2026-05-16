@@ -5,7 +5,7 @@ export const BRANCH_MISSING_PRODUCTS_COLUMNS: TableColumn<Product>[] = [
   { key: 'select', header: '', width: '56px' },
   { key: 'code', header: 'Codigo', width: '140px' },
   { key: 'name', header: 'Producto' },
-  { key: 'categoryName', header: 'Categoria' },
+  { key: 'category', header: 'Categoria' },
   { key: 'price', header: 'Precio', width: '140px' },
   { key: 'stock', header: 'Stock', width: '130px' },
   { key: 'lowStock', header: 'Stock minimo', width: '140px' },

@@ -1,0 +1,39 @@
+<form [formGroup]="businessForm" class="space-y-4">
+  <app-form-input
+    label="Nombre del business"
+    [name]="'businessName'"
+    [parentForm]="businessForm"
+    controlName="name"
+    placeholder="Ej: Mi empresa"
+  />
+
+  <app-form-input
+    label="NIT"
+    [name]="'businessNit'"
+    [parentForm]="businessForm"
+    controlName="nit"
+    placeholder="Ej: 10203040"
+  />
+
+  <app-form-input
+    label="Telefono"
+    [name]="'businessPhone'"
+    [parentForm]="businessForm"
+    controlName="phone"
+    placeholder="Ej: +591 70000000"
+  />
+
+  <div class="flex justify-end space-x-2">
+    @if (!this.data) {
+      <app-button
+        appSendBusiness
+        [keepOpen]="true"
+        type="submit"
+        label="Guardar y continuar"
+        variant="primary"
+        size="md"
+      />
+    }
+    <app-button appSendBusiness type="submit" label="Guardar" variant="primary" size="md" />
+  </div>
+</form>

@@ -26,33 +26,19 @@
           type="checkbox"
           class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
           [checked]="isProductSelected(product.id)"
-          (change)="toggleProductSelection(product, selectProduct.checked)"
+          (change)="toggleProductSelection(product.id, selectProduct.checked)"
         />
       </div>
     </ng-template>
 
     <ng-template appTableColumn="stock" let-product>
-      <input
-        #productStock
-        type="number"
-        min="0"
-        step="1"
-        class="w-24 rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-primary-400 dark:focus:ring-primary-400"
-        [value]="getEditableValue(product.id, 'stock') ?? ''"
-        (input)="updateEditableValue(product.id, 'stock', productStock.value)"
-      />
+      <span class="font-medium text-slate-700">{{ product.stock }}</span>
     </ng-template>
 
-    <ng-template appTableColumn="lowStock" let-product>
-      <input
-        #productLowStock
-        type="number"
-        min="0"
-        step="1"
-        class="w-24 rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-700 outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-primary-400 dark:focus:ring-primary-400"
-        [value]="getEditableValue(product.id, 'lowStock') ?? ''"
-        (input)="updateEditableValue(product.id, 'lowStock', productLowStock.value)"
-      />
+    <ng-template appTableColumn="unitPrice" let-product>
+      <span class="font-medium text-slate-800">
+        {{ product.unitPrice | currency: 'BOB' : 'symbol' : '1.2-2' }}
+      </span>
     </ng-template>
   </app-table>
 

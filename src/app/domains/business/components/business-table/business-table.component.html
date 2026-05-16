@@ -1,0 +1,35 @@
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <app-table
+    [data]="businessData()?.items ?? []"
+    [columns]="businessColumns"
+    [config]="tableConfig()"
+  >
+    <ng-template appTableColumn="actions" let-business>
+      <app-action-buttons>
+        <div appEditItem>
+          <app-icon-button (buttonClick)="editBusiness(business)" action="edit" />
+        </div>
+
+        <div>
+          <app-icon-button
+            (buttonClick)="deleteBusiness(business)"
+            action="delete"
+            tooltip="Eliminar"
+          />
+        </div>
+      </app-action-buttons>
+    </ng-template>
+  </app-table>
+
+  @if (businessData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page ?? 1"
+      [currentPageSize]="currentPage().pageSize ?? 10"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>
