@@ -1,10 +1,11 @@
 export type PurchaseStatus = 'Borrador' | 'Emitida' | 'Recibida' | 'Anulada';
 
 export interface PurchaseDetail {
-  id: number;
+  id?: number | string;
+  productId?: string | number;
   quantity: number;
   price: number;
-  product: string;
+  product?: string;
 }
 
 export interface Purchase {
@@ -18,6 +19,9 @@ export interface Purchase {
 
   // Legacy optional fields used by existing forms/components.
   folio?: string;
+  providerId?: number | string;
+  branchId?: number | string;
+  warehouseId?: number | string;
   supplierId?: number | string;
   supplierName?: string;
   status?: PurchaseStatus;

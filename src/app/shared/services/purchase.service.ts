@@ -19,14 +19,16 @@ export class PurchaseService {
   }
 
   public create(purchase: Partial<Purchase>): Observable<Purchase> {
+    const payload = this._normalizePurchasePayload(purchase);
     return this._http
-      .post<Purchase>(this._url, purchase)
+      .post<Purchase>(this._url, payload)
       .pipe(map(item => this._normalizePurchase(item)));
   }
 
   public update(purchase: Partial<Purchase>, id: string | number): Observable<Purchase> {
+    const payload = this._normalizePurchasePayload(purchase);
     return this._http
-      .put<Purchase>(`${this._url}/${id}`, purchase)
+      .put<Purchase>(`${this._url}/${id}`, payload)
       .pipe(map(item => this._normalizePurchase(item)));
   }
 
@@ -66,5 +68,34 @@ export class PurchaseService {
       expectedDate: String(item.date ?? '').slice(0, 10),
       items: itemsCount,
     };
+  }
+
+  private _normalizePurchasePayload(purchase: Partial<Purchase>): Partial<Purchase> {
+    const purchaseDetails = Array.isArray(purchase.purchaseDetails)
+      ? purchase.purchaseDetails.map(detail => ({
+          ...detail,
+          productId: this._toIntegerOrKeep(detail.productId),
+          quantity: Number(detail.quantity ?? 0),
+          price: Number(detail.price ?? 0),
+        }))
+      : purchase.purchaseDetails;
+
+    return {
+      ...purchase,
+      purchaseDetails,
+    };
+  }
+
+  private _toIntegerOrKeep(value: unknown): string | number | undefined {
+    const parsedValue = Number(value);
+    if (!Number.isInteger(parsedValue) || parsedValue < 1) {
+      if (value === null || value === undefined) {
+        return undefined;
+      }
+
+      return String(value);
+    }
+
+    return parsedValue;
   }
 }

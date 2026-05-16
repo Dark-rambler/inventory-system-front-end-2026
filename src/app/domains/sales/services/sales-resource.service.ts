@@ -139,7 +139,9 @@ export class SalesResourceService {
     return {
       id,
       date: String(this._readNested(sale, ['date', 'createdAt', 'saleDate']) ?? ''),
+      folio: String(this._readNested(sale, ['folio', 'saleCode', 'id']) ?? '-'),
       sellerName: String(this._readNested(sale, ['seller', 'sellerName', 'user.name']) ?? '-'),
+      customer: String(this._readNested(sale, ['customer', 'customerName', 'client.name']) ?? '-'),
       branchName: String(
         this._readNested(sale, ['branch', 'branchName', 'branch.name']) ?? `Sucursal ${branchId}`
       ),
