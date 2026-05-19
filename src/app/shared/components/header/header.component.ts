@@ -12,6 +12,7 @@ export class HeaderComponent {
   sidebarToggle = output<void>();
   protected readonly _authService = inject(AuthService);
   private readonly _themeService = inject(ThemeService);
+  protected readonly bussinesName = this._authService.getBusinessName();
 
   protected readonly userName = this._authService.currentUsername;
   protected readonly currentRole = this._authService.currentRole;

@@ -1,0 +1,98 @@
+<app-modal [title]="'Seleccionar cliente'" width="w-[52rem] max-w-[96vw]">
+  <div class="max-h-[78vh] overflow-y-auto pr-1">
+    <form [formGroup]="selectCustomerForm" class="space-y-4">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <app-form-input
+          label="Buscar cliente"
+          [name]="'customerSearch'"
+          [parentForm]="selectCustomerForm"
+          controlName="search"
+          placeholder="Busca por nombre o NIT"
+        />
+
+        <app-form-dropdown
+          label="Cliente"
+          [name]="'customerId'"
+          [parentForm]="selectCustomerForm"
+          controlName="customerId"
+          [options]="filteredCustomerOptions()"
+          optionLabelKey="name"
+          optionValueKey="id"
+          [visibleKeys]="['name', 'nit']"
+          placeholder="Selecciona un cliente"
+          [emptyMessage]="'No se encontro cliente. Registra uno nuevo.'"
+        />
+      </div>
+
+      <div class="flex items-center justify-between rounded-md border border-slate-200 p-3">
+        <p class="text-sm text-slate-600">Si no existe el cliente, puedes registrarlo ahora.</p>
+        <app-button
+          type="button"
+          [label]="isCreatingCustomer() ? 'Ocultar registro' : 'Registrar cliente'"
+          variant="outline"
+          size="sm"
+          (buttonClick)="toggleCreateCustomer()"
+        />
+      </div>
+
+      @if (isCreatingCustomer()) {
+        <div
+          [formGroup]="createCustomerForm"
+          class="grid grid-cols-1 gap-3 rounded-md border border-slate-200 p-3 sm:grid-cols-3"
+        >
+          <app-form-input
+            label="Nombre"
+            [name]="'newCustomerName'"
+            [parentForm]="createCustomerForm"
+            controlName="name"
+            placeholder="Ej: Juan Perez"
+          />
+
+          <app-form-input
+            label="NIT"
+            [name]="'newCustomerNit'"
+            [parentForm]="createCustomerForm"
+            controlName="nit"
+            placeholder="Ej: 1234567"
+          />
+
+          <app-form-input
+            label="Telefono"
+            [name]="'newCustomerPhone'"
+            [parentForm]="createCustomerForm"
+            controlName="phone"
+            placeholder="Ej: 70000000"
+          />
+
+          <div class="sm:col-span-3 flex justify-end">
+            <app-button
+              type="button"
+              label="Guardar cliente"
+              variant="primary"
+              size="sm"
+              [loading]="isSavingCustomer()"
+              (buttonClick)="createCustomer()"
+            />
+          </div>
+        </div>
+      }
+
+      <div class="flex justify-end space-x-2">
+        <app-button
+          type="button"
+          label="Cancelar"
+          variant="outline"
+          size="md"
+          (buttonClick)="closeModal()"
+        />
+        <app-button
+          type="button"
+          label="Continuar con venta"
+          variant="primary"
+          size="md"
+          (buttonClick)="confirmCustomer()"
+        />
+      </div>
+    </form>
+  </div>
+</app-modal>

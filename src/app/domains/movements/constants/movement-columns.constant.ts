@@ -9,8 +9,6 @@ export const MOVEMENT_COLUMNS: TableColumn<Movement>[] = [
   { key: 'toBranch', header: 'Sucursal Destino' },
   { key: 'toWarehouse', header: 'Almacen Destino' },
   { key: 'quantity', header: 'Cantidad' },
-  { key: 'previousStock', header: 'Stock Anterior' },
-  { key: 'currentStock', header: 'Stock Actual' },
   { key: 'createdAt', header: 'Fecha' },
 ];
 export const MOVEMENT_COLUMNS_BRANCH: TableColumn<Movement>[] = [
@@ -19,8 +17,6 @@ export const MOVEMENT_COLUMNS_BRANCH: TableColumn<Movement>[] = [
   { key: 'fromBranch', header: 'Sucursal Origen' },
   { key: 'toBranch', header: 'Sucursal Destino' },
   { key: 'quantity', header: 'Cantidad' },
-  { key: 'previousStock', header: 'Stock Anterior' },
-  { key: 'currentStock', header: 'Stock Actual' },
   { key: 'createdAt', header: 'Fecha' },
 ];
 export const MOVEMENT_COLUMNS_WAREHOUSE: TableColumn<Movement>[] = [
@@ -29,7 +25,5 @@ export const MOVEMENT_COLUMNS_WAREHOUSE: TableColumn<Movement>[] = [
   { key: 'fromWarehouse', header: 'Almacen Origen' },
   { key: 'toWarehouse', header: 'Almacen Destino' },
   { key: 'quantity', header: 'Cantidad' },
-  { key: 'previousStock', header: 'Stock Anterior' },
-  { key: 'currentStock', header: 'Stock Actual' },
   { key: 'createdAt', header: 'Fecha' },
 ];
