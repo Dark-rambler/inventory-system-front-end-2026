@@ -27,6 +27,17 @@
     placeholder="Ej: PRD-001"
   />
 
+  <app-form-dropdown
+    label="Unidad de medida"
+    [name]="'measureUnitId'"
+    [parentForm]="productForm"
+    controlName="measureUnitId"
+    [options]="meassureUnits()"
+    optionLabelKey="name"
+    optionValueKey="id"
+    [visibleKeys]="['name']"
+    placeholder="Selecciona una unidad de medida"
+  />
   <app-form-input
     [textArea]="true"
     label="Descripción del producto"

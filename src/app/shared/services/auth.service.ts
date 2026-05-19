@@ -157,4 +157,8 @@ export class AuthService {
   public getBusinessId(): string | null {
     return this.tokenPayload()?.businessId ?? null;
   }
+
+  public getBusinessName(): string | null {
+    return this.tokenPayload()?.businessName ?? null;
+  }
 }

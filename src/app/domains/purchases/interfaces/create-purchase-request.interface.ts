@@ -6,7 +6,7 @@ export interface CreatePurchaseDetailRequest {
 
 export interface CreatePurchaseRequest {
   providerId: string;
-  branchId: string;
-  warehouseId: string;
+  branchId: string | null;
+  warehouseId: string | null;
   purchaseDetails: CreatePurchaseDetailRequest[];
 }

@@ -70,6 +70,11 @@ export class SendPurchaseDirective {
   }
 
   private _request(payload: CreatePurchaseRequest): Observable<Purchase> {
+    payload = {
+      ...payload,
+      warehouseId: payload.warehouseId || null,
+      branchId: payload.branchId || null,
+    };
     return this.data
       ? this._purchaseService.update(payload, this.data.id)
       : this._purchaseService.create(payload);

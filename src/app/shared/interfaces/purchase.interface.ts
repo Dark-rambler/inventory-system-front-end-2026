@@ -20,8 +20,8 @@ export interface Purchase {
   // Legacy optional fields used by existing forms/components.
   folio?: string;
   providerId?: number | string;
-  branchId?: number | string;
-  warehouseId?: number | string;
+  branchId?: number | string | null;
+  warehouseId?: number | string | null;
   supplierId?: number | string;
   supplierName?: string;
   status?: PurchaseStatus;
