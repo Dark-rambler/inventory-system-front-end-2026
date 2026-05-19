@@ -18,6 +18,7 @@ export const ROLE_ACCESS = {
   sales: ['admin'],
   purchases: ['admin', 'seller'],
   customers: ['admin', 'seller'],
+  business: ['admin'],
 } as const satisfies Record<string, readonly AppRole[]>;
 
 const SELLER_ROLE_ALIASES = new Set(['seller', 'vendor', 'vendedor', 'cashier']);

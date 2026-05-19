@@ -4,35 +4,39 @@
   <div
     class="flex flex-col gap-3 border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50 px-3 py-3 dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/70 sm:flex-row sm:items-center sm:justify-between"
   >
-    <label
-      class="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:border-primary/40 hover:text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-primary-400/40 dark:hover:text-primary-300"
-    >
-      <input
-        #selectVisible
-        type="checkbox"
-        class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
-        [checked]="isAllVisibleSelected()"
-        (change)="toggleVisibleInventories(selectVisible.checked)"
-      />
-      Seleccionar visibles
-    </label>
-
-    <app-button
-      label="Eliminar seleccionados"
-      variant="danger"
-      [loading]="isDeletingSelected()"
-      [disabled]="selectedInventoryCount() === 0"
-      (buttonClick)="deleteSelectedInventories()"
-    >
-      <svg slot="icon" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+    @if (showEditVIew()) {
+      <label
+        class="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:border-primary/40 hover:text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-primary-400/40 dark:hover:text-primary-300"
+      >
+        <input
+          #selectVisible
+          type="checkbox"
+          class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
+          [checked]="isAllVisibleSelected()"
+          (change)="toggleVisibleInventories(selectVisible.checked)"
         />
-      </svg>
-    </app-button>
+        Seleccionar visibles
+      </label>
+    }
+
+    @if (showEditVIew()) {
+      <app-button
+        label="Eliminar seleccionados"
+        variant="danger"
+        [loading]="isDeletingSelected()"
+        [disabled]="selectedInventoryCount() === 0"
+        (buttonClick)="deleteSelectedInventories()"
+      >
+        <svg slot="icon" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          />
+        </svg>
+      </app-button>
+    }
   </div>
 
   <app-table
@@ -40,17 +44,19 @@
     [columns]="inventoryColumns"
     [config]="tableConfig()"
   >
-    <ng-template appTableColumn="select" let-inventory>
-      <div class="flex justify-center">
-        <input
-          #selectInventory
-          type="checkbox"
-          class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
-          [checked]="isInventorySelected(inventory.id)"
-          (change)="toggleInventorySelection(inventory.id, selectInventory.checked)"
-        />
-      </div>
-    </ng-template>
+    @if (showEditVIew()) {
+      <ng-template appTableColumn="select" let-inventory>
+        <div class="flex justify-center">
+          <input
+            #selectInventory
+            type="checkbox"
+            class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
+            [checked]="isInventorySelected(inventory.id)"
+            (change)="toggleInventorySelection(inventory.id, selectInventory.checked)"
+          />
+        </div>
+      </ng-template>
+    }
 
     <ng-template appTableColumn="price" let-inventory>
       @if (isEditingRow(inventory.id)) {
@@ -101,19 +107,21 @@
     </ng-template>
 
     <ng-template appTableColumn="actions" let-inventory>
-      <app-action-buttons>
-        <div appEditItem>
-          @if (isEditingRow(inventory.id)) {
-            <app-icon-button (buttonClick)="saveInlineEdit()" action="save" tooltip="Guardar" />
-          } @else {
-            <app-icon-button
-              (buttonClick)="startInlineEdit(inventory)"
-              action="edit"
-              tooltip="Editar"
-            />
-          }
-        </div>
-      </app-action-buttons>
+      @if (showEditVIew()) {
+        <app-action-buttons>
+          <div appEditItem>
+            @if (isEditingRow(inventory.id)) {
+              <app-icon-button (buttonClick)="saveInlineEdit()" action="save" tooltip="Guardar" />
+            } @else {
+              <app-icon-button
+                (buttonClick)="startInlineEdit(inventory)"
+                action="edit"
+                tooltip="Editar"
+              />
+            }
+          </div>
+        </app-action-buttons>
+      }
     </ng-template>
   </app-table>
 

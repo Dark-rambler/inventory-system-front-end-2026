@@ -150,6 +150,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./domains/customers/customers.component').then(m => m.CustomersComponent),
       },
+      {
+        path: 'business',
+        canActivate: [roleGuard],
+        data: { roles: ROLE_ACCESS.business },
+        loadComponent: () =>
+          import('./domains/business/business.component').then(m => m.BusinessComponent),
+      },
     ],
   },
   {

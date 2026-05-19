@@ -1,0 +1,54 @@
+<section
+  class="overflow-hidden rounded-b-xl rounded-t-none border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 [&_.app-table-container]:rounded-none [&_.app-table-container]:border-0 [&_.app-table-container]:shadow-none"
+>
+  <div
+    class="space-y-3 border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50 px-3 py-3 dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/80"
+  >
+    <label
+      class="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:border-primary/40 hover:text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-primary-400/40 dark:hover:text-primary-300"
+    >
+      <input
+        #selectVisible
+        type="checkbox"
+        class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
+        [checked]="isAllVisibleSelected()"
+        (change)="toggleVisibleProducts(selectVisible.checked)"
+      />
+      Seleccionar visibles
+    </label>
+  </div>
+
+  <app-table [data]="productsData().items" [columns]="productColumns" [config]="tableConfig()">
+    <ng-template appTableColumn="select" let-product>
+      <div class="flex justify-center">
+        <input
+          #selectProduct
+          type="checkbox"
+          class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-900 dark:focus:ring-primary-400"
+          [checked]="isProductSelected(product.id)"
+          (change)="toggleProductSelection(product.id, selectProduct.checked)"
+        />
+      </div>
+    </ng-template>
+
+    <ng-template appTableColumn="stock" let-product>
+      <span class="font-medium text-slate-700">{{ product.stock }}</span>
+    </ng-template>
+
+    <ng-template appTableColumn="unitPrice" let-product>
+      <span class="font-medium text-slate-800">
+        {{ product.unitPrice | currency: 'BOB' : 'symbol' : '1.2-2' }}
+      </span>
+    </ng-template>
+  </app-table>
+
+  @if (productsData(); as data) {
+    <app-paginator
+      [paginator]="data"
+      [currentPage]="currentPage().page"
+      [currentPageSize]="currentPage().pageSize"
+      (pageChange)="changePage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    />
+  }
+</section>

@@ -1,90 +1,115 @@
 <form [formGroup]="purchaseForm" class="space-y-4">
   <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-    <app-form-input
-      label="Folio"
-      [name]="'purchaseFolio'"
-      [parentForm]="purchaseForm"
-      controlName="folio"
-      placeholder="Ej: CMP-00012"
-    />
-
     <app-form-dropdown
       label="Proveedor"
-      [name]="'supplierId'"
+      [name]="'providerId'"
       [parentForm]="purchaseForm"
-      controlName="supplierId"
-      [options]="supplierOptions()"
+      controlName="providerId"
+      [options]="providerOptions()"
       optionLabelKey="name"
       optionValueKey="id"
-      [visibleKeys]="['name']"
+      [visibleKeys]="['name', 'city']"
       placeholder="Selecciona un proveedor"
-      (optionSelected)="onSupplierSelected($event)"
     />
   </div>
 
   <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-    <app-form-dropdown
-      label="Estado"
-      [name]="'purchaseStatus'"
-      [parentForm]="purchaseForm"
-      controlName="status"
-      [options]="statusOptions"
-      optionLabelKey="label"
-      optionValueKey="value"
-      [visibleKeys]="['label']"
-      placeholder="Selecciona un estado"
-    />
+    @if (showBranchDropdown()) {
+      <app-form-dropdown
+        label="Sucursal"
+        [name]="'branchId'"
+        [parentForm]="purchaseForm"
+        controlName="branchId"
+        [options]="branchOptions()"
+        optionLabelKey="name"
+        optionValueKey="id"
+        [visibleKeys]="['name', 'city']"
+        placeholder="Selecciona una sucursal"
+      />
+    }
 
-    <app-form-dropdown
-      label="Metodo de pago"
-      [name]="'paymentMethod'"
-      [parentForm]="purchaseForm"
-      controlName="paymentMethod"
-      [options]="paymentMethodOptions"
-      optionLabelKey="label"
-      optionValueKey="value"
-      [visibleKeys]="['label']"
-      placeholder="Selecciona un metodo"
-    />
+    @if (showWarehouseDropdown()) {
+      <app-form-dropdown
+        label="Bodega"
+        [name]="'warehouseId'"
+        [parentForm]="purchaseForm"
+        controlName="warehouseId"
+        [options]="warehouseOptions()"
+        optionLabelKey="name"
+        optionValueKey="id"
+        [visibleKeys]="['name', 'city']"
+        placeholder="Selecciona una bodega"
+      />
+    }
   </div>
 
-  <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-    <app-form-input
-      type="number"
-      label="Items"
-      [name]="'purchaseItems'"
-      [parentForm]="purchaseForm"
-      controlName="items"
-      placeholder="Ej: 10"
-    />
+  <div class="rounded-lg border border-slate-200 p-3">
+    <div class="mb-2 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-slate-700">Productos de la compra</h3>
+      <app-button
+        type="button"
+        label="Agregar producto"
+        variant="outline"
+        size="sm"
+        (buttonClick)="addPurchaseDetail()"
+      />
+    </div>
 
-    <app-form-input
-      type="number"
-      label="Total (BOB)"
-      [name]="'purchaseTotal'"
-      [parentForm]="purchaseForm"
-      controlName="total"
-      placeholder="Ej: 2450"
-    />
+    <div formArrayName="purchaseDetails" class="space-y-3">
+      @for (detailGroup of purchaseDetailsControls; track $index) {
+        <div
+          [formGroupName]="$index"
+          class="grid grid-cols-1 gap-3 rounded-md border border-slate-100 p-3 sm:grid-cols-12"
+        >
+          <div class="sm:col-span-6">
+            <app-form-dropdown
+              label="Producto"
+              [name]="'purchaseDetailProduct' + $index"
+              [parentForm]="detailGroup"
+              controlName="productId"
+              [options]="productOptions()"
+              optionLabelKey="name"
+              optionValueKey="numericId"
+              [visibleKeys]="['name', 'code']"
+              placeholder="Selecciona un producto"
+            />
+          </div>
 
-    <app-form-input
-      type="date"
-      label="Fecha estimada"
-      [name]="'expectedDate'"
-      [parentForm]="purchaseForm"
-      controlName="expectedDate"
-      placeholder=""
-    />
+          <div class="sm:col-span-2">
+            <app-form-input
+              type="number"
+              label="Cantidad"
+              [name]="'purchaseDetailQuantity' + $index"
+              [parentForm]="detailGroup"
+              controlName="quantity"
+              placeholder="0"
+            />
+          </div>
+
+          <div class="sm:col-span-2">
+            <app-form-input
+              type="number"
+              label="Precio"
+              [name]="'purchaseDetailPrice' + $index"
+              [parentForm]="detailGroup"
+              controlName="price"
+              placeholder="0"
+            />
+          </div>
+
+          <div class="flex items-end sm:col-span-2">
+            <app-button
+              type="button"
+              [label]="purchaseDetailsControls.length > 1 ? 'Quitar' : 'Limpiar'"
+              variant="danger"
+              size="sm"
+              (buttonClick)="removePurchaseDetail($index)"
+            />
+          </div>
+        </div>
+      }
+    </div>
   </div>
-
-  <app-form-input
-    [textArea]="true"
-    label="Notas"
-    [name]="'purchaseNotes'"
-    [parentForm]="purchaseForm"
-    controlName="notes"
-    placeholder="Detalle interno de la compra"
-  />
 
   <div class="flex justify-end space-x-2">
     @if (!this.data) {

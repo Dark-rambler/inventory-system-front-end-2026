@@ -26,6 +26,12 @@ interface WarehouseProductParams {
   pageSize: number;
 }
 
+interface WarehouseMissingProductParams {
+  warehouseId: string | null;
+  page: number;
+  pageSize: number;
+}
+
 const DEFAULT_PAGINATION: WarehouseTablePagination = {
   page: 1,
   pageSize: 10,
@@ -50,6 +56,7 @@ export class WarehouseBranchDetailResourceService {
 
   public readonly productPagination = signal<WarehouseTablePagination>(DEFAULT_PAGINATION);
   public readonly movementPagination = signal<WarehouseTablePagination>(DEFAULT_PAGINATION);
+  public readonly missingProductPagination = signal<WarehouseTablePagination>(DEFAULT_PAGINATION);
 
   public readonly productsResource = rxResource({
     request: () => {
@@ -75,6 +82,21 @@ export class WarehouseBranchDetailResourceService {
     },
   });
 
+  public readonly missingProductsResource = rxResource({
+    request: () => {
+      const warehouseId = this._currentWarehouseId();
+      const pagination = this.missingProductPagination();
+      return { warehouseId, page: pagination.page, pageSize: pagination.pageSize };
+    },
+    loader: ({ request }) => {
+      if (!request.warehouseId) {
+        return of(this._buildEmptyMissingProductsPaginator(request.page, request.pageSize));
+      }
+
+      return this._getMissingProducts(request);
+    },
+  });
+
   public readonly productsData = linkedSignal(
     () => this.productsResource.value() ?? this._buildEmptyProductsPaginator()
   );
@@ -83,10 +105,16 @@ export class WarehouseBranchDetailResourceService {
     () => this.movementsResource.value() ?? this._buildEmptyMovementsPaginator()
   );
 
+  public readonly missingProductsData = linkedSignal(
+    () => this.missingProductsResource.value() ?? this._buildEmptyMissingProductsPaginator()
+  );
+
   public readonly isLoadingProducts = this.productsResource.isLoading;
   public readonly isLoadingMovements = this.movementsResource.isLoading;
+  public readonly isLoadingMissingProducts = this.missingProductsResource.isLoading;
   public readonly reloadProducts = () => this.productsResource.reload();
   public readonly reloadMovements = () => this.movementsResource.reload();
+  public readonly reloadMissingProducts = () => this.missingProductsResource.reload();
 
   public readonly isEmpty = linkedSignal(() => this.movementsData());
 
@@ -106,6 +134,7 @@ export class WarehouseBranchDetailResourceService {
     this._currentWarehouseId.set(warehouseId);
     this.productPagination.set({ ...DEFAULT_PAGINATION });
     this.movementPagination.set({ ...DEFAULT_PAGINATION });
+    this.missingProductPagination.set({ ...DEFAULT_PAGINATION });
   }
 
   private _getProducts(
@@ -130,6 +159,20 @@ export class WarehouseBranchDetailResourceService {
         items: (response.items ?? []).map(item => this._mapMovement(item)),
       })),
       catchError(() => of(this._buildEmptyMovementsPaginator(request.page, request.pageSize)))
+    );
+  }
+
+  private _getMissingProducts(
+    request: WarehouseMissingProductParams
+  ): Observable<PaginatorInterface<WarehouseBranchProduct>> {
+    const params = buildHttpParams(
+      { page: request.page, pageSize: request.pageSize },
+      WAREHOUSE_PRODUCT_PARAMETER_MAPPING
+    );
+
+    return this._warehouseService.getProductsNotInWarehouse(request.warehouseId!, params).pipe(
+      map(response => response as unknown as PaginatorInterface<WarehouseBranchProduct>),
+      catchError(() => of(this._buildEmptyMissingProductsPaginator(request.page, request.pageSize)))
     );
   }
 
@@ -172,6 +215,21 @@ export class WarehouseBranchDetailResourceService {
     pageIndex = this.movementPagination().page,
     pageSize = this.movementPagination().pageSize
   ): PaginatorInterface<WarehouseBranchMovement> {
+    return {
+      items: [],
+      totalCount: 0,
+      pageIndex,
+      pageSize,
+      totalPages: 1,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    };
+  }
+
+  private _buildEmptyMissingProductsPaginator(
+    pageIndex = this.missingProductPagination().page,
+    pageSize = this.missingProductPagination().pageSize
+  ): PaginatorInterface<WarehouseBranchProduct> {
     return {
       items: [],
       totalCount: 0,

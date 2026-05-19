@@ -1,5 +1,13 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component, computed, inject, signal, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  signal,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   ActionButtonsComponent,
   IconButtonComponent,
@@ -11,7 +19,7 @@ import {
   TableConfig,
 } from '../../../../shared/components/table';
 import { ButtonComponent } from '../../../../shared/components/button';
-import { EditItemDirective, ViewDetailsDirective } from '../../../../shared/directives';
+import { EditItemDirective } from '../../../../shared/directives';
 import { Inventory } from '../../interfaces/inventory.interface';
 import { INVENTORYCOLUMNS } from '../../constants/inventory-columns.constant';
 import { InventoryResourceService } from '../../services/inventory-resource.service';
@@ -39,14 +47,14 @@ interface EditableValues {
     TableColumnDirective,
     IconButtonComponent,
     ActionButtonsComponent,
-    ViewDetailsDirective,
     EditItemDirective,
     ButtonComponent,
     PaginatorComponent,
   ],
   templateUrl: './inventory-table.component.html',
 })
-export class InventoryTableComponent {
+export class InventoryTableComponent implements OnInit {
+  showEditVIew = input<boolean>(true);
   private readonly _route = inject(ActivatedRoute);
   private readonly _inventoryResourceService = inject(InventoryResourceService);
   private readonly _branchService = inject(BranchService);
@@ -64,6 +72,7 @@ export class InventoryTableComponent {
   protected readonly selectedInventoryIds = signal<string[]>([]);
   protected readonly isDeletingSelected = signal<boolean>(false);
   private readonly _editableValues = signal<Record<string, EditableValues>>({});
+  protected inventoryColumns = INVENTORYCOLUMNS;
 
   private _findBranchId(): string | null {
     let route: ActivatedRoute | null = this._route;
@@ -74,6 +83,11 @@ export class InventoryTableComponent {
     }
     return null;
   }
+  ngOnInit(): void {
+    if (this.showEditVIew()) {
+      this.inventoryColumns = this.inventoryColumns.filter(column => column.header !== 'actions');
+    }
+  }
 
   public tableConfig = computed<TableConfig>(() => ({
     emptyMessage: 'No se encontró inventario',
@@ -83,7 +97,6 @@ export class InventoryTableComponent {
     enableStriped: true,
   }));
 
-  protected readonly inventoryColumns = INVENTORYCOLUMNS;
   protected readonly selectedInventoryCount = computed(() => this.selectedInventoryIds().length);
   protected readonly isAllVisibleSelected = computed(() => {
     const visibleInventories = this.inventoryData()?.items ?? [];

@@ -10,6 +10,8 @@ import { FormInputComponent } from '@app/shared/form-input/form-input.component'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { PRODUCT_FORM_CONTROL } from '../../../constants/form-products.constants';
 import { SendProductDirective } from '../../directives/click-send-product.directive';
+import { Measure } from '@app/shared/interfaces/measures.interface';
+import { MeasureService } from '@app/shared/services/measure.service';
 
 @Component({
   selector: 'app-products-form',
@@ -26,14 +28,17 @@ export class ProductsFormComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly _categoryService = inject(CategoryService);
   private readonly _destroyRef = inject(DestroyRef);
+  private readonly _measureService = inject(MeasureService);
 
   protected productForm = this.formBuilder.group(PRODUCT_FORM_CONTROL);
   protected data = inject(DIALOG_DATA);
   protected categoryOptions = signal<Category[]>([]);
+  protected meassureUnits = signal<Measure[]>([]);
 
   ngOnInit(): void {
     this.loadCategories();
     this.loadData();
+    this.loadMeassureUnits();
   }
 
   private loadCategories(): void {
@@ -67,5 +72,13 @@ export class ProductsFormComponent implements OnInit {
             : '',
       });
     }
+  }
+  private loadMeassureUnits(): void {
+    this._measureService
+      .getAll()
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(response => {
+        this.meassureUnits.set(response);
+      });
   }
 }

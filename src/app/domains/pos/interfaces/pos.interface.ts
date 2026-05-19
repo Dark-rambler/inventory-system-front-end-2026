@@ -30,5 +30,6 @@ export interface SaleDetail {
 }
 
 export interface SaleRequest {
+  customerId: string | number;
   saleDetails: SaleDetail[];
 }
